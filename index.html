@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="x-share-desc" content="" data-custom="">
+    <meta name="x-key" content="7bc93a8817dc54211689319275f08f30">
+    <meta name="screen-orientation" content="portrait">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="prefetch" href="http://davidwalsh.name/wp-content/themes/walshbook3/images/sprite.png" />
+    <title></title>
+    <style>
+        html,body{
+            height: 100%;
+        }
+        body{
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+        #canvas{
+            height: 100%;
+            margin: 0 auto;
+        }
+        .start_game{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            font-size: 2rem;
+            text-align: center;
+            line-height: 10em;
+            font-family: "隶书";
+        }
+        .tools{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: left;
+            z-index: 10;
+        }
+        .icon{
+            display: inline-block;
+            width: 31px;
+            height: 24px;
+        }
+        .icon-volume{
+            position: relative;
+            margin: 30px 0 0 30px;
+            background: url(./imgs/sound.png);
+            background-size: 100% 100%;
+            z-index: 50;
+        }
+        .icon-volume.muted{
+            background: url(./imgs/sound-min.png);
+            background-size: 100% 100%;
+        }
+
+        @font-face{
+            font-family: 'number';src:url(./number.ttf);
+        }
+
+        .client{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        #pre_show{
+            z-index: 100;
+            background: #8aa8ef;
+            color: black;
+            line-height: 15em;
+            font-size: 30px;
+        }
+        #orientation{
+            z-index: 1000;
+            display: none;
+            background: rgba(0,0,0,.7);
+        }
+        #orientation img{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -88px;
+            margin-top: -56px;
+            width: 200px;
+        }
+
+        .animated {
+            -webkit-animation-duration: 2.5s;
+            animation-duration: 2.5s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+            -webkit-animation-iteration-count: infinite;
+            animation-iteration-count: infinite;
+        }
+        @-webkit-keyframes pulse {
+            0% {
+                -webkit-transform: scale3d(1, 1, 1);
+                transform: scale3d(1, 1, 1);
+            }
+
+            50% {
+                -webkit-transform: scale3d(1.05, 1.05, 1.05);
+                transform: scale3d(1.05, 1.05, 1.05);
+            }
+
+            100% {
+                -webkit-transform: scale3d(1, 1, 1);
+                transform: scale3d(1, 1, 1);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                -webkit-transform: scale3d(1, 1, 1);
+                transform: scale3d(1, 1, 1);
+            }
+
+            50% {
+                -webkit-transform: scale3d(1.05, 1.05, 1.05);
+                transform: scale3d(1.05, 1.05, 1.05);
+            }
+
+            100% {
+                -webkit-transform: scale3d(1, 1, 1);
+                transform: scale3d(1, 1, 1);
+            }
+        }
+
+        .pulse {
+            -webkit-animation-name: pulse;
+            animation-name: pulse;
+        }
+
+        @media (orientation: landscape) {
+            #orientation{
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<script src="zepto.min.js"></script>
+<canvas id="canvas"></canvas>
+<div class="start_game animated pulse">点击开始</div>
+<div class="tools">
+    <i class="icon icon-volume"></i>
+</div>
+<div id="pre_show" class="client">
+    loding...
+</div>
+<div id="orientation" class="client">
+    <img src="imgs/orientation.png">
+</div>
+
+<audio autoplay hidden id="game_audio"></audio>
+
+
+<script>
+    var ctx, sw, sh;
+    var line_height = 50, ball_radius = 25, ball_color, ball_color_index = 0, PI = Math.PI;
+    var colors = ["#94C00F","#30AEC4","#333E43"], circles_center_delta = 0.65;
+    var inner_radius = 50;
+    var outer_radius = 70;
+    var angle = 0, orig_ball_height = ball_height= line_height+ball_radius, drop_h = 8;
+    var dropping = false, drop_start;
+    var num = 0, a=0.2;
+    var game_over = true;
+    var audio_map = {};
+
+    var audio_context,gainNode;
+
+    try {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+        audio_context = new AudioContext();
+        gainNode = audio_context.createGain();
+    } catch(e) {
+        throw new Error('Web Audio API not supported.');
+    }
+
+    /**
+     * 初始化
+     */
+    init();
+
+    function init(){
+        var canvas = document.getElementById("canvas");
+        ctx = canvas.getContext("2d");
+
+        window.setTimeout(function(){
+            loadSoundSource(["cut","end","point","tap"], function(){
+                $("#pre_show").hide();
+            });
+        }, 500);
+
+        //设置大小并绘制
+        setCanvasSize(canvas);
+
+        $(window).on("orientationchange", function(){
+            setCanvasSize(canvas);
+        });
+
+
+        $(".start_game").on("tap", function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            setAudio("tap");
+            num = 0;
+            game_over = false;
+            render();
+            $(this).hide();
+        });
+
+        $(".icon-volume").on("tap", function(){
+            var audio = $("#game_audio")[0];
+            if(gainNode.gain.value){
+                gainNode.gain.value = 0;
+                $(this).addClass("muted");
+            }else{
+                gainNode.gain.value = 1;
+                $(this).removeClass("muted");
+            }
+        });
+
+        //事件
+        $("#canvas").on("tap", function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            if(dropping){
+                return false;
+            }
+            dropBall();
+            return false;
+        });
+        $(document).on("touchmove", function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            return false;
+        }).on("doubleTap", function(e){
+            e.stopPropagation();
+            e.preventDefault();
+        });
+    }
+
+    /**
+     * 设置canvas的宽度和高度,横屏竖屏
+     */
+    function setCanvasSize(ele){
+        if(window.orientation==180 || window.orientation==0){
+            sw = document.documentElement.offsetWidth * 1.2;
+            sh = document.documentElement.offsetHeight * 1.2;
+            ele.width = sw;
+            ele.height = sh;
+            _render();
+        }else{
+            sw = document.documentElement.offsetWidth * 1.2;
+            sh = document.documentElement.offsetHeight * 1.2;
+            var temp = sh;
+            sw = sh;
+            sh = temp;
+            ele.width = sw;
+            ele.height = sh;
+            _render();
+        }
+    }
+
+    /**
+     * 绘制渲染
+     */
+    function render(){
+        if(game_over){
+            return;
+        }
+        requestAnimationFrame(render);
+
+        _render();
+    }
+
+    function _render(){
+        ctx.clearRect(0,0,sw, sh);
+
+        drawLine();
+        drawBall();
+        drawCircles();
+        drawNum();
+    }
+
+    function drawLine(){
+        ctx.save();
+        ctx.strokeStyle = "#414346";
+
+        ctx.beginPath();
+        ctx.moveTo(sw/2, 0);
+        ctx.lineTo(sw/2, line_height);
+
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function drawBall(){
+        if(dropping) {
+            var t = (new Date().getTime() - drop_start)/1000;
+            var h = 980 * t * t / 2;
+            ball_height = orig_ball_height + h;
+        }
+
+        if(!ball_color){
+            ball_color_index = Math.floor(Math.random() * colors.length);
+            ball_color = colors[ball_color_index];
+        }
+        var ch = sh * circles_center_delta - outer_radius - ball_radius;
+        if(ch <= ball_height){
+            var ret = checkColor(ball_color_index);
+            if(ret){
+                setAudio("point");
+            }else{
+                setAudio("end");
+            }
+            ball_height = line_height+ball_radius;
+            dropping = false;
+            ball_color_index = Math.floor(Math.random() * colors.length);
+            ball_color = colors[ball_color_index];
+        }
+
+        ctx.save();
+        var cx = sw/ 2, cy = ball_height;
+
+        var grd=ctx.createRadialGradient(cx, cy, 0, cx, cy, ball_radius*1.5);
+        grd.addColorStop(0, "white");
+        grd.addColorStop(1, ball_color);
+
+        ctx.fillStyle = ball_color;
+        ctx.beginPath();
+        ctx.arc(cx, ball_height, ball_radius, 0, PI*2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    }
+
+    function drawCircles(){
+        angle = angle + 1.5 + num * a;
+
+        var ch = sh * circles_center_delta;
+
+        var delta = PI * 2 / colors.length;
+        for(var i = 0; i < colors.length; i++){
+            ctx.beginPath();
+            ctx.fillStyle = colors[i];
+            var start = i * delta - PI/2 + angle * PI / 180;
+            var end = (i+1) * delta - PI/2 + angle * PI / 180;
+
+            ctx.arc(sw/2, ch, outer_radius, start, end, false);
+            ctx.arc(sw/2, ch, inner_radius, end, start, true);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function drawNum(){
+        if(num > 0) {
+            ctx.font = 'bold 28px number';
+            var ch = sh * circles_center_delta + outer_radius + 50;
+            var textw = ctx.measureText(num).width;
+            ctx.fillText(num, sw / 2 - textw / 2, ch);
+        }
+    }
+
+    function dropBall(){
+        setAudio("cut");
+        dropping = true;
+        drop_start = new Date().getTime();
+    }
+
+    function checkColor(index){
+        var current = angle % 360;
+        index = colors.length - 1 - index;
+        var delta = 360 / colors.length;
+        var start_angle = delta * index;
+
+        var end_angle = (index+1) * delta;
+        if(current <= end_angle && current >= start_angle){
+            num++;
+            return true;
+        }else{
+            game_over = true;
+            $(".start_game").show();
+            return false;
+        }
+    }
+
+    function setAudio(type){
+        var parent = $("#game_audio");
+        var supported_ogg = parent[0].canPlayType('audio/ogg');
+        var suffix = ".ogg";
+        if("" == supported_ogg){
+            suffix = ".mp3";
+        }
+        loadSound("./audio/" + type + suffix, type);
+    }
+
+    function loadSoundSource(arr, cback){
+        var parent = $("#game_audio");
+        var supported_ogg = parent[0].canPlayType('audio/ogg');
+        var suffix = ".ogg";
+        if("" == supported_ogg){
+            suffix = ".mp3";
+        }
+
+        var finished_num = 0;
+        function finished(){
+            finished_num ++;
+            if(finished_num == arr.length){
+                cback ? cback() : false;
+            }
+        }
+        for(var i in arr){
+            loadSound("./audio/" + arr[i] + suffix, arr[i], function(){
+                finished();
+            });
+        }
+    }
+
+    function loadSound(url, type, cback) {
+        if(audio_map[type]){
+            playSound(audio_map[type]);
+        }else {
+            var request = new XMLHttpRequest();
+            request.open('GET', url, true);
+            request.responseType = 'arraybuffer';
+
+            request.onload = function () {
+                audio_context.decodeAudioData(request.response, function (buffer) {
+                    audio_map[type] = buffer;
+                    cback ? cback() : false;
+                }, function (err) {
+                    throw new Error(err);
+                });
+            };
+
+            request.send();
+        }
+    }
+
+    function playSound(buffer){
+        var source = audio_context.createBufferSource();
+        source.buffer = buffer;
+
+        source.connect(gainNode);
+
+        gainNode.connect(audio_context.destination);
+        source.start(0);
+    }
+</script>
+</body>
+</html>
