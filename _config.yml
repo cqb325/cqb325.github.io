@@ -10,8 +10,6 @@ encoding: UTF-8
 assets: /assets
 
 # pagination
-gems: [jekyll-paginate]
-
 paginate: 10
 
 # Markdown Processors
@@ -150,3 +148,4 @@ tinysou_search:     ## http://tinysou.com/
 
 gems:
  - jemoji
+ - jekyll-paginate
