@@ -13,7 +13,7 @@ assets: /assets
 paginate: 10
 
 # Markdown Processors
-markdown: redcarpet
+markdown: kramdown
 redcarpet:
   extensions:
     - hard_wrap
