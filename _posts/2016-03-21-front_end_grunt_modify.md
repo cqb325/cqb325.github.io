@@ -16,39 +16,41 @@ tags: [前端, Grunt]
 
 代码大致如下：
 
+
 	task.loadNpmTasks = function(name) {
-	  loadTasksMessage('"' + name + '" local Npm module');
-	  var root = path.resolve('node_modules', __dirname+"../../../../");
-	  var pkgfile = path.join(root, name, 'package.json');
-	  var pkg = grunt.file.exists(pkgfile) ? grunt.file.readJSON(pkgfile) : {keywords: []};
+		loadTasksMessage('"' + name + '" local Npm module');
+		var root = path.resolve('node_modules', __dirname+"../../../../");
+		var pkgfile = path.join(root, name, 'package.json');
+		var pkg = grunt.file.exists(pkgfile) ? grunt.file.readJSON(pkgfile) : {keywords: []};
 	
-	  // Process collection plugins.
-	  if (pkg.keywords && pkg.keywords.indexOf('gruntcollection') !== -1) {
-	loadTaskDepth++;
-	Object.keys(pkg.dependencies).forEach(function(depName) {
-	  // Npm sometimes pulls dependencies out if they're shared, so find
-	  // upwards if not found locally.
-	  var filepath = grunt.file.findup('node_modules/' + depName, {
-	cwd: path.resolve('node_modules', name),
-	nocase: true
-	  });
-	  if (filepath) {
-	// Load this task plugin recursively.
-	task.loadNpmTasks(path.relative(root, filepath));
-	  }
-	});
-	loadTaskDepth--;
-	return;
-	  }
+	  	// Process collection plugins.
+		if (pkg.keywords && pkg.keywords.indexOf('gruntcollection') !== -1) {
+			loadTaskDepth++;
+			Object.keys(pkg.dependencies).forEach(function(depName) {
+				// Npm sometimes pulls dependencies out if they're shared, so find
+				// upwards if not found locally.
+				var filepath = grunt.file.findup('node_modules/' + depName, {
+					cwd: path.resolve('node_modules', name),
+					nocase: true
+		  		});
+			  	if (filepath) {
+					// Load this task plugin recursively.
+					task.loadNpmTasks(path.relative(root, filepath));
+		  		}
+			});
+			loadTaskDepth--;
+			return;
+  		}
 	
-	  // Process task plugins.
-	  var tasksdir = path.join(root, name, 'tasks');
-	  if (grunt.file.exists(root)) {
-	loadTasks(tasksdir);
-	  } else {
-	grunt.log.error('Local Npm module "' + name + '" not found. Is it installed?');
-	  }
+		// Process task plugins.
+		var tasksdir = path.join(root, name, 'tasks');
+		if (grunt.file.exists(root)) {
+			loadTasks(tasksdir);
+		} else {
+			grunt.log.error('Local Npm module "' + name + '" not found. Is it installed?');
+		}
 	};
+
 
 修改root的路径为本地安装node模块的地址即可，如：
 
