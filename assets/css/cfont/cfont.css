@@ -1,0 +1,41 @@
+
+@font-face {font-family: "cfont";
+  src: url('iconfont.eot?t=1483409057390'); /* IE9*/
+  src: url('iconfont.eot?t=1483409057390#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1483409057390') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1483409057390') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1483409057390#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.cfont {
+  font-family:"cfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cfont-qq:before { content: "\e606"; }
+
+.cfont-android:before { content: "\e616"; }
+
+.cfont-shufayu:before { content: "\e63f"; }
+
+.cfont-checkboxunchecked:before { content: "\e635"; }
+
+.cfont-checkboxper:before { content: "\e85c"; }
+
+.cfont-radio:before { content: "\e671"; }
+
+.cfont-radio1:before { content: "\e626"; }
+
+.cfont-tclsongfeng:before { content: "\e782"; }
+
+.cfont-iphone:before { content: "\e607"; }
+
+.cfont-tcl:before { content: "\e69e"; }
+
+.cfont-file:before { content: "\e605"; }
+
+.cfont-rocket:before { content: "\e643"; }
+
