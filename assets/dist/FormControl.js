@@ -1,4 +1,4 @@
-define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'utils/omit', 'utils/regs', 'utils/dom', 'utils/Validation', 'Label', 'core/Ajax', 'Tooltip'], function (module, React, ReactDOM, classnames, BaseComponent, Omit, Regs, Dom, Validation, Label, Ajax, Tooltip) {
+define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'utils/omit', 'utils/regs', 'utils/Dom', 'utils/Validation', 'Label', 'core/Ajax', 'Tooltip'], function (module, React, ReactDOM, classnames, BaseComponent, Omit, Regs, Dom, Validation, Label, Ajax, Tooltip) {
     "use strict";
 
     var _extends = Object.assign || function (target) {
