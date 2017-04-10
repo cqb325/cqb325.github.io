@@ -1,4 +1,4 @@
-define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'utils/Dom', 'Panel', 'Button'], function (module, React, ReactDOM, classnames, BaseComponent, Dom, Panel, Button) {
+define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'utils/Dom', 'Panel', 'Button', "velocity"], function (module, React, ReactDOM, classnames, BaseComponent, Dom, Panel, Button, velocity) {
     "use strict";
 
     var _extends = Object.assign || function (target) {
@@ -64,7 +64,6 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
     }
 
     var PropTypes = React.PropTypes;
-    var createFragment = React.addons.createFragment;
 
     var Dialog = function (_BaseComponent) {
         _inherits(Dialog, _BaseComponent);
@@ -74,12 +73,12 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
 
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dialog).call(this, props));
 
+            _this.title = props.title;
             _this.addState({
-                title: props.title || "",
                 visibility: false
             });
 
-            _this.footers = props.footers || {
+            _this.footers = props.hasFooter ? props.footers || {
                 components: [React.createElement(
                     Button,
                     { theme: "success", raised: true, onClick: _this.btnHandler.bind(_this, true), icon: "save" },
@@ -89,7 +88,7 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
                     { theme: "info", raised: true, onClick: _this.btnHandler.bind(_this, false), icon: "flask", className: "ml-10" },
                     props.cancleButtonText || "取 消"
                 )]
-            };
+            } : null;
 
             _this.backdrop = null;
 
@@ -111,9 +110,8 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
         }, {
             key: "setTitle",
             value: function setTitle(title) {
-                this.setState({
-                    title: title
-                });
+                this.title = title;
+                this.panel.setTitle(title);
             }
         }, {
             key: "btnHandler",
@@ -133,9 +131,25 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
         }, {
             key: "close",
             value: function close() {
+                var _this2 = this;
+
                 this.setState({
                     visibility: false
                 });
+                if (this.orign) {
+                    var offset = Dom.dom(this.orign).offset();
+                    var ele = ReactDOM.findDOMNode(this.panel);
+
+                    velocity(ele, {
+                        left: offset.left,
+                        top: offset.top,
+                        scale: 0
+                    }, { duration: 300, complete: function complete() {
+                            velocity(_this2.container, "fadeOut", { duration: 0 });
+                        } });
+                } else {
+                    velocity(this.container, "fadeOut", { duration: 300 });
+                }
 
                 if (this.props.onClose) {
                     this.props.onClose();
@@ -145,8 +159,8 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
             }
         }, {
             key: "open",
-            value: function open() {
-                var _this2 = this;
+            value: function open(orign) {
+                var _this3 = this;
 
                 this.setState({
                     visibility: true
@@ -166,21 +180,67 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
                 this.backdrop.style.display = "block";
 
                 window.setTimeout(function () {
-                    var ele = ReactDOM.findDOMNode(_this2);
+                    Dom.dom(_this3.container).show();
+                    var ele = ReactDOM.findDOMNode(_this3.panel);
                     var w = ele.clientWidth;
                     var h = ele.clientHeight;
                     ele.style.marginLeft = -w / 2 + "px";
                     ele.style.marginTop = -h / 2 + "px";
+                    Dom.dom(_this3.container).hide();
 
-                    if (_this2.props.onOpen) {
-                        _this2.props.onOpen();
+                    if (orign) {
+                        velocity(_this3.container, "fadeIn", { duration: 0 });
+                        _this3.orign = orign;
+                        var offset = Dom.dom(orign).offset();
+                        Dom.dom(ele).css({
+                            left: offset.left + "px",
+                            top: offset.top + "px"
+                        });
+                        var bodyw = document.documentElement.clientWidth;
+                        var bodyH = document.documentElement.clientHeight;
+                        velocity(ele, {
+                            scale: 0
+                        }, { duration: 0, complete: function complete() {
+                                velocity(ele, {
+                                    scale: 1,
+                                    left: bodyw / 2,
+                                    top: bodyH / 2
+                                }, { duration: 500, easing: "ease-in" });
+                            } });
+                    } else {
+                        velocity(_this3.container, "fadeIn", { duration: 300 });
                     }
-                    _this2.emit("open");
+
+                    if (_this3.props.onOpen) {
+                        _this3.props.onOpen();
+                    }
+                    _this3.emit("open");
                 }, 0);
             }
         }, {
-            key: "render",
-            value: function render() {
+            key: "isOpen",
+            value: function isOpen() {
+                return this.state.visibility;
+            }
+        }, {
+            key: "getContainer",
+            value: function getContainer() {
+                return this.container;
+            }
+        }, {
+            key: "getPanel",
+            value: function getPanel() {
+                return this.panel;
+            }
+        }, {
+            key: "componentDidMount",
+            value: function componentDidMount() {
+                var _this4 = this;
+
+                this.container = document.createElement("div");
+                document.body.appendChild(this.container);
+                Dom.dom(this.container).addClass("cm-popup-warp");
+
                 var _props = this.props;
                 var className = _props.className;
                 var style = _props.style;
@@ -189,22 +249,48 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
                 var props = _extends({}, this.props);
                 props.className = className;
 
-                var sty = style || {};
-                sty.display = this.state.visibility ? "block" : "none";
-                props.style = sty;
-
+                props.style = style || {};
                 props.footers = this.footers;
 
-                return React.createElement(
-                    Panel,
-                    props,
-                    this.props.children
-                );
+                if (this.props.hasCloseBtn) {
+                    props.tools = {
+                        components: [React.createElement(
+                            "a",
+                            { href: "javascript:void(0)", onClick: this.close.bind(this), className: "cm-dialog-close" },
+                            "×"
+                        )]
+                    };
+                }
+
+                if (this.state.visibility) {
+                    Dom.dom(this.container).show();
+                } else {
+                    Dom.dom(this.container).hide();
+                }
+
+                window.setTimeout(function () {
+                    ReactDOM.render(React.createElement(
+                        Panel,
+                        _extends({ ref: function ref(_ref) {
+                                _this4.panel = _ref;
+                            } }, props),
+                        _this4.props.children
+                    ), _this4.container);
+                }, 0);
+            }
+        }, {
+            key: "render",
+            value: function render() {
+                return React.createElement("div", null);
             }
         }]);
 
         return Dialog;
     }(BaseComponent);
+
+    Dialog.defaultProps = {
+        hasCloseBtn: true
+    };
 
     Dialog.propTypes = {
         /**

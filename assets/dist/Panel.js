@@ -112,20 +112,25 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
                     }
                 }
 
+                var text = React.createElement(
+                    "span",
+                    { className: "cm-panel-head-text" },
+                    this.state.title
+                );
                 if (tools_cont) {
                     if (align === "right") {
                         return createFragment({
-                            title: this.state.title,
+                            title: text,
                             tools: tools_cont
                         });
                     } else {
                         return createFragment({
                             tools: tools_cont,
-                            title: this.state.title
+                            title: text
                         });
                     }
                 } else {
-                    return this.state.title;
+                    return text;
                 }
             }
         }, {

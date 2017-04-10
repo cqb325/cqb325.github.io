@@ -45,7 +45,9 @@
             "shiv": '../lib/html5shiv',
             "respond": '../lib/respond.min',
             "Routers": '../config/Routers',
-            "markdown": '../lib/markdown'
+            "markdown": '../lib/markdown',
+            "plupload": "../lib/plupload.full.min",
+            "mock": "../lib/mock"
         },
         shim: {
             "common": ["shiv","respond","jquery","moment","validate"],
@@ -53,7 +55,8 @@
             'daterangepicker': ['moment','jquery'],
             'validate': ['jquery'],
             'validate-message': ['validate'],
-            'sham': ['shim']
+            'sham': ['shim'],
+            "Uploadify": ["plupload"]
         }
     });
 

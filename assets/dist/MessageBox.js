@@ -144,8 +144,7 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
         }, {
             key: "hide",
             value: function hide() {
-                var ele = Dom.dom(ReactDOM.findDOMNode(this.panel));
-                velocity(ele[0], "fadeOut", { duration: 300 });
+                velocity(this.container, "fadeOut", { duration: 300 });
 
                 if (this.props.onHide) {
                     this.props.onHide();
@@ -197,13 +196,14 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
 
                 window.setTimeout(function () {
                     var ele = ReactDOM.findDOMNode(_this2.panel);
-                    Dom.dom(ele).show();
+                    Dom.dom(_this2.container).show();
+
                     var w = ele.clientWidth;
                     var h = ele.clientHeight;
                     ele.style.marginLeft = -w / 2 + "px";
                     ele.style.marginTop = -h / 2 + "px";
-                    Dom.dom(ele).hide();
-                    velocity(ele, "fadeIn", { duration: 300 });
+                    Dom.dom(_this2.container).show();
+                    velocity(_this2.container, "fadeIn", { duration: 300 });
 
                     if (_this2.props.onShow) {
                         _this2.props.onShow();
@@ -218,6 +218,8 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
 
                 this.container = document.createElement("div");
                 document.body.appendChild(this.container);
+                Dom.dom(this.container).addClass("cm-popup-warp");
+                Dom.dom(this.container).hide();
 
                 var _props = this.props;
                 var className = _props.className;
@@ -229,7 +231,6 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
 
                 props.footers = this.footers;
                 style = _extends({}, style);
-                style.display = "none";
                 props.style = style;
 
                 window.setTimeout(function () {
