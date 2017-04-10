@@ -37,7 +37,8 @@ define(function(module, exports){
             {id:"322", text: "Table",link: "#/components/table"},
             {id:"323", text: "Progress",link: "#/components/progress"},
             {id:"324", text: "Slick",link: "#/components/slick"},
-            {id:"325", text: "Spin",link: "#/components/spin"}
+            {id:"325", text: "Spin",link: "#/components/spin"},
+            {id:"326", text: "Uploadify",link: "#/components/uploadify"}
         ]},
         {id: "4", "text": "业务组件", children: [
             {id:"41", text: "列表页",link: "#/business-component/simple-list-page"},

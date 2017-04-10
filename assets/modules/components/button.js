@@ -58,6 +58,76 @@ define(["module", "react", "Row", "Col", "Label", "../components/button/demo1", 
                             React.createElement(Demo4, null)
                         )
                     )
+                ),
+                React.createElement(
+                    "h2",
+                    { className: "page-h2" },
+                    "API"
+                ),
+                React.createElement(
+                    "h3",
+                    { className: "page-h3" },
+                    "Input"
+                ),
+                React.createElement(
+                    "table",
+                    { className: "cm-table table-bordered" },
+                    React.createElement(
+                        "thead",
+                        null,
+                        React.createElement(
+                            "tr",
+                            null,
+                            React.createElement(
+                                "th",
+                                null,
+                                "参数"
+                            ),
+                            React.createElement(
+                                "th",
+                                null,
+                                "说明"
+                            ),
+                            React.createElement(
+                                "th",
+                                null,
+                                "类型"
+                            ),
+                            React.createElement(
+                                "th",
+                                null,
+                                "默认值"
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        "tbody",
+                        null,
+                        React.createElement(
+                            "tr",
+                            null,
+                            React.createElement(
+                                "td",
+                                null,
+                                "theme"
+                            ),
+                            React.createElement(
+                                "td",
+                                null,
+                                "theme"
+                            ),
+                            React.createElement(
+                                "td",
+                                null,
+                                "string"
+                            ),
+                            React.createElement(
+                                "td",
+                                null,
+                                "default"
+                            )
+                        )
+                    )
                 )
             );
         }

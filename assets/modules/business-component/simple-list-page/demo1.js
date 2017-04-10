@@ -1,4 +1,4 @@
-define(["module", "react", "../../components/BaseDemo", "business/SimpleListPage", "../../components/Code", "FontIcon", "FormControl", "Input", "Select", "Button"], function (module, React, BaseDemo, SimpleListPage, Code, FontIcon, FormControl, Input, Select, Button) {
+define(["module", "react", "../../components/BaseDemo", "business/SimpleListPage", "../../components/Code", "FontIcon", "FormControl", "Input", "Select", "Button", "mock"], function (module, React, BaseDemo, SimpleListPage, Code, FontIcon, FormControl, Input, Select, Button, Mock) {
     "use strict";
 
     function _classCallCheck(instance, Constructor) {
@@ -48,6 +48,8 @@ define(["module", "react", "../../components/BaseDemo", "business/SimpleListPage
         });
         if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
     }
+
+    Mock.mock("getOperatorList.html", { "total|100-500": 1, "pageSize": 10, "pageNum|1-50": 1, "data|10": [{ "id": "@string(8)", "province": "@CHINESENAME", "username": "@CHINESENAME", "mobile": "@String('number',11)", "email": "@email", "desc": "@string(15)", "createTime": "@datetime()", "status|0-1": 1 }] });
 
     var Demo = function (_BaseDemo) {
         _inherits(Demo, _BaseDemo);
@@ -106,7 +108,7 @@ define(["module", "react", "../../components/BaseDemo", "business/SimpleListPage
                                 "查 询"
                             )
                         ),
-                        React.createElement(SimpleListPage, { pagination: true, columns: columns, action: "http://192.168.105.202:8415/mock/cdn/getOperatorList.html" })
+                        React.createElement(SimpleListPage, { pagination: true, columns: columns, action: "getOperatorList.html" })
                     ),
                     React.createElement(
                         "div",
@@ -131,7 +133,7 @@ define(["module", "react", "../../components/BaseDemo", "business/SimpleListPage
                         React.createElement(
                             Code,
                             { className: "language-jsx" },
-                            "\nconst SimpleListPage = require(\"business/SimpleListPage\");\nconst FormControl = require(\"FormControl\");\nconst Input = require(\"Input\");\nconst Select = require(\"Select\");\nconst Button = require(\"Button\");\n\nlet columns = [\n    {name: \"username\", text: \"用户名\"},\n    {name: \"mobile\", text: \"手机号码\"},\n    {name: \"email\", text: \"邮箱\"},\n    {name: \"createTime\", text: \"注册时间\"},\n    {name: \"status\", text: \"状态\", format: function(value, column, row){\n        return [\"禁用\",\"激活\"][value];\n    }}\n];\n\nReactDOM.render(\n<div>\n    <div className=\"search-wrap mb-10\">\n        <label>用户名</label> <Input type=\"text\" name=\"username\" className=\"searchItem\"/>\n        <label>手机号</label> <Input type=\"number\" name=\"mobile\"  className=\"searchItem\"/>\n        <label>状态</label> <Select name=\"status\" data={[{id: \"0\", text: \"禁用\"},{id: \"1\", text: \"激活\"}]} className=\"searchItem\"/>\n        <a className=\"cm-button primary ml-10\" id=\"search-btn\">查 询</a>\n    </div>\n    <SimpleListPage pagination={true} columns={columns} action=\"http://192.168.105.202:8415/mock/cdn/getOperatorList.html\"></SimpleListPage>\n</div>, mountNode);\n"
+                            "\nconst SimpleListPage = require(\"business/SimpleListPage\");\nconst FormControl = require(\"FormControl\");\nconst Input = require(\"Input\");\nconst Select = require(\"Select\");\nconst Button = require(\"Button\");\n\nlet columns = [\n    {name: \"username\", text: \"用户名\"},\n    {name: \"mobile\", text: \"手机号码\"},\n    {name: \"email\", text: \"邮箱\"},\n    {name: \"createTime\", text: \"注册时间\"},\n    {name: \"status\", text: \"状态\", format: function(value, column, row){\n        return [\"禁用\",\"激活\"][value];\n    }}\n];\n\nReactDOM.render(\n<div>\n    <div className=\"search-wrap mb-10\">\n        <label>用户名</label> <Input type=\"text\" name=\"username\" className=\"searchItem\"/>\n        <label>手机号</label> <Input type=\"number\" name=\"mobile\"  className=\"searchItem\"/>\n        <label>状态</label> <Select name=\"status\" data={[{id: \"0\", text: \"禁用\"},{id: \"1\", text: \"激活\"}]} className=\"searchItem\"/>\n        <a className=\"cm-button primary ml-10\" id=\"search-btn\">查 询</a>\n    </div>\n    <SimpleListPage pagination={true} columns={columns} action=\"getOperatorList.html\"></SimpleListPage>\n</div>, mountNode);\n"
                         )
                     )
                 );

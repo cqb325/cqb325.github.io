@@ -2421,6 +2421,10 @@ textarea.cm-form-control {
   padding: 7px 15px;
   border-bottom: 1px solid #e9e9e9;
 }
+.cm-panel .cm-panel-head-text {
+  min-height: 12px;
+  display: inline-block;
+}
 .cm-panel .cm-panel-content {
   padding: 20px;
 }
@@ -2446,7 +2450,15 @@ textarea.cm-form-control {
   top: 50%;
   left: 50%;
   z-index: 40000;
-  min-width: 200px;
+  min-width: 300px;
+}
+.cm-popup-warp {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 50000;
 }
 .shadow-backdrop {
   position: fixed;
@@ -4047,4 +4059,178 @@ textarea.cm-form-control {
 .cm-table.table-bordered > thead > tr > th,
 .cm-table.table-bordered > tbody > tr > td {
   border-right: 1px solid #e9e9e9;
+}
+.cm-uploadify {
+  display: inline-block;
+  width: 100%;
+  font-size: 12px;
+  line-height: normal;
+}
+.cm-uploadify-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cm-uploadify-list.cm-uploadify-picture .cm-uploadify-item {
+  padding: 8px;
+  border: 1px solid #e9e9e9;
+  border-radius: 3px;
+}
+.cm-uploadify-item {
+  position: relative;
+  margin-top: 8px;
+  padding: 3px 25px 3px 16px;
+  -webkit-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.cm-uploadify-item .fa-paperclip {
+  position: absolute;
+  left: 2px;
+  top: 8px;
+}
+.cm-uploadify-item:hover {
+  background-color: #ecf6fd;
+}
+.cm-uploadify-item:hover .cm-uploadify-close {
+  opacity: 1;
+}
+.cm-uploadify-item .cm-uploadify-name {
+  width: 100%;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+.cm-uploadify-item.cm-uploadify-done .cm-uploadify-progress {
+  opacity: 0;
+}
+.cm-uploadify-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 1px;
+  background: #2DB2FF;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -ms-transition: all .3s;
+  -o-transition: all .3s;
+  transition: all .3s;
+}
+.cm-uploadify-close {
+  position: absolute;
+  color: rgba(0, 0, 0, 0.43);
+  right: 10px;
+  top: 4px;
+  opacity: 0;
+  cursor: pointer;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  z-index: 1;
+}
+.cm-uploadify-thumbnail {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border-radius: 3px;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.cm-uploadify-thumbnail img {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+.cm-uploadify-falls .cm-uploadify-thumbnail {
+  margin-right: 8px;
+  position: relative;
+  zindex: 1;
+}
+.cm-uploadify-falls .cm-uploadify-picture .cm-uploadify-name {
+  margin-left: -56px;
+  padding-left: 56px;
+}
+.cm-uploadify-grid .cm-uploadify-button {
+  width: 62px;
+  height: 62px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.43);
+  border: 1px dashed #d9d9d9;
+  border-radius: 4px;
+  padding: 4px;
+  cursor: pointer;
+  display: inline-block;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  margin-bottom: 6px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.cm-uploadify-grid .cm-uploadify-button:hover {
+  border: 1px dashed #20a0ff;
+}
+.cm-uploadify-grid .cm-uploadify-button > span {
+  display: inline-block;
+}
+.cm-uploadify-grid .cm-uploadify-list {
+  display: inline-block;
+  float: left;
+}
+.cm-uploadify-grid .cm-uploadify-item {
+  float: left;
+  margin-right: 6px;
+  margin-top: 0;
+  margin-bottom: 6px;
+  padding: 6px;
+  position: relative;
+  z-index: 1;
+}
+.cm-uploadify-grid .cm-uploadify-item:after {
+  position: absolute;
+  display: block;
+  content: '';
+  left: 6px;
+  top: 6px;
+  right: 6px;
+  bottom: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+}
+.cm-uploadify-grid .cm-uploadify-item:hover:after {
+  opacity: 1;
+}
+.cm-uploadify-grid .cm-uploadify-close {
+  color: #eee;
+  top: 50%;
+  margin-top: -6px;
+  right: 12px;
+}
+.cm-uploadify-view {
+  position: absolute;
+  top: 50%;
+  margin-top: -6px;
+  left: 12px;
+  cursor: pointer;
+  opacity: 0;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  z-index: 1;
+}
+.cm-uploadify-item:hover .cm-uploadify-view {
+  color: #eee;
+  opacity: 1;
+}
+.cm-uploadify-plus {
+  font-size: 30px;
+}
+.cm-uploadify-lightbox {
+  display: block;
+  margin: 0 auto;
 }
