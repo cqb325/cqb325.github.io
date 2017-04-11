@@ -49,7 +49,7 @@ define(["module", "react", "../../components/BaseDemo", "business/SimpleListPage
         if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
     }
 
-    Mock.mock("getOperatorList.html", { "total|100-500": 1, "pageSize": 10, "pageNum|1-50": 1, "data|10": [{ "id": "@string(8)", "province": "@CHINESENAME", "username": "@CHINESENAME", "mobile": "@String('number',11)", "email": "@email", "desc": "@string(15)", "createTime": "@datetime()", "status|0-1": 1 }] });
+    Mock.mock("getOperatorList.html", { "total|100-500": 1, "pageSize": 10, "pageNum|1-50": 1, "data|10": [{ "id": "@string(8)", "province": "@cname()", "username": "@cname()", "mobile": "@String('number',11)", "email": "@email", "desc": "@string(15)", "createTime": "@datetime()", "status|0-1": 1 }] });
 
     var Demo = function (_BaseDemo) {
         _inherits(Demo, _BaseDemo);
