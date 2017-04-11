@@ -31,6 +31,7 @@ define(function(module, exports){
             {id:"317", text: "Panel",link: "#/components/panel"},
             {id:"316", text: "Tooltip",link: "#/components/tooltip"},
             {id:"318", text: "MessageBox",link: "#/components/messagebox"},
+            {id:"3181", text: "Dialog",link: "#/components/dialog"},
             {id:"319", text: "Menu",link: "#/components/menu"},
             {id:"320", text: "Tree",link: "#/components/tree"},
             {id:"321", text: "Select",link: "#/components/select"},
