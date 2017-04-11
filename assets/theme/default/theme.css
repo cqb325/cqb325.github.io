@@ -764,6 +764,10 @@ a:focus {
 .cm-radio-group.stick .cm-checkbox label {
   cursor: pointer;
 }
+.invalid .cm-checkbox-group .cm-checkbox,
+.invalid .cm-radio-group .cm-checkbox {
+  color: #ff4949;
+}
 .clock-container {
   position: relative;
   width: 100%;
