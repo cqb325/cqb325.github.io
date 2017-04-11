@@ -244,9 +244,12 @@ define(["module", "react", "react-dom", "classnames", 'utils/Dom', 'utils/Events
                 var top = 0,
                     left = 0;
                 this.scrollElements.forEach(function (ele) {
-                    top += ele.scrollTop;
-                    left += ele.scrollLeft;
+                    if(ele.tagName !== "BODY") {
+                        top += ele.scrollTop;
+                        left += ele.scrollLeft;
+                    }
                 });
+
                 return {
                     top: top,
                     left: left
