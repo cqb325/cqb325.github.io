@@ -238,6 +238,22 @@ define(["module", "react", "core/BaseComponent", 'classnames', 'Input', 'CheckBo
                 });
             }
         }, {
+            key: "isValid",
+            value: function isValid() {
+                var valid = true;
+                for (var i = 0; i < this.items.length; i++) {
+                    var rowItems = this.items[i];
+                    for (var field in rowItems) {
+                        if (rowItems[field].isFormItem() && rowItems[field].check() == false) {
+                            valid = false;
+                            return valid;
+                        }
+                    }
+                }
+
+                return valid;
+            }
+        }, {
             key: "render",
             value: function render() {
                 var _props = this.props;

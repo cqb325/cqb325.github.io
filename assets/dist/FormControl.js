@@ -220,7 +220,7 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
                 if (trigger && trigger == event.type) {
                     this.check(value);
                     if (this.props.onChange) {
-                        this.props.onChange.apply(this, arguments);
+                        this.props.onChange.apply(this, [value, event]);
                     }
                 }
             }
