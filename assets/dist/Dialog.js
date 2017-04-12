@@ -86,7 +86,7 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
                 ), React.createElement(
                     Button,
                     { theme: "info", raised: true, onClick: _this.btnHandler.bind(_this, false), icon: "flask", className: "ml-10" },
-                    props.cancleButtonText || "取 消"
+                    props.cancelButtonText || "取 消"
                 )]
             } : null;
 
