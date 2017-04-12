@@ -76,8 +76,17 @@ define(["module", "react", "react-dom", "../../components/BaseDemo", "../../comp
         }, {
             key: "onChange",
             value: function onChange(name, value, col, items, selectItem) {
+                console.log(arguments);
                 if (name === "loopDomain") {
                     items["checkURL"].setValue("http://" + value);
+                }
+            }
+        }, {
+            key: "submit",
+            value: function submit() {
+                if (this.refs.tableForm.isValid()) {
+                    //do submit
+                    console.log("valid all");
                 }
             }
         }, {
@@ -110,7 +119,7 @@ define(["module", "react", "react-dom", "../../components/BaseDemo", "../../comp
                             { className: "mt-25 text-center" },
                             React.createElement(
                                 Button,
-                                { theme: "primary" },
+                                { theme: "primary", onClick: this.submit.bind(this) },
                                 "提 交"
                             )
                         ),
