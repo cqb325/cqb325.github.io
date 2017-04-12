@@ -1,4 +1,4 @@
-define(["module", "react", "Label", "../components/switch/demo1", "../components/switch/demo2", "../components/switch/demo3", "../components/switch/demo4", "../components/switch/demo5"], function (module, React, Label, Demo1, Demo2, Demo3, Demo4, Demo5) {
+define(["module", "react", "Label", "Table", "../components/switch/demo1", "../components/switch/demo2", "../components/switch/demo3", "../components/switch/demo4", "../components/switch/demo5"], function (module, React, Label, Table, Demo1, Demo2, Demo3, Demo4, Demo5) {
     "use strict";
 
     var Page = React.createClass({
@@ -55,6 +55,40 @@ define(["module", "react", "Label", "../components/switch/demo1", "../components
                         Label,
                         { className: "code-box" },
                         React.createElement(Demo4, null)
+                    )
+                ),
+                React.createElement(
+                    "h2",
+                    { className: "page-h2" },
+                    "API"
+                ),
+                React.createElement(
+                    "h3",
+                    { className: "page-h3" },
+                    "Switch"
+                ),
+                React.createElement(Table, { columns: [{ name: "param", text: "参数" }, { name: "desc", text: "说明" }, { name: "type", text: "类型" }, { name: "default", text: "默认值" }], bordered: true, data: [{ param: "className", desc: "自定义class", type: "string", default: "" }, { param: "style", desc: "自定义样式", type: "object", default: "" }, { param: "checked", desc: "是否选中", type: "boolean", default: "false" }, { param: "disabled", desc: "是否禁用", type: "boolean", default: "false" }, { param: "onChange", desc: "选中状态变化时触发", type: "function", default: "" }, { param: "size", desc: "switch的尺寸 small", type: "string", default: "" }, { param: "checkedText", desc: "选中时的提示字符串", type: "string", default: "" }, { param: "unCheckedText", desc: "未选中时的提示字符串", type: "string", default: "" }, { param: "name", desc: "作为form表单元素的name", type: "string", default: "" }] }),
+                React.createElement(
+                    "h3",
+                    { className: "page-h3" },
+                    "Methods"
+                ),
+                React.createElement(
+                    "ul",
+                    { className: "code-methods" },
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "i",
+                            null,
+                            "toggleSwitch()"
+                        ),
+                        React.createElement(
+                            "span",
+                            null,
+                            "改变Switch的状态"
+                        )
                     )
                 )
             );
