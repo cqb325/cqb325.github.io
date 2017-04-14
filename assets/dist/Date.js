@@ -90,11 +90,26 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
             _this.maxStage = maxStage;
 
             _this.maxRange = props.maxRange || 0;
+            var current = moment();
+            var format = props.format;
+            if (props.value) {
+                if (!format) {
+                    if (stages[stage] == 0) {
+                        format = "HH:mm:ss";
+                        current = moment(props.value, format);
+                    } else {
+                        current = moment(props.value);
+                    }
+                } else {
+                    current = moment(props.value, format);
+                }
+            }
+
             _this.addState({
                 stage: stages[stage],
                 value: props.value,
-                format: props.format,
-                current: moment(props.value),
+                format: format,
+                current: current,
                 startDate: props.startDate ? moment(props.startDate) : false,
                 endDate: props.endDate ? moment(props.endDate) : false,
                 prevBtn: props.prevBtn || true,
@@ -154,14 +169,32 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                 }
             }
         }, {
-            key: "show",
-            value: function show() {
-                var today = moment();
-
-                this.setState({
-                    current: moment(this.state.value) || today
-                });
+            key: "getCurrent",
+            value: function getCurrent() {
+                return this.state.current;
             }
+        }, {
+            key: "setCurrent",
+            value: function setCurrent(current) {
+                this.setState({ current: current });
+            }
+        }, {
+            key: "show",
+            value: function show() {}
+            // let today = moment();
+            //
+            // this.setState({
+            //     current: moment(this.state.value) || today
+            // });
+
+
+            /**
+             * 格式化值
+             * @method formatValue
+             * @param value {String} 日期的值
+             * @returns {String} 格式化后的日期
+             */
+
         }, {
             key: "formatValue",
             value: function formatValue(value) {
@@ -249,9 +282,8 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                 }
                 setTimeout(function () {
                     _this3.setState(state);
+                    _this3.emit("selectYear", year);
                 }, 0);
-
-                this.emit("selectYear", year);
             }
         }, {
             key: "monthChange",
@@ -280,8 +312,8 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                 }
                 setTimeout(function () {
                     _this4.setState(state);
+                    _this4.emit("selectMonth", month);
                 }, 0);
-                this.emit("selectMonth", month);
             }
         }, {
             key: "timeChange",
@@ -292,15 +324,16 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                 var current = this.state.current;
                 current.set({ "hour": time.get("hour"), minute: time.get("minute"), second: time.get("second") });
 
+                var value = this.formatValue(current);
                 setTimeout(function () {
                     _this5.setState({
                         current: current,
-                        value: current.format("HH:mm:ss")
+                        value: value
                     });
                 }, 0);
 
-                this.valueChange(current.format("HH:mm:ss"), current.toDate());
-                this.emit("selectTime", current.format("HH:mm:ss"));
+                this.valueChange(value, current.toDate());
+                this.emit("selectTime", value, current.toDate());
             }
         }, {
             key: "hoverDay",
@@ -353,6 +386,8 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
         }, {
             key: "renderDays",
             value: function renderDays() {
+                var _this7 = this;
+
                 var value = this.state.value,
                     current = moment(this.state.current),
                     year = current.year(),
@@ -361,7 +396,9 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                     end = moment(first).add(1, 'months').add(-1, 'days'),
                     min = 1 - first.weekday(),
                     max = Math.ceil((end.get("date") - min + 1) / 7) * 7,
-                    days = [];
+                    days = [],
+                    lines = [],
+                    lineLength = 0;
 
                 //当前视窗需要渲染的日期
                 for (var date, i = 0; i < max; i++) {
@@ -369,6 +406,8 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                     date = temp.add(i + min - 1, "days");
                     days.push(date);
                 }
+
+                lineLength = days.length / 7;
 
                 //当天
                 var isToday = value ? year === moment(value).get("year") && month === moment(value).get('month') : false;
@@ -387,39 +426,69 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                 }
 
                 var completion = this.props.completion == undefined ? true : this.props.completion;
-                return days.map(function (d, i) {
-                    var _this7 = this;
+                for (var _i = 0; _i < lineLength; _i++) {
+                    var line = [];
 
-                    //日期过滤
-                    var disabled = startDate && moment(d.format(startDate._f)).diff(startDate) < 0 ? true : false;
-                    disabled = disabled || (endDate && moment(d.format(endDate._f)).diff(endDate) > 0 ? true : false);
+                    var _loop = function _loop(j) {
+                        var index = _i * 7 + j;
+                        var d = days[index];
 
-                    var rangeSelect = false;
-                    if (rangeStart && (rangeStart.isBefore(d) || rangeStart.isSame(d, 'day') && rangeStart.isSame(d, 'month') && rangeStart.isSame(d, 'year')) && (d.isBefore(rangeEnd) || rangeEnd.isSame(d, 'day') && rangeEnd.isSame(d, 'month') && rangeEnd.isSame(d, 'year'))) {
-                        rangeSelect = true;
+                        //日期过滤
+                        var disabled = startDate && moment(d.format(startDate._f)).diff(startDate) < 0 ? true : false;
+                        disabled = disabled || (endDate && moment(d.format(endDate._f)).diff(endDate) > 0 ? true : false);
+
+                        var rangeSelect = false;
+                        var isRangeStart = false,
+                            isRangeEnd = false;
+                        if (rangeStart && (rangeStart.isBefore(d) || rangeStart.isSame(d, 'day') && rangeStart.isSame(d, 'month') && rangeStart.isSame(d, 'year')) && (d.isBefore(rangeEnd) || rangeEnd.isSame(d, 'day') && rangeEnd.isSame(d, 'month') && rangeEnd.isSame(d, 'year'))) {
+                            rangeSelect = true;
+
+                            if (rangeStart.isSame(d, 'day') && rangeStart.isSame(d, 'month') && rangeStart.isSame(d, 'year')) {
+                                isRangeStart = true;
+                            }
+                            if (rangeEnd.isSame(d, 'day') && rangeEnd.isSame(d, 'month') && rangeEnd.isSame(d, 'year')) {
+                                isRangeEnd = true;
+                            }
+                        }
+
+                        var className = classnames('day', {
+                            disabled: disabled,
+                            gray: d.get('month') !== month,
+                            today: isToday && moment(value).get('date') === d.get('date') && moment(value).get('month') === d.get('month'),
+                            rangeSelect: rangeSelect,
+                            "cm-date-range-start": isRangeStart,
+                            "cm-date-range-end": isRangeEnd
+                        });
+
+                        if (!completion && d.get('month') !== month) {
+                            line.push(React.createElement("button", { type: "button", key: index, className: "day empty" }));
+                        } else {
+                            line.push(React.createElement(
+                                "button",
+                                { type: "button", onClick: function onClick() {
+                                        _this7.dayChange(d);
+                                    }, onMouseOver: function onMouseOver() {
+                                        _this7.hoverDay(d);
+                                    }, key: index, className: className },
+                                React.createElement(
+                                    "span",
+                                    null,
+                                    d.get('date')
+                                )
+                            ));
+                        }
+                    };
+
+                    for (var j = 0; j < 7; j++) {
+                        _loop(j);
                     }
-
-                    var className = classnames('day', {
-                        disabled: disabled,
-                        gray: d.get('month') !== month,
-                        today: isToday && moment(value).get('date') === d.get('date') && moment(value).get('month') === d.get('month'),
-                        rangeSelect: rangeSelect
-                    });
-
-                    if (!completion && d.get('month') !== month) {
-                        return React.createElement("button", { type: "button", key: i, className: "day empty" });
-                    }
-
-                    return React.createElement(
-                        "button",
-                        { type: "button", onClick: function onClick() {
-                                _this7.dayChange(d);
-                            }, onMouseOver: function onMouseOver() {
-                                _this7.hoverDay(d);
-                            }, key: i, className: className },
-                        d.get('date')
-                    );
-                }, this);
+                    lines.push(React.createElement(
+                        "li",
+                        { key: _i, className: "cm-date-line" },
+                        line
+                    ));
+                }
+                return lines;
             }
         }, {
             key: "renderYears",
@@ -431,21 +500,38 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
 
                 var ret = [];
 
-                var _loop = function _loop(i) {
+                var _loop2 = function _loop2(i) {
+                    var className = classnames("year", {
+                        "active": i === year
+                    });
                     ret.push(React.createElement(
                         "button",
                         { type: "button", onClick: function onClick() {
                                 _this8.yearChange(i);
-                            }, key: i, className: 'year' },
+                            }, key: i, className: className },
                         i
                     ));
                 };
 
                 for (var i = year - 12; i < year + 13; i++) {
-                    _loop(i);
+                    _loop2(i);
                 }
 
-                return ret;
+                var lines = [];
+                for (var _i2 = 0; _i2 < 5; _i2++) {
+                    var line = [];
+                    for (var j = 0; j < 5; j++) {
+                        var _index = _i2 * 5 + j;
+                        line.push(ret[_index]);
+                    }
+                    lines.push(React.createElement(
+                        "div",
+                        { className: "cm-date-line", key: _i2 },
+                        line
+                    ));
+                }
+
+                return lines;
             }
         }, {
             key: "renderMonths",
@@ -462,7 +548,7 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                 var ret = [];
                 var months = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
 
-                var _loop2 = function _loop2(i) {
+                var _loop3 = function _loop3(i) {
                     var disabled = false;
                     if (startDate) {
                         if (startDate.get("year") > year) {
@@ -485,7 +571,8 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                         }
                     }
                     var className = classnames('month', {
-                        disabled: disabled
+                        disabled: disabled,
+                        active: i == month
                     });
                     ret.push(React.createElement(
                         "button",
@@ -497,7 +584,7 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                 };
 
                 for (var i = 0; i < 12; i++) {
-                    _loop2(i);
+                    _loop3(i);
                 }
 
                 return ret;
@@ -505,9 +592,13 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
         }, {
             key: "timeClose",
             value: function timeClose() {
+                var _this10 = this;
+
                 if (this.view !== "time") {
-                    this.setState({
-                        stage: 1
+                    window.setTimeout(function () {
+                        _this10.setState({
+                            stage: 1
+                        });
                     });
                 }
             }
@@ -558,7 +649,7 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
         }, {
             key: "_getHeader",
             value: function _getHeader(now) {
-                var _this10 = this;
+                var _this11 = this;
 
                 if (this.state.stage == 0) {
                     return "";
@@ -566,31 +657,32 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                 var prev = this.state.stage == 3 || !this.state.prevBtn ? null : React.createElement(
                     "a",
                     { className: "prev", onClick: this.prev.bind(this) },
-                    React.createElement("i", { className: "fa fa-chevron-left" })
+                    "<"
                 );
                 var next = this.state.stage == 3 || !this.state.nextBtn ? null : React.createElement(
                     "a",
                     { className: "next", onClick: this.next.bind(this) },
-                    React.createElement("i", { className: "fa fa-chevron-right" })
+                    ">"
                 );
                 var month = this.state.stage > 1 ? null : React.createElement(
                     "a",
                     { className: "month", onClick: function onClick() {
-                            _this10.stageChange(2);
+                            _this11.stageChange(2);
                         } },
                     now.format('MM')
+                );
+                var year = this.state.stage >= 3 ? null : React.createElement(
+                    "a",
+                    { className: "year", onClick: function onClick() {
+                            _this11.stageChange(3);
+                        } },
+                    now.format('YYYY')
                 );
                 return React.createElement(
                     "div",
                     { style: this.props.style, className: "date-picker-header" },
                     prev,
-                    React.createElement(
-                        "a",
-                        { className: "year", onClick: function onClick() {
-                                _this10.stageChange(3);
-                            } },
-                        now.format('YYYY')
-                    ),
+                    year,
                     month,
                     next
                 );
@@ -629,8 +721,16 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                             return React.createElement(
                                 "div",
                                 { className: "inner" },
-                                weeks,
-                                cont
+                                React.createElement(
+                                    "div",
+                                    { className: "cm-date-week-line" },
+                                    weeks
+                                ),
+                                React.createElement(
+                                    "ul",
+                                    { className: "cm-date-lines" },
+                                    cont
+                                )
                             );
                         }
                     case 3:
@@ -639,7 +739,11 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                             return React.createElement(
                                 "div",
                                 { className: "inner" },
-                                _cont
+                                React.createElement(
+                                    "ul",
+                                    { className: "cm-date-lines cm-date-year-line" },
+                                    _cont
+                                )
                             );
                         }
                     case 2:
@@ -648,7 +752,11 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                             return React.createElement(
                                 "div",
                                 { className: "inner" },
-                                _cont2
+                                React.createElement(
+                                    "ul",
+                                    { className: "cm-date-lines cm-date-month-line" },
+                                    _cont2
+                                )
                             );
                         }
                     case 0:
@@ -657,7 +765,11 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "co
                             return React.createElement(
                                 "div",
                                 { className: "inner" },
-                                _cont3
+                                React.createElement(
+                                    "ul",
+                                    { className: "cm-date-lines" },
+                                    _cont3
+                                )
                             );
                         }
                 }

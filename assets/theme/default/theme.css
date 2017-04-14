@@ -772,7 +772,9 @@ a:focus {
   position: relative;
   width: 100%;
   padding: 15px;
-  background-color: #ABAAAF;
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+  font-family: Consolas,cursive,monospace,serif;
 }
 .clock-container .clock-face {
   width: 160px;
@@ -780,7 +782,7 @@ a:focus {
   margin: 0 auto;
   border-radius: 160px;
   border: 2px solid #fff;
-  background-color: #333;
+  background-color: #545353;
   position: relative;
 }
 .clock-container .clock-face .clock-numbers span {
@@ -852,10 +854,10 @@ a:focus {
 }
 .clock-container .spinners {
   margin-top: 20px;
+  white-space: nowrap;
 }
 .clock-container .spinners .spinner {
   width: 52px;
-  border: 1px solid #ccc;
   border-radius: 2px;
   height: 30px;
   background-color: white;
@@ -919,9 +921,9 @@ a:focus {
   z-index: 10;
   padding: 5px;
   background: whitesmoke;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
-  -moz-box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
-  box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.117647) 0 1px 6px, rgba(0, 0, 0, 0.117647) 0 1px 4px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.117647) 0 1px 6px, rgba(0, 0, 0, 0.117647) 0 1px 4px;
+  box-shadow: rgba(0, 0, 0, 0.117647) 0 1px 6px, rgba(0, 0, 0, 0.117647) 0 1px 4px;
   display: none;
 }
 .cm-datetime.cm-dateRange .cm-datetime-wrap {
@@ -930,10 +932,16 @@ a:focus {
 .cm-datetime.cm-dateRange .date-text {
   width: auto;
 }
+.cm-datetime.cm-dateRange .cm-date-month-line {
+  width: 218px;
+}
+.cm-datetime.cm-dateRange .cm-date-year-line {
+  width: 218px;
+}
 .cm-datetime .tools-info {
   font-size: 12px;
-  padding: 3px 20px;
-  border-bottom: 1px solid #ccc;
+  padding: 5px 20px 7px;
+  border-bottom: 1px dashed #ccc;
   text-align: left;
 }
 .cm-datetime .tools-info .date-range-shortcut {
@@ -942,13 +950,8 @@ a:focus {
 }
 .cm-datetime .date-picker {
   display: inline-block;
-  width: 216px;
-  min-height: 215px;
   font-size: 12px;
   float: left;
-}
-.cm-datetime .date-picker:nth-child(2) {
-  margin-left: 10px;
 }
 .cm-datetime.dropup .cm-datetime-wrap {
   top: auto;
@@ -958,7 +961,7 @@ a:focus {
   padding: 4px 30px 4px 10px;
   border: 1px solid #ccc;
   border-radius: 2px;
-  color: #333333;
+  color: #787878;
   width: 100%;
   min-width: 150px;
   display: inline-block;
@@ -993,7 +996,7 @@ a:focus {
 .cm-datetime .date-picker-header a {
   display: inline-block;
   padding: 4px;
-  color: #333333;
+  color: #787878;
   text-decoration: none;
 }
 .cm-datetime .date-picker-header a.year,
@@ -1009,31 +1012,50 @@ a:focus {
 .cm-datetime .date-picker-header a.prev {
   float: left;
   cursor: pointer;
+  font-family: Consolas,cursive,monospace,serif;
+  -webkit-user-select: none;
+  user-select: none;
+  margin-top: 4px;
 }
 .cm-datetime .date-picker-header a.next {
   float: right;
   cursor: pointer;
+  font-family: Consolas,cursive,monospace,serif;
+  -webkit-user-select: none;
+  user-select: none;
+  margin-top: 4px;
 }
 .cm-datetime .inner {
-  margin-bottom: 5px;
   white-space: normal;
 }
-.cm-datetime .week,
 .cm-datetime .month,
 .cm-datetime .year,
 .cm-datetime button.day {
-  width: 27px;
-  padding: 4px 0;
-  margin: 1px;
-  color: #333333;
+  color: #787878;
+  font-size: 12px;
   text-align: center;
   display: inline-block;
   border: none;
-  background-color: transparent;
-  border-radius: 2px;
   outline: none;
+  background-color: transparent;
+}
+.cm-datetime .week,
+.cm-datetime button.day span {
+  display: inline-block;
+  width: 24px;
+  padding: 5px 0;
+  margin: 0 3px;
+  border-radius: 50%;
+  font-family: Consolas,cursive,monospace,serif;
+  background-color: transparent;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -ms-transition: all .3s;
+  -o-transition: all .3s;
+  transition: all .3s;
 }
 .cm-datetime .week {
+  text-align: center;
   border: none;
   background: none;
   cursor: default;
@@ -1041,8 +1063,10 @@ a:focus {
 }
 .cm-datetime .month {
   cursor: pointer;
-  width: 49px;
-  padding: 10px 0;
+  width: 45px;
+  padding: 6px 0;
+  margin: 4px 10px;
+  border-radius: 3px;
 }
 .cm-datetime .month.disabled {
   color: #cccccc;
@@ -1052,12 +1076,31 @@ a:focus {
 .cm-datetime .year {
   cursor: pointer;
   width: 39px;
-  padding: 8px 0;
+  padding: 6px 0;
+  border-radius: 3px;
 }
-.cm-datetime button.day.today,
-.cm-datetime button.day:hover,
+.cm-datetime button.day:hover span {
+  background-color: #e1f0fa;
+}
 .cm-datetime button.day.rangeSelect {
-  background-color: #ffe684;
+  color: #fff;
+  background-color: #3498DB;
+}
+.cm-datetime button.day.rangeSelect.cm-date-range-start {
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+.cm-datetime button.day.rangeSelect.cm-date-range-end {
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+.cm-datetime button.day.rangeSelect span {
+  background-color: transparent;
+}
+.cm-datetime button.day.today span {
+  color: #fff;
+  background-color: #3498DB;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
 }
 .cm-datetime button.day.disabled,
 .cm-datetime button.day.gray {
@@ -1068,14 +1111,15 @@ a:focus {
   cursor: default;
 }
 .cm-datetime button.day.empty {
+  width: 30px;
   visibility: hidden;
 }
 .cm-datetime .date-picker-footer {
   text-align: center;
-  margin-bottom: 5px;
+  margin: 5px 0;
 }
 .cm-datetime .date-picker-footer a {
-  color: #555;
+  color: #787878;
   text-decoration: none;
   padding: 4px 15px;
   border-radius: 3px;
@@ -1085,6 +1129,12 @@ a:focus {
 .cm-datetime .month:hover,
 .cm-datetime .year:hover {
   background-color: #fff;
+}
+.cm-datetime .month.active,
+.cm-datetime .year.active {
+  color: #fff;
+  background-color: #3498DB;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
 }
 .cm-datetime.black .cm-datetime-wrap {
   background: #29323F;
@@ -1098,10 +1148,28 @@ a:focus {
 .cm-datetime.black button.day {
   color: #fff;
 }
-.cm-datetime.black button.day.today,
-.cm-datetime.black button.day:hover,
-.cm-datetime.black button.day.rangeSelect {
+.cm-datetime.black button.day:hover span {
   background-color: #8a9095;
+}
+.cm-datetime.black button.day.rangeSelect {
+  color: #fff;
+  background-color: #3498DB;
+}
+.cm-datetime.black button.day.rangeSelect.cm-date-range-start {
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+.cm-datetime.black button.day.rangeSelect.cm-date-range-end {
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+.cm-datetime.black button.day.rangeSelect span {
+  background-color: transparent;
+}
+.cm-datetime.black button.day.today span {
+  color: #fff;
+  background-color: #3498DB;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 }
 .cm-datetime.black button.day.disabled,
 .cm-datetime.black button.day.gray {
@@ -1116,6 +1184,23 @@ a:focus {
 .cm-datetime.black .year:hover {
   background-color: #8a9095;
   color: #fff;
+}
+.cm-datetime.black .tools-info {
+  color: #fff;
+}
+.cm-datetime .cm-date-week-line,
+.cm-datetime .cm-date-line {
+  padding: 4px;
+  white-space: nowrap;
+}
+.cm-datetime .cm-date-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cm-datetime .cm-date-month-line {
+  min-width: 140px;
+  text-align: center;
 }
 .invalid .cm-datetime .date-text {
   border-color: #E05B5B;
