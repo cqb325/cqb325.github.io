@@ -1,4 +1,4 @@
-define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "utils/ClickAway", "core/BaseComponent", 'Date', "utils/shallowEqual", 'FormControl', 'utils/grids'], function (module, React, ReactDOM, classnames, moment, Dom, clickAway, BaseComponent, Date, shallowEqual, FormControl, grids) {
+define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "utils/ClickAway", "core/BaseComponent", 'Date', "utils/shallowEqual", 'FormControl', 'utils/grids', "velocity", 'utils/omit'], function (module, React, ReactDOM, classnames, moment, Dom, clickAway, BaseComponent, Date, shallowEqual, FormControl, grids, velocity, Omit) {
     "use strict";
 
     var _extends = Object.assign || function (target) {
@@ -92,13 +92,6 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
 
     var getGrid = grids.getGrid;
 
-    /**
-     * Datetime 类
-     * @class Datetime
-     * @constructor
-     * @extend BaseComponent
-     */
-
     var Datetime = function (_BaseComponent) {
         _inherits(Datetime, _BaseComponent);
 
@@ -134,16 +127,22 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
                     return;
                 }
 
-                var ele = ReactDOM.findDOMNode(this.refs.datePicker);
-                ele.style.display = 'block';
+                if (this.state.visibility) {
+                    return false;
+                }
 
+                var ele = ReactDOM.findDOMNode(this.refs.datePicker);
+                Dom.dom(ele).show();
                 var container = Dom.closest(ele, ".cm-datetime");
                 var offset = Dom.getOuterHeight(ele) + 5;
                 var dropup = Dom.overView(container, offset);
 
                 Dom.withoutTransition(container, function () {
                     _this2.setState({ dropup: dropup });
+                    Dom.dom(ele).hide();
                 });
+
+                velocity(ele, "fadeIn", { duration: 500 });
 
                 if (!this.state.visibility) {
                     _get(Object.getPrototypeOf(Datetime.prototype), "show", this).call(this);
@@ -158,8 +157,13 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
         }, {
             key: "hide",
             value: function hide() {
-                _get(Object.getPrototypeOf(Datetime.prototype), "hide", this).call(this);
-                this.unbindClickAway();
+                var _this3 = this;
+
+                var ele = ReactDOM.findDOMNode(this.refs.datePicker);
+                velocity(ele, "fadeOut", { delay: 200, duration: 500, complete: function complete() {
+                        _get(Object.getPrototypeOf(Datetime.prototype), "hide", _this3).call(_this3);
+                        _this3.unbindClickAway();
+                    } });
 
                 var dateComp = this.refs.date;
 
@@ -213,22 +217,22 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
         }, {
             key: "componentDidMount",
             value: function componentDidMount() {
-                var _this3 = this;
+                var _this4 = this;
 
                 var dateComp = this.refs.date;
 
                 dateComp.on("hide", function () {
-                    _this3.hide();
+                    _this4.hide();
                 });
 
                 dateComp.on("selectTime", function (value) {
-                    _this3.emit("selectTime", value);
+                    _this4.emit("selectTime", value);
                 });
                 dateComp.on("selectMonth", function (value) {
-                    _this3.emit("selectMonth", value);
+                    _this4.emit("selectMonth", value);
                 });
                 dateComp.on("selectYear", function (value) {
-                    _this3.emit("selectYear", value);
+                    _this4.emit("selectYear", value);
                 });
             }
         }, {
@@ -268,6 +272,7 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
                     " "
                 );
 
+                var others = Omit(this.props, ["className", "grid", "readOnly", "disabled", "style"]);
                 return React.createElement(
                     "div",
                     { ref: "datetime", onClick: this.show.bind(this), className: className, style: style || {} },
@@ -275,8 +280,8 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
                     React.createElement("i", { className: "fa fa-calendar" }),
                     React.createElement(
                         "div",
-                        { className: "cm-datetime-wrap", ref: "datePicker", style: { display: this.state.visibility ? "block" : "none" } },
-                        React.createElement(Date, _extends({ ref: "date" }, this.props, { onSelectDate: this._selectDate.bind(this) }))
+                        { className: "cm-datetime-wrap", ref: "datePicker" },
+                        React.createElement(Date, _extends({ ref: "date" }, others, { onSelectDate: this._selectDate.bind(this) }))
                     )
                 );
             }

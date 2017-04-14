@@ -1,4 +1,4 @@
-define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "utils/ClickAway", "core/BaseComponent", "Date", "./Button", 'FormControl'], function (module, React, ReactDOM, classnames, moment, Dom, clickAway, BaseComponent, Date, Button, FormControl) {
+define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "utils/ClickAway", "core/BaseComponent", "Date", "./Button", 'FormControl', "velocity"], function (module, React, ReactDOM, classnames, moment, Dom, clickAway, BaseComponent, Date, Button, FormControl, velocity) {
     "use strict";
 
     var _extends = Object.assign || function (target) {
@@ -176,8 +176,11 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
                     return;
                 }
 
+                if (this.state.visibility) {
+                    return false;
+                }
                 var ele = ReactDOM.findDOMNode(this.refs.datePicker);
-                ele.style.display = 'block';
+                Dom.dom(ele).show();
 
                 var container = Dom.closest(ele, ".cm-datetime");
                 var offset = Dom.getOuterHeight(ele) + 5;
@@ -185,7 +188,10 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
 
                 Dom.withoutTransition(container, function () {
                     _this2.setState({ dropup: dropup });
+                    Dom.dom(ele).hide();
                 });
+
+                velocity(ele, "fadeIn", { duration: 500 });
 
                 if (!this.state.visibility) {
                     _get(Object.getPrototypeOf(DateRange.prototype), "show", this).call(this);
@@ -201,8 +207,13 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
         }, {
             key: "hide",
             value: function hide() {
-                _get(Object.getPrototypeOf(DateRange.prototype), "hide", this).call(this);
-                this.unbindClickAway();
+                var _this3 = this;
+
+                var ele = ReactDOM.findDOMNode(this.refs.datePicker);
+                velocity(ele, "fadeOut", { delay: 200, duration: 500, complete: function complete() {
+                        _get(Object.getPrototypeOf(DateRange.prototype), "hide", _this3).call(_this3);
+                        _this3.unbindClickAway();
+                    } });
             }
         }, {
             key: "_selectStartDate",
@@ -229,8 +240,8 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
             key: "_selectEndDate",
             value: function _selectEndDate(value, date) {
                 if (!this._isSelecting) {
-                    if (this.props.onSelectStart) {
-                        this.props.onSelectStart(value, date);
+                    if (this.props.onSelectEnd) {
+                        this.props.onSelectEnd(value, date);
                     }
                     this._isSelecting = true;
                     this._selectedDate[0] = value;
@@ -316,7 +327,7 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
         }, {
             key: "componentDidMount",
             value: function componentDidMount() {
-                var _this3 = this;
+                var _this4 = this;
 
                 var start = this.state.start,
                     end = this.state.end;
@@ -348,42 +359,42 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
                 this.updateRange();
 
                 startDate.on("selectPrev", function () {
-                    _this3.checkIsSibling();
+                    _this4.checkIsSibling();
                 });
                 startDate.on("selectNext", function () {
-                    _this3.checkIsSibling();
+                    _this4.checkIsSibling();
                 });
                 startDate.on("selectMonth", function () {
-                    _this3.checkIsSibling();
+                    _this4.checkIsSibling();
                 });
 
                 endDate.on("selectPrev", function () {
-                    _this3.checkIsSibling();
+                    _this4.checkIsSibling();
                 });
                 endDate.on("selectNext", function () {
-                    _this3.checkIsSibling();
+                    _this4.checkIsSibling();
                 });
                 endDate.on("selectMonth", function () {
-                    _this3.checkIsSibling();
+                    _this4.checkIsSibling();
                 });
 
                 startDate.on("hoverDay", function (d) {
-                    if (_this3._isSelecting) {
-                        if (_this3._inMaxRange(d)) {
-                            _this3._selectedDate[1] = d;
-                            _this3.updateRange();
+                    if (_this4._isSelecting) {
+                        if (_this4._inMaxRange(d)) {
+                            _this4._selectedDate[1] = d;
+                            _this4.updateRange();
                         } else {
-                            _this3._selectMaxRange(d);
+                            _this4._selectMaxRange(d);
                         }
                     }
                 });
                 endDate.on("hoverDay", function (d) {
-                    if (_this3._isSelecting) {
-                        if (_this3._inMaxRange(d)) {
-                            _this3._selectedDate[1] = d;
-                            _this3.updateRange();
+                    if (_this4._isSelecting) {
+                        if (_this4._inMaxRange(d)) {
+                            _this4._selectedDate[1] = d;
+                            _this4.updateRange();
                         } else {
-                            _this3._selectMaxRange(d);
+                            _this4._selectMaxRange(d);
                         }
                     }
                 });
@@ -428,6 +439,17 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
 
                 var isSibling = false;
                 if (start.get("month") == end.get("month") && start.get("year") == end.get("year")) {
+                    isSibling = true;
+                }
+                if (start.get("month") > end.get("month")) {
+                    var year = start.get("year");
+                    var month = start.get("month");
+
+                    end.set("year", year);
+                    end.set("month", month);
+                    end.set("date", 1);
+
+                    endDate.setCurrent(end);
                     isSibling = true;
                 }
 
