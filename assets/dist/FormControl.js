@@ -189,7 +189,7 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
             }
         }, {
             key: "handleChange",
-            value: function handleChange(event) {
+            value: function handleChange(event, options) {
                 var _props = this.props;
                 var readOnly = _props.readOnly;
                 var type = _props.type;
@@ -199,7 +199,11 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
                     return;
                 }
                 //textArea
-                this.props.autoHeight && this.autoHeight(event);
+                if (this.props.autoHeight) {
+                    if (options && options.component) {
+                        options.component.autoHeight(event);
+                    }
+                }
 
                 if (!this.item) {
                     this.item = this.refs["formItem"];

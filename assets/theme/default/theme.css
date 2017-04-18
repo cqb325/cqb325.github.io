@@ -1277,7 +1277,6 @@ textarea.cm-form-control {
   display: inline-block;
   padding: 4px 12px;
   height: 28px;
-  font-size: 14px;
   font-weight: 400;
   line-height: normal;
   color: #555;
@@ -1830,6 +1829,7 @@ textarea.cm-form-control {
   min-width: 150px;
   height: 30px;
   line-height: 30px;
+  vertical-align: middle;
 }
 .cm-upload .cm-upload-pick-helper {
   position: absolute;

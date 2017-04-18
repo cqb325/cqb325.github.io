@@ -1,0 +1,28 @@
+.cm-checkbox {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+}
+.cm-checkbox .cm-checkbox-icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: url(../../imgs/icon-checkbox.png);
+  cursor: pointer;
+  margin: 0 4px;
+}
+.cm-checkbox.active .cm-checkbox-icon {
+  background: url(../../imgs/icon-checked.png);
+}
+.cm-checkbox.disabled {
+  color: rgba(0, 0, 0, 0.3);
+}
+.cm-checkbox.disabled .cm-checkbox-icon {
+  cursor: default;
+}
+.cm-checkbox-group.stack .cm-checkbox,
+.cm-radio-group.stack .cm-checkbox {
+  display: block;
+}

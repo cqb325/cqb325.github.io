@@ -1,0 +1,86 @@
+.cm-upload {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background: whitesmoke;
+  position: relative;
+  overflow: hidden;
+  min-width: 150px;
+  height: 30px;
+  line-height: 30px;
+}
+.cm-upload .cm-upload-pick-helper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  font-size: 100px;
+}
+.cm-upload .cm-upload-fileName {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cm-upload i {
+  cursor: pointer;
+  position: absolute;
+  right: 8px;
+  top: 6px;
+}
+.cm-upload i.fa-check {
+  color: #009900;
+}
+.cm-upload i.fa-exclamation-triangle {
+  color: #990000;
+}
+.cm-upload .cm-upload-progress {
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+.cm-upload .cm-upload-progress .cm-progress-bar {
+  position: absolute;
+  width: 0;
+  height: 100%;
+  background: #00a2d4;
+  -webkit-transition: width 0.5s;
+  -o-transition: width 0.5s;
+  transition: width 0.5s;
+}
+.cm-upload .cm-upload-pick-btn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 28px;
+  cursor: pointer;
+  background: white;
+  padding: 0 8px;
+  line-height: 28px;
+}
+.cm-upload .webuploader-element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px);
+  /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+}
+.cm-upload .webuploader-pick {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.cm-upload .webuploader-pick-disable {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.invalid .cm-upload {
+  border-color: #E05B5B;
+}

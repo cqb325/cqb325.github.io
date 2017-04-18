@@ -1,0 +1,14 @@
+.cm-divider {
+  height: 0;
+  margin: 1.5rem auto;
+  overflow: hidden;
+  clear: both;
+  border-top: 1px solid #ddd;
+  max-width: none;
+}
+.cm-divider.dotted {
+  border-top: 1px dotted #ccc;
+}
+.cm-divider.dashed {
+  border-top: 1px dashed #ccc;
+}

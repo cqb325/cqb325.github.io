@@ -79,6 +79,31 @@ define(["module", "react", "Label", "Table", "../components/input/demo1"], funct
                                 " Input的值"
                             )
                         )
+                    ),
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "i",
+                            null,
+                            "setValue(value)"
+                        ),
+                        React.createElement(
+                            "span",
+                            null,
+                            "设置当前的值"
+                        ),
+                        React.createElement(
+                            "ul",
+                            null,
+                            React.createElement(
+                                "li",
+                                null,
+                                "value ",
+                                "String",
+                                " Input的值"
+                            )
+                        )
                     )
                 )
             );
