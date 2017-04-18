@@ -157,6 +157,34 @@ define(["module", "react", "Row", "Col", "Label", "Table", "../components/select
                                 " Select的初始选项数据"
                             )
                         )
+                    ),
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "i",
+                            null,
+                            "disable()"
+                        ),
+                        React.createElement(
+                            "span",
+                            null,
+                            "禁用"
+                        )
+                    ),
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "i",
+                            null,
+                            "enable()"
+                        ),
+                        React.createElement(
+                            "span",
+                            null,
+                            "启用"
+                        )
                     )
                 )
             );

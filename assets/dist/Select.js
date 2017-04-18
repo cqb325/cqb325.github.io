@@ -71,7 +71,8 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
             _this.addState({
                 value: props.value,
                 active: false,
-                data: data
+                data: data,
+                disabled: props.disabled
             });
 
             _this.showOptions = _this.showOptions.bind(_this);
@@ -331,7 +332,7 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
             value: function showOptions() {
                 var _this3 = this;
 
-                if (this.props.readOnly || this.props.disabled) {
+                if (this.props.readOnly || this.state.disabled) {
                     return;
                 }
                 if (this.state.active && !this.props.multi) {
@@ -387,6 +388,16 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
                 });
             }
         }, {
+            key: "disable",
+            value: function disable() {
+                this.setState({ disabled: true });
+            }
+        }, {
+            key: "enable",
+            value: function enable() {
+                this.setState({ disabled: false });
+            }
+        }, {
             key: "componentWillMount",
             value: function componentWillMount() {
                 var _this5 = this;
@@ -410,14 +421,13 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
             value: function render() {
                 var _props2 = this.props;
                 var className = _props2.className;
-                var disabled = _props2.disabled;
                 var readOnly = _props2.readOnly;
                 var style = _props2.style;
                 var grid = _props2.grid;
 
                 className = classnames("cm-select", getGrid(grid), {
                     active: this.state.active,
-                    disabled: disabled || readOnly,
+                    disabled: this.state.disabled || readOnly,
                     dropup: this.state.dropup,
                     hasEmptyOption: this.props.hasEmptyOption
                 });

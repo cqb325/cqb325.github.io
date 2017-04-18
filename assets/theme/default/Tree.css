@@ -1,0 +1,101 @@
+.cm-tree {
+  font-size: 13px;
+  overflow: auto;
+}
+.draghelper {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-color: #F4DB9D;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+.tree_arrow {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  vertical-align: top;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.tree_checkbox {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-image: url(../../imgs/tree/iconUncheckDis.gif);
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  vertical-align: top;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.tree_checkbox.checked {
+  background-image: url(../../imgs/tree/iconCheckDis.gif);
+}
+.tree_checkbox.dischecked {
+  background-image: url(../../imgs/tree/iconCheckGray.gif);
+}
+.tree_icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  vertical-align: top;
+}
+.tree_text {
+  margin-left: 2px;
+  height: 20px;
+  line-height: 20px;
+  cursor: pointer;
+  padding: 0px 2px;
+  display: inline-block;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  white-space: nowrap;
+}
+.tree_text.dragenter {
+  background-color: #C1D1FF;
+}
+.node_selected {
+  background-color: #F4DB9D;
+}
+.tree_node {
+  clear: both;
+  white-space: nowrap;
+}
+.tree_subNode {
+  clear: both;
+  margin-left: 20px;
+}
+.tree_node_wrap {
+  height: 20px;
+  line-height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.icon_branch {
+  background-image: url(../../imgs/tree/folderClosed.gif);
+}
+.node_open > .tree_arrow {
+  background-image: url(../../imgs/tree/minus.gif);
+}
+.node_close > .tree_arrow {
+  background-image: url(../../imgs/tree/plus.gif);
+}
+.node_open > .icon_branch {
+  background-image: url(../../imgs/tree/folderOpen.gif);
+}
+.node_close > .icon_branch {
+  background-image: url(../../imgs/tree/folderClosed.gif);
+}
+.icon_leaf {
+  background-image: url(../../imgs/tree/file.png);
+}

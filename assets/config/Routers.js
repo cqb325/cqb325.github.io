@@ -25,6 +25,7 @@ define(function(module, exports){
             {id:"310", text: "DateRange",link: "#/components/daterange"},
             {id:"311", text: "Pagination",link: "#/components/pagination"},
             {id:"312", text: "Input",link: "#/components/input"},
+            {id:"313", text: "Form",link: "#/components/form"},
             {id:"313", text: "Steps",link: "#/components/steps"},
             {id:"314", text: "Switch",link: "#/components/switch"},
             {id:"315", text: "Card",link: "#/components/card"},

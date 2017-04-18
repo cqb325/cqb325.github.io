@@ -1,0 +1,207 @@
+.cm-datetime {
+  display: inline-block;
+  position: relative;
+}
+.cm-datetime .cm-datetime-wrap {
+  overflow: hidden;
+  position: absolute;
+  top: 31px;
+  left: 0;
+  z-index: 10;
+  padding: 5px;
+  background: whitesmoke;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  display: none;
+}
+.cm-datetime.cm-dateRange .cm-datetime-wrap {
+  width: 452px;
+}
+.cm-datetime.cm-dateRange .date-text {
+  width: auto;
+}
+.cm-datetime .tools-info {
+  font-size: 12px;
+  padding: 3px 20px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+.cm-datetime .tools-info .date-range-shortcut {
+  margin-left: 10px;
+  color: gray;
+}
+.cm-datetime .date-picker {
+  display: inline-block;
+  width: 216px;
+  min-height: 215px;
+  font-size: 12px;
+  float: left;
+}
+.cm-datetime .date-picker:nth-child(2) {
+  margin-left: 10px;
+}
+.cm-datetime.dropup .cm-datetime-wrap {
+  top: auto;
+  bottom: 31px;
+}
+.cm-datetime .date-text {
+  padding: 4px 30px 4px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  color: #333;
+  width: 100%;
+  min-width: 150px;
+  display: inline-block;
+  background-color: #fff;
+  background-image: none;
+  transition: border-color ease-in-out 0.15s;
+  cursor: pointer;
+}
+.cm-datetime.disabled {
+  cursor: default;
+}
+.cm-datetime.disabled .date-text {
+  cursor: default;
+}
+.cm-datetime i.fa-calendar {
+  position: absolute;
+  right: 6px;
+  top: 9px;
+}
+.cm-datetime .date-picker-header {
+  padding: 2px 4px;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+}
+.cm-datetime .date-picker-header a {
+  display: inline-block;
+  padding: 4px;
+  color: #333;
+  text-decoration: none;
+}
+.cm-datetime .date-picker-header a.year,
+.cm-datetime .date-picker-header a.month {
+  padding: 4px 10px;
+  border-radius: 3px;
+  width: 65px;
+}
+.cm-datetime .date-picker-header a.year :hover,
+.cm-datetime .date-picker-header a.month :hover {
+  background: #fff;
+}
+.cm-datetime .date-picker-header a.prev {
+  float: left;
+  cursor: pointer;
+}
+.cm-datetime .date-picker-header a.next {
+  float: right;
+  cursor: pointer;
+}
+.cm-datetime .inner {
+  margin-bottom: 5px;
+  white-space: normal;
+}
+.cm-datetime .week,
+.cm-datetime .month,
+.cm-datetime .year,
+.cm-datetime button.day {
+  width: 27px;
+  padding: 4px 0;
+  margin: 1px;
+  color: #333;
+  text-align: center;
+  display: inline-block;
+  border: none;
+  background-color: transparent;
+  border-radius: 3px;
+  outline: none;
+}
+.cm-datetime .week {
+  border: none;
+  background: none;
+  cursor: default;
+  color: #aaa;
+}
+.cm-datetime .month {
+  cursor: pointer;
+  width: 49px;
+  padding: 10px 0;
+}
+.cm-datetime .month.disabled {
+  color: #ccc;
+  pointer-events: none;
+  cursor: default;
+}
+.cm-datetime .year {
+  cursor: pointer;
+  width: 39px;
+  padding: 8px 0;
+}
+.cm-datetime button.day.today,
+.cm-datetime button.day:hover,
+.cm-datetime button.day.rangeSelect {
+  background-color: #FFE684;
+}
+.cm-datetime button.day.disabled,
+.cm-datetime button.day.gray {
+  color: #ccc;
+}
+.cm-datetime button.day.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+.cm-datetime button.day.empty {
+  visibility: hidden;
+}
+.cm-datetime .date-picker-footer {
+  text-align: center;
+  margin-bottom: 5px;
+}
+.cm-datetime .date-picker-footer a {
+  color: #555;
+  text-decoration: none;
+  padding: 4px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.cm-datetime .date-picker-footer a:hover,
+.cm-datetime .month:hover,
+.cm-datetime .year:hover {
+  background-color: #fff;
+}
+.cm-datetime.black .cm-datetime-wrap {
+  background: #29323F;
+}
+.cm-datetime.black .date-picker-header a {
+  color: #8A9095;
+}
+.cm-datetime.black .week,
+.cm-datetime.black .month,
+.cm-datetime.black .year,
+.cm-datetime.black button.day {
+  color: #fff;
+}
+.cm-datetime.black button.day.today,
+.cm-datetime.black button.day:hover,
+.cm-datetime.black button.day.rangeSelect {
+  background-color: #8A9095;
+}
+.cm-datetime.black button.day.disabled,
+.cm-datetime.black button.day.gray {
+  color: #8A9095;
+}
+.cm-datetime.black button.day:hover.disabled,
+.cm-datetime.black button.day:hover.gray {
+  color: #fff;
+}
+.cm-datetime.black .date-picker-footer a:hover,
+.cm-datetime.black .month:hover,
+.cm-datetime.black .year:hover {
+  background-color: #8A9095;
+  color: #fff;
+}
+.invalid .cm-datetime .date-text {
+  border-color: #E05B5B;
+}

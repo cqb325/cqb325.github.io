@@ -1,0 +1,153 @@
+.cm-select {
+  display: inline-block;
+  position: relative;
+  line-height: initial;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.cm-select .cm-select-value {
+  padding: 4px 30px 4px 10px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  color: #333;
+  min-width: 150px;
+  display: block;
+  background-color: #fff;
+  background-image: none;
+  transition: border-color ease-in-out 0.15s;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.cm-select .cm-select-value.placeholder {
+  color: #999;
+}
+.cm-select .cm-select-cert {
+  position: absolute;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  right: 5px;
+  top: 5px;
+  cursor: pointer;
+}
+.cm-select .cm-select-cert:before {
+  width: 0;
+  height: 0;
+  border-top: 6px solid #666;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 8px;
+  z-index: 0;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+.cm-select .cm-select-options-wrap {
+  position: absolute;
+  top: 30px;
+  overflow: hidden;
+  left: -10px;
+  right: -10px;
+  z-index: 1000;
+}
+.cm-select .cm-select-options {
+  display: none;
+  -webkit-transition: 0.45s;
+  -o-transition: 0.45s;
+  transition: 0.45s;
+  -webkit-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+  margin: 0 10px 10px 10px;
+  background: whitesmoke;
+  max-height: 300px;
+  overflow-x: hidden;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+}
+.cm-select .cm-select-options ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cm-select .cm-select-options ul li {
+  position: relative;
+}
+.cm-select .cm-select-options ul li a {
+  display: inline-block;
+  padding: 5px 10px;
+  width: 100%;
+  height: 100%;
+}
+.cm-select .cm-select-options ul li a:hover {
+  background: #0078e7;
+  color: white;
+}
+.cm-select .cm-select-options ul li.active a {
+  background: #0078e7;
+  color: white;
+}
+.cm-select.hasEmptyOption ul li:first-child {
+  border-bottom: 1px solid #ccc;
+}
+.cm-select.active .cm-select-cert:before {
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.cm-select.active .cm-select-options {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.cm-select.dropup .cm-select-options-wrap {
+  top: auto;
+  bottom: 30px;
+}
+.cm-select.dropup .cm-select-options {
+  margin: 5px 10px 0 10px;
+  -webkit-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+  -webkit-box-shadow: rgba(0, 0, 0, 0.117647) 0px -1px 6px, rgba(0, 0, 0, 0.117647) 0px -1px 4px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.117647) 0px -1px 6px, rgba(0, 0, 0, 0.117647) 0px -1px 4px;
+  box-shadow: rgba(0, 0, 0, 0.117647) 0px -1px 6px, rgba(0, 0, 0, 0.117647) 0px -1px 4px;
+}
+.cm-select.dropup.active .cm-select-options {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.cm-select.disabled .cm-select-value {
+  border-color: #eee;
+  color: #ccc;
+  cursor: default;
+}
+.cm-select.disabled .cm-select-cert:before {
+  border-top-color: #eee;
+}
+.cm-select.cm-autocomplete .cm-select-value {
+  display: inline-block;
+  -webkit-user-select: initial;
+  -moz-user-select: initial;
+  -ms-user-select: initial;
+  user-select: initial;
+}
+.invalid .cm-select .cm-select-value {
+  border-color: #E05B5B;
+}

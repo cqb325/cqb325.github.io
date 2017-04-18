@@ -1,4 +1,4 @@
-define(['react', 'jquery', 'react-dom', 'ReactRouter', "FontIcon", "Routers", "SideBar", "Menu"], function (React, jQuery, ReactDOM, ReactRouter, FontIcon, Routers, SideBar, Menu) {
+define(['react', 'jquery', 'react-dom', 'ReactRouter', "FontIcon", "Logo", "Routers", "SideBar", "Menu"], function (React, jQuery, ReactDOM, ReactRouter, FontIcon, Logo, Routers, SideBar, Menu) {
     'use strict';
 
     var Router = ReactRouter.Router;
@@ -95,6 +95,17 @@ define(['react', 'jquery', 'react-dom', 'ReactRouter', "FontIcon", "Routers", "S
                 React.createElement(
                     'div',
                     { className: 'menu-wrap' },
+                    React.createElement(
+                        'div',
+                        { style: { verticalAlign: "middle", borderBottom: "1px dashed #e7e7e7" } },
+                        React.createElement(Logo, null),
+                        ' ',
+                        React.createElement(
+                            'span',
+                            { className: 'ml-5', style: { position: "relative", top: -11 } },
+                            'CMUI'
+                        )
+                    ),
                     React.createElement(
                         Menu,
                         { style: { width: 200 },
