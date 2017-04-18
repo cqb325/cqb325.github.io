@@ -232,7 +232,7 @@ define(["module", "react", "react-dom", "classnames", 'utils/Dom', 'utils/Events
                 var parent = ele.parentNode;
 
                 while (parent !== null && parent.tagName !== "HTML") {
-                    if (parent.scrollHeight > parent.offsetHeight && Dom.dom(parent).css("overflow") !== "hidden") {
+                    if (parent.scrollHeight > parent.offsetHeight && (Dom.dom(parent).css("overflow-y") !== "hidden" || Dom.dom(parent).css("overflow-x") !== "hidden")) {
                         this.scrollElements.push(parent);
                     }
                     parent = parent.parentNode;
@@ -244,12 +244,11 @@ define(["module", "react", "react-dom", "classnames", 'utils/Dom', 'utils/Events
                 var top = 0,
                     left = 0;
                 this.scrollElements.forEach(function (ele) {
-                    if(ele.tagName !== "BODY") {
+                    if (ele.tagName !== "BODY") {
                         top += ele.scrollTop;
                         left += ele.scrollLeft;
                     }
                 });
-
                 return {
                     top: top,
                     left: left
