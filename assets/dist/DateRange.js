@@ -441,7 +441,7 @@ define(["module", "react", "react-dom", "classnames", "moment", "utils/Dom", "ut
                 if (start.get("month") == end.get("month") && start.get("year") == end.get("year")) {
                     isSibling = true;
                 }
-                if (start.get("month") > end.get("month")) {
+                if (start.get("year") >= end.get("year") && start.get("month") > end.get("month")) {
                     var year = start.get("year");
                     var month = start.get("month");
 
