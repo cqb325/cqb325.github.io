@@ -95,6 +95,34 @@ define(["module", "react", "Label", "Table", "../components/tooltip/demo1", "../
                                 " 标题"
                             )
                         )
+                    ),
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "i",
+                            null,
+                            "show()"
+                        ),
+                        React.createElement(
+                            "span",
+                            null,
+                            "显示"
+                        )
+                    ),
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "i",
+                            null,
+                            "hide()"
+                        ),
+                        React.createElement(
+                            "span",
+                            null,
+                            "隐藏"
+                        )
                     )
                 )
             );

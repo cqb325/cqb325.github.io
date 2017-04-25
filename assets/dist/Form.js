@@ -182,6 +182,9 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
                             "data-itemBind": _this2.itemBind.bind(_this2)
                         }, child.props);
                         props.layout = _this2.props.layout ? _this2.props.layout : props.layout;
+                        props.tipTheme = _this2.props.tipTheme ? _this2.props.tipTheme : props.tipTheme;
+                        props.tipAlign = _this2.props.tipAlign ? _this2.props.tipAlign : props.tipAlign;
+                        props.tipAuto = _this2.props.tipAuto ? _this2.props.tipAuto : props.tipAuto;
                         props.labelWidth = _this2.props.labelWidth ? _this2.props.labelWidth : props.labelWidth;
                         return React.cloneElement(child, props);
                     } else {

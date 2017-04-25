@@ -963,7 +963,7 @@ a:focus {
   border-radius: 2px;
   color: #787878;
   width: 100%;
-  min-width: 150px;
+  min-width: 161px;
   display: inline-block;
   background-color: #fff;
   background-image: none;
@@ -1826,7 +1826,7 @@ textarea.cm-form-control {
   background: whitesmoke;
   position: relative;
   overflow: hidden;
-  min-width: 150px;
+  min-width: 161px;
   height: 30px;
   line-height: 30px;
   vertical-align: middle;
