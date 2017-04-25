@@ -114,6 +114,16 @@ define(["module", "react", 'react-dom', "classnames", 'internal/InnerTrigger', "
                 this.refs.trigger.updateContent(this.getPopupElement(title));
             }
         }, {
+            key: "show",
+            value: function show() {
+                this.refs.trigger.setPopupVisible(true);
+            }
+        }, {
+            key: "hide",
+            value: function hide() {
+                this.refs.trigger.setPopupVisible(false);
+            }
+        }, {
             key: "render",
             value: function render() {
                 var _props = this.props;

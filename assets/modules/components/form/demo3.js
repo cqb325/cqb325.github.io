@@ -74,7 +74,7 @@ define(["module", "react", "../BaseDemo", "FontIcon", "Form", "FormControl", "In
                         { className: "code-box-demo" },
                         React.createElement(
                             Form,
-                            { layout: "stack", labelWidth: "80", useDefaultSubmitBtn: false },
+                            { layout: "stack", labelWidth: "80", useDefaultSubmitBtn: false, tipAlign: "top", tipTheme: "primary" },
                             React.createElement(FormControl, { type: "text", label: "Input", required: true, name: "input", messages: { required: "请输入input的内容" } }),
                             React.createElement(FormControl, { type: "select", label: "Select", required: true, data: ["Option1", "Option2"], name: "select" }),
                             React.createElement(FormControl, { type: "datetime", label: "DateTime", required: true, dateOnly: true, name: "datetime" })
@@ -86,7 +86,7 @@ define(["module", "react", "../BaseDemo", "FontIcon", "Form", "FormControl", "In
                         React.createElement(
                             "div",
                             { className: "code-box-title" },
-                            "layout"
+                            "layout, tip theme and tip align"
                         ),
                         React.createElement(
                             "div",
@@ -101,7 +101,7 @@ define(["module", "react", "../BaseDemo", "FontIcon", "Form", "FormControl", "In
                         React.createElement(
                             Code,
                             { className: "language-jsx" },
-                            "\nconst Form = require(\"Form\");\nconst FormControl = require(\"FormControl\");\nconst Input = require(\"Input\");\nconst Select = require(\"Select\");\nconst TextArea = require(\"TextArea\");\nconst RadioGroup = require(\"RadioGroup\");\nconst CheckBoxGroup = require(\"CheckBoxGroup\");\nconst DateTime = require(\"DateTime\");\nconst DateRange = require(\"DateRange\");\nconst Upload = require(\"Upload\");\n\nReactDOM.render(\n<div>\n    <Form layout=\"stack\" labelWidth=\"80\" useDefaultSubmitBtn={false}>\n        <FormControl type=\"text\" label=\"Input\" required={true} name=\"input\" messages={{required: \"请输入input的内容\"}}/>\n        <FormControl type=\"select\" label=\"Select\" required={true} data={[\"Option1\",\"Option2\"]} name=\"select\"/>\n        <FormControl type=\"datetime\" label=\"DateTime\" required={true} dateOnly={true} name=\"datetime\"/>\n    </Form>\n</div>, mountNode);\n"
+                            "\nconst Form = require(\"Form\");\nconst FormControl = require(\"FormControl\");\nconst Input = require(\"Input\");\nconst Select = require(\"Select\");\nconst TextArea = require(\"TextArea\");\nconst RadioGroup = require(\"RadioGroup\");\nconst CheckBoxGroup = require(\"CheckBoxGroup\");\nconst DateTime = require(\"DateTime\");\nconst DateRange = require(\"DateRange\");\nconst Upload = require(\"Upload\");\n\nReactDOM.render(\n<div>\n    <Form layout=\"stack\" labelWidth=\"80\" useDefaultSubmitBtn={false} tipAlign=\"top\" tipTheme=\"primary\">\n        <FormControl type=\"text\" label=\"Input\" required={true} name=\"input\" messages={{required: \"请输入input的内容\"}}/>\n        <FormControl type=\"select\" label=\"Select\" required={true} data={[\"Option1\",\"Option2\"]} name=\"select\"/>\n        <FormControl type=\"datetime\" label=\"DateTime\" required={true} dateOnly={true} name=\"datetime\"/>\n    </Form>\n</div>, mountNode);\n"
                         )
                     )
                 );

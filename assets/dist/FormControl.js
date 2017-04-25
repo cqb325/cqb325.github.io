@@ -82,6 +82,7 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
             _this._name = props.name;
             _this._areaLabel = false;
             _this._tipAlign = props.tipAlign || "right";
+            _this._tipAuto = props.tipAuto || false;
             if (props.required) {
                 _this.rules["required"] = true;
             }
@@ -112,7 +113,7 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
                         component = FormControl.COMPONENTS["text"];
                     }
 
-                    var others = Omit(this.props, ["itemStyle", "labelWidth", "handleChange", "data-valueType", "className", "children", "layout", "rules", "messages", "isFormItem", "onValid", "onChange", "label", "labelGrid"]);
+                    var others = Omit(this.props, ["tipTheme", "tipAlign", "tipAuto", "itemStyle", "labelWidth", "handleChange", "data-valueType", "className", "children", "layout", "rules", "messages", "isFormItem", "onValid", "onChange", "label", "labelGrid"]);
                     var props = _extends({
                         type: this.props.type,
                         key: this.props.name,
@@ -147,7 +148,7 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
                 return React.Children.map(children, function (child, index) {
                     var registerComp = _this2.isRegisterComponent(child);
                     if (registerComp) {
-                        var others = Omit(_this2.props, ["itemStyle", "labelWidth", "handleChange", "data-valueType", "tipAlign", "className", "children", "layout", "rules", "messages", "isFormItem", "onValid", "onChange", "label", "labelGrid"]);
+                        var others = Omit(_this2.props, ["tipTheme", "tipAlign", "tipAuto", "itemStyle", "labelWidth", "handleChange", "data-valueType", "tipAlign", "className", "children", "layout", "rules", "messages", "isFormItem", "onValid", "onChange", "label", "labelGrid"]);
                         var props = _extends({
                             key: index,
                             "data-valueType": registerComp.valueType,
@@ -272,6 +273,7 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
                     if (this.state.errorTip) {
                         this.setState({ errorTip: null });
                         this.refs.tooltip.setTitle(null);
+                        this.refs.tooltip.hide();
                     }
                     return true;
                 }
@@ -284,6 +286,9 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
                     rule = { method: "required", parameters: rules["required"] };
                     result = this.validByMethod(value, rule, messages);
                     if (result == false) {
+                        if (this._tipAuto) {
+                            this.refs.tooltip.show();
+                        }
                         return false;
                     }
                 }
@@ -295,6 +300,9 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
 
                     result = this.validByMethod(value, rule, messages);
                     if (result == false) {
+                        if (this._tipAuto) {
+                            this.refs.tooltip.show();
+                        }
                         return false;
                     }
                 }
@@ -310,6 +318,9 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
 
                     result = this.validByRemote(value, url, messages);
                     if (result == false) {
+                        if (this._tipAuto) {
+                            this.refs.tooltip.show();
+                        }
                         return false;
                     }
                 }
@@ -321,6 +332,7 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
 
                 this.setState({ errorTip: null });
                 this.refs.tooltip.setTitle(null);
+                this.refs.tooltip.hide();
                 return true;
             }
         }, {
@@ -541,7 +553,7 @@ define(["module", "react", "react-dom", "classnames", "core/BaseComponent", 'uti
                     labelEle,
                     React.createElement(
                         Tooltip,
-                        { theme: "error", className: "error-tip", align: this._tipAlign, ref: "tooltip", title: this.state.errorTip },
+                        { theme: this.props.tipTheme || "error", className: "error-tip", align: this._tipAlign, ref: "tooltip", title: this.state.errorTip },
                         items,
                         customChildren
                     )
