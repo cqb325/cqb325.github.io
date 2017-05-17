@@ -1,0 +1,41 @@
+
+<h3 id="internet-explorer--safari-iframe-session-cookie-problem">Internet Explorer &amp; Safari: IFrame Session Cookie Problem</h3>
+
+<p>在IE和Safari浏览器中，一个域名网页嵌入另外一个域名网页的iframe的时候会发现不能保持cookies，导致session丢失。</p>
+
+<p><em>如果在localhost域名下嵌入另外域名的iframe没有问题</em></p>
+
+<blockquote>
+  <p>例：在<code class="highlighter-rouge">domain A</code>中嵌入<code class="highlighter-rouge">domain B </code>的iframe</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;iframe src="http://www.domain-B.com/login.html"&gt;&lt;/iframe&gt;
+</code></pre>
+</div>
+
+<blockquote>
+  <p>在<code class="highlighter-rouge">domain B </code>中登录或注册等创建需要的session</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;form action="dologin.html" method="post"&gt;
+	&lt;input name="username"&gt;
+	&lt;input type="password" name="passwrod"&gt;
+	&lt;input type="submit" value="提交"&gt;
+&lt;/form&gt;
+</code></pre>
+</div>
+
+<blockquote>
+  <p>在<code class="highlighter-rouge">domain B </code>中编写action</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>String redirect = request.getParameter("redirect");
+
+if(loginSuccess){
+	getSession().setAttribute("user", user);
+}
+
+//重新定位到domain A的地址
+return "redirect:"+redirect;
+</code></pre>
+</div>

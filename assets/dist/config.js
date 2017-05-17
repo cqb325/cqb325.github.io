@@ -47,7 +47,8 @@
             "Routers": '../config/Routers',
             "markdown": '../lib/markdown',
             "plupload": "../lib/plupload.full.min",
-            "mock": "../lib/mock"
+            "mock": "../lib/mock",
+            "Draggable": "../lib/Draggable"
         },
         shim: {
             "common": ["shiv","respond","jquery","moment","validate"],

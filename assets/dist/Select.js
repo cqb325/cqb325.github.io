@@ -173,7 +173,7 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
                 }
                 html = '<div class="cm-select-value-text">' + (html.join(this.sep) || '&nbsp;') + '</div>';
 
-                html = html + '<input type="hidden" class="' + this.props.className + '" name="' + this.props.name + '" value="' + (this.state.value || "") + '">';
+                html = html + '<input type="hidden" class="' + (this.props.className || "") + '" name="' + this.props.name + '" value="' + (this.state.value || "") + '">';
 
                 return React.createElement("span", { className: className, dangerouslySetInnerHTML: { __html: html } });
             }
@@ -380,11 +380,39 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
             }
         }, {
             key: "setData",
-            value: function setData(data) {
-                data = this._rebuildData(data);
+            value: function setData(data, value) {
+                var valueField = this.props.valueField || "id";
+                if (value != undefined) {
+                    this.selectedItems = {};
+                }
+                var val = value == undefined ? this.state.value : value;
+                data = this._rebuildData(data, val, valueField);
                 this.setState({
                     data: data,
-                    value: ""
+                    value: val
+                });
+            }
+        }, {
+            key: "addOption",
+            value: function addOption(option) {
+                var data = this.state.data;
+                data.push(option);
+                this.setState({
+                    data: data
+                });
+            }
+        }, {
+            key: "removeOption",
+            value: function removeOption(key, value) {
+                var data = this.state.data;
+                data.forEach(function (item, index) {
+                    if (item[key] === value) {
+                        data.splice(index, 1);
+                    }
+                });
+
+                this.setState({
+                    data: data
                 });
             }
         }, {
@@ -411,6 +439,11 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
                                 scope.setState({
                                     data: data
                                 });
+
+                                if (scope.props.onDataLoaded) {
+                                    scope.props.onDataLoaded();
+                                }
+                                scope.emit("dataLoaded");
                             }
                         });
                     })();

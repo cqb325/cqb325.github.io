@@ -113,7 +113,7 @@ define(["module", "react", "classnames", "core/BaseComponent", 'FontIcon', 'inte
                     return;
                 }
                 if (this.props.onClick) {
-                    this.props.onClick();
+                    this.props.onClick(e);
                 }
                 this.emit("click");
                 if (this.props.once) {
@@ -238,7 +238,19 @@ define(["module", "react", "classnames", "core/BaseComponent", 'FontIcon', 'inte
          * @attribute iconAlign
          * @type {string}
          */
-        iconAlign: PropTypes.oneOf(["left", "right"])
+        iconAlign: PropTypes.oneOf(["left", "right"]),
+        /**
+         * 按钮尺寸
+         * @attribute size
+         * @type {string}
+         */
+        size: PropTypes.oneOf(["default","large", "small"]),
+        /**
+         * 跳转的目标通a标签的target
+         * @attribute target
+         * @type {string}
+         */
+        target: PropTypes.string
     };
 
     module.exports = Button;

@@ -68,7 +68,8 @@ define(["module", "react", "classnames", "core/BaseComponent", 'internal/Enhance
 
             _this.addState({
                 value: props.value,
-                checked: props.checked || false
+                checked: props.checked || false,
+                disabled: props.disabled || false
             });
             return _this;
         }
@@ -83,12 +84,9 @@ define(["module", "react", "classnames", "core/BaseComponent", 'internal/Enhance
         _createClass(CheckBox, [{
             key: "handleChange",
             value: function handleChange(event) {
-                var _props = this.props;
-                var readOnly = _props.readOnly;
-                var disabled = _props.disabled;
+                var disabled = this.state.disabled;
 
-
-                if (readOnly || disabled) {
+                if (disabled) {
                     return;
                 }
 
@@ -126,19 +124,31 @@ define(["module", "react", "classnames", "core/BaseComponent", 'internal/Enhance
                 this.setState(state);
             }
         }, {
+            key: "enable",
+            value: function enable() {
+                this.setState({
+                    disabled: false
+                });
+            }
+        }, {
+            key: "disable",
+            value: function disable() {
+                this.setState({
+                    disabled: true
+                });
+            }
+        }, {
             key: "render",
             value: function render() {
-                var _props2 = this.props;
-                var className = _props2.className;
-                var name = _props2.name;
-                var type = _props2.type;
-                var item = _props2.item;
-                var readOnly = _props2.readOnly;
-                var disabled = _props2.disabled;
+                var _props = this.props;
+                var className = _props.className;
+                var name = _props.name;
+                var type = _props.type;
+                var item = _props.item;
 
                 className = classnames(className, 'cm-checkbox', {
                     active: this.state.checked,
-                    disabled: disabled || readOnly
+                    disabled: this.state.disabled
                 });
 
                 type = type || "checkbox";
@@ -161,7 +171,7 @@ define(["module", "react", "classnames", "core/BaseComponent", 'internal/Enhance
                         { style: { position: "relative" } },
                         React.createElement(
                             EnhancedButton,
-                            { disabled: disabled || readOnly, centerRipple: true, touchRippleColor: 'rgba(0, 0, 0, 0.2)' },
+                            { disabled: this.state.disabled, centerRipple: true, touchRippleColor: 'rgba(0, 0, 0, 0.2)' },
                             React.createElement("span", { className: "cm-checkbox-icon" })
                         )
                     ),

@@ -62,6 +62,7 @@ define(["module", "react", "classnames", "core/BaseComponent", "CheckBox", "core
             var data = props.data ? Core.clone(props.data) : null;
 
             data = _this._rebuildData(data);
+            _this.items = {};
 
             _this.addState({
                 data: data,
@@ -143,6 +144,21 @@ define(["module", "react", "classnames", "core/BaseComponent", "CheckBox", "core
                 this.emit("change", value);
             }
         }, {
+            key: "getItem",
+            value: function getItem(value) {
+                return this.items[value];
+            }
+        }, {
+            key: "enableItem",
+            value: function enableItem(value) {
+                this.getItem(value).enable();
+            }
+        }, {
+            key: "disableItem",
+            value: function disableItem(value) {
+                this.getItem(value).disable();
+            }
+        }, {
             key: "setValue",
             value: function setValue(value) {
                 this.setState({ value: value });
@@ -163,6 +179,8 @@ define(["module", "react", "classnames", "core/BaseComponent", "CheckBox", "core
                 var currentValue = this.state.value;
                 var name = this.props.name || "radio_" + new Date().getTime();
                 return data.map(function (item, index) {
+                    var _this2 = this;
+
                     var value_key = valueField ? valueField : "id";
                     var text_key = textField ? textField : "text";
                     var value = item[value_key],
@@ -175,6 +193,9 @@ define(["module", "react", "classnames", "core/BaseComponent", "CheckBox", "core
                     return React.createElement(CheckBox, { key: index,
                         disabled: this.props.disabled,
                         readOnly: this.props.readOnly,
+                        ref: function ref(_ref) {
+                            _this2.items[value] = _ref;
+                        },
                         type: "radio",
                         value: value,
                         label: text,
@@ -188,12 +209,12 @@ define(["module", "react", "classnames", "core/BaseComponent", "CheckBox", "core
         }, {
             key: "componentWillMount",
             value: function componentWillMount() {
-                var _this2 = this;
+                var _this3 = this;
 
                 if (this.props.url) {
                     (function () {
-                        var scope = _this2;
-                        Ajax.get(_this2.props.url, {}, function (data, err) {
+                        var scope = _this3;
+                        Ajax.get(_this3.props.url, {}, function (data, err) {
                             scope.setState({
                                 data: data
                             });
@@ -206,7 +227,6 @@ define(["module", "react", "classnames", "core/BaseComponent", "CheckBox", "core
             value: function render() {
                 var _props3 = this.props;
                 var className = _props3.className;
-                var name = _props3.name;
                 var layout = _props3.layout;
 
                 className = classnames(className, 'cm-radio-group', {

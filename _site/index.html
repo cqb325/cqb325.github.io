@@ -1,0 +1,2397 @@
+
+        <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+    
+    
+    
+    
+    <title>CQB's Blog</title>
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Chenqb">
+    
+
+    
+    <!--<%- open_graph({twitter_id: theme.author.twitter, google_plus: theme.author.google_plus}) %>-->
+    
+    <meta name="description" content="page.description">
+    
+    <meta property="og:type" content="website">
+    
+    <meta property="og:title" content="">
+    <meta property="og:url" content="/">
+    <meta property="og:site_name" content="CQB's Blog">
+    <meta property="og:description" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="">
+    <meta name="twitter:description" content="page.description">
+    <meta name="twitter:creator" content="@">
+    <link rel="publisher" href="">
+
+    
+    <link rel="alternative" href="/atom.xml" title="CQB's Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/assets/img/favicon1.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/assets/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/jacman.jpg">
+    
+
+    <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/highlight.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+        <div>
+		    
+			<div id="imglogo">
+				<!--<a href="/"><img src="/assets/img/logo.png" alt="CQB's Blog" title="CQB's Blog"/></a>-->
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="CQB's Blog">CQB's Blog</a></h1>
+				<h2 class="blog-motto">A technology blog for myself.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/cmui">CMUI</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+  
+  
+  
+  
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/%E9%A1%B5%E9%9D%A2%E6%8C%9F%E6%8C%81%E5%A4%84%E7%90%86/2016/08/25/from_end-clickjacking" title="避免点击劫持" itemprop="url">避免点击劫持</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-25 00:00:00 +0800" itemprop="datePublished"> 发表于 2016-08-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="section">避免点击劫持</h2>
+
+<h3 id="x-frame-options-">添加 X-Frame-Options 响应头</h3>
+
+<p><code class="highlighter-rouge">X-Frame-Options</code> HTTP 响应头是用来给浏览器指示允许一个页面可否在 <code class="highlighter-rouge">&lt;frame&gt;</code>, <code class="highlighter-rouge">&lt;iframe&gt;</code> 或者 <code class="highlighter-rouge">&lt;object&gt;</code> 中展现的标记。网站可以使用此功能，来确保自己网站的内容没有被嵌到别人的网站中去，也从而避免了点击劫持 (clickjacking) 的攻击。</p>
+
+<blockquote>
+  <p>使用 X-Frame-Options</p>
+</blockquote>
+
+<p>X-Frame-Options 有三个值:
+&gt;DENY</p>
+
+<p>表示该页面不允许在 frame 中展示，即便是在相同域名的页面中嵌套也不允许。
+&gt;SAMEORIGIN</p>
+
+<p>表示该页面可以在相同域名页面的 frame 中展示。
+&gt;ALLOW-FROM uri</p>
+
+<p>表示该页面可以在指定来源的 frame 中展示。</p>
+
+<p>换一句话说，如果设置为 DENY，不光在别人的网站 frame 嵌入时会无法加载，在同域名页面中同样会无法加载。另一方面，如果设置为 SAMEORIGIN，那么页面就可以在同域名页面的 frame 中嵌套。</p>
+
+<h3 id="apache">配置 Apache</h3>
+
+<p>配置 Apache 在所有页面上发送 X-Frame-Options 响应头，需要把下面这行添加到 ‘site’ 的配置中:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Header always append X-Frame-Options SAMEORIGIN
+</code></pre>
+</div>
+
+<h3 id="nginx">配置 nginx</h3>
+
+<p>配置 nginx 发送 X-Frame-Options 响应头，把下面这行添加到 ‘http’, ‘server’ 或者 ‘location’ 的配置中:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>add_header X-Frame-Options SAMEORIGIN;
+</code></pre>
+</div>
+
+<h3 id="iis">配置 IIS</h3>
+
+<p>配置 IIS 发送 X-Frame-Options 响应头，添加下面的配置到 Web.config 文件中:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;system.webServer&gt;
+  ...
+
+  &lt;httpProtocol&gt;
+    &lt;customHeaders&gt;
+      &lt;add name="X-Frame-Options" value="SAMEORIGIN" /&gt;
+    &lt;/customHeaders&gt;
+  &lt;/httpProtocol&gt;
+
+  ...
+&lt;/system.webServer&gt;
+</code></pre>
+</div>
+
+<h3 id="section-1">结果</h3>
+
+<p>在 Firefox 尝试加载 frame 的内容时，如果 X-Frame-Options 响应头设置为禁止访问了，那么 Firefox 会用 about:blank 展现到 frame 中。也许从某种方面来讲的话，展示为错误消息会更好一点。</p>
+
+<p>参考  <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options" title="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/%E9%A1%B5%E9%9D%A2%E6%8C%9F%E6%8C%81%E5%A4%84%E7%90%86/2016/08/25/from_end-clickjacking#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#页面挟持处理">页面挟持处理</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#挟持">挟持</a>
+  
+  <a href="/tags/#X-Frame-Options">X-Frame-Options</a>
+  
+  <a href="/tags/#clickjacking">clickjacking</a>
+  
+  <a href="/tags/#iframe">iframe</a>
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/%E9%A1%B5%E9%9D%A2%E6%8C%9F%E6%8C%81%E5%A4%84%E7%90%86/2016/08/25/from_end-clickjacking#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2016-08-25-from_end-clickjacking.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+  
+  
+  
+  
+    
+    <article class="post-expand " itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/03/from_end-IE-Safari-iframe-Cookie-Problem" title="From_end Ie Safari Iframe cookie Problem" itemprop="url">From_end Ie Safari Iframe cookie Problem</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-03 00:00:00 +0800" itemprop="datePublished"> 发表于 2016-08-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        
+<h3 id="internet-explorer--safari-iframe-session-cookie-problem">Internet Explorer &amp; Safari: IFrame Session Cookie Problem</h3>
+
+<p>在IE和Safari浏览器中，一个域名网页嵌入另外一个域名网页的iframe的时候会发现不能保持cookies，导致session丢失。</p>
+
+<p><em>如果在localhost域名下嵌入另外域名的iframe没有问题</em></p>
+
+<blockquote>
+  <p>例：在<code class="highlighter-rouge">domain A</code>中嵌入<code class="highlighter-rouge">domain B </code>的iframe</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;iframe src="http://www.domain-B.com/login.html"&gt;&lt;/iframe&gt;
+</code></pre>
+</div>
+
+<blockquote>
+  <p>在<code class="highlighter-rouge">domain B </code>中登录或注册等创建需要的session</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;form action="dologin.html" method="post"&gt;
+	&lt;input name="username"&gt;
+	&lt;input type="password" name="passwrod"&gt;
+	&lt;input type="submit" value="提交"&gt;
+&lt;/form&gt;
+</code></pre>
+</div>
+
+<blockquote>
+  <p>在<code class="highlighter-rouge">domain B </code>中编写action</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>String redirect = request.getParameter("redirect");
+
+if(loginSuccess){
+	getSession().setAttribute("user", user);
+}
+
+//重新定位到domain A的地址
+return "redirect:"+redirect;
+</code></pre>
+</div>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/08/03/from_end-IE-Safari-iframe-Cookie-Problem#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/08/03/from_end-IE-Safari-iframe-Cookie-Problem#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2016-08-03-from_end-IE-Safari-iframe Cookie-Problem.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+  
+  
+  
+  
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2016/07/18/from_end-react-native-android-release" title="React-Native Android打包发布" itemprop="url">React-Native Android打包发布</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2016-07-18 00:00:00 +0800" itemprop="datePublished"> 发表于 2016-07-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="react-native-android">React-Native Android打包发布</h3>
+
+<hr />
+<blockquote>
+  <p>启动服务</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    //在项目目录下执行启动服务
+	npm start
+</code></pre>
+</div>
+
+<blockquote>
+  <p>生成密匙</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>`keytool -genkey -v -keystore my-test-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000`
+</code></pre>
+</div>
+
+<p>代码中的 my-test-key.keystore 和 my-key-alias 替换成需要的名字。记住后续步骤中输入的密码等信息，需要用于第四步骤中的gradle脚本的编写。</p>
+
+<blockquote>
+  <p>下载bundle文件并保存</p>
+</blockquote>
+
+<p>通过访问<code class="highlighter-rouge">http://localhost:8081/index.android.bundle</code>地址下载bundle文件保存到<code class="highlighter-rouge">/android/app/src/main/assets</code>目录下
+或者执行
+<code class="highlighter-rouge">curl -k "http://localhost:8081/index.android.bundle" &gt; android/app/src/main/assets/index.android.bundle </code></p>
+
+<blockquote>
+  <p>添加 gradle 的 keystore 配置</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>// 在 defaultConfig 后面添加
+signingConfigs {
+    release {
+        storeFile file("/my-test-key.keystore") // 替换成你实际密匙文件所在位置
+        storePassword "步骤1中的密码"　　// 替换成你实际的密码
+        keyAlias "my-key-alias"　　　　// 替换
+        keyPassword "步骤1中的密码"　　// 替换
+    }
+}
+
+// 修改原来的配置，主要是加入 signingConfig 这一行
+buildTypes {
+    release {
+        minifyEnabled enableProguardInReleaseBuilds // 记得修改相应的功能启动
+        proguardFiles fetDefaultProguardFile('proguard-android.txt), 'proguard-rules.pro' 
+        signingConfig signingConfigs.release
+    }
+}
+</code></pre>
+</div>
+
+<p><em>注意：路径中的 反斜线() 要改成 正斜线(/)。</em></p>
+
+<blockquote>
+  <p>启用 Proguard 代码混淆（可选）</p>
+</blockquote>
+
+<p>Proguard 是一个 Java 字节码混淆压缩工具，可剔除项目文件夹中为使用的部分，有效减少APK的大小。在 build.gradle 文件中，启动 Proguard模块：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>def enableProguardInReleaseBuilds = true
+</code></pre>
+</div>
+
+<blockquote>
+  <p>执行打包脚本</p>
+</blockquote>
+
+<p>首先：进入项目根目录下的 /android/ 目录中；</p>
+
+<p>然后：执行 gradle assembleRelease 命令。</p>
+
+<p><em>注意：如果出现错误或者没有安装 gradle 工具，需要自行安装 gradle 工具和配置好 GRADLE_HOME 和 PATH，注意和 /android/gradle/wrapper/gradele-wrapper.properties 文件中的版本配置保持一致。也可以使用 gradle clean 清理一下缓存。</em></p>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2016/07/18/from_end-react-native-android-release#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#前端资源">前端资源</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#react-native">react-native</a>
+  
+  <a href="/tags/#android">android</a>
+  
+  <a href="/tags/#打包发布">打包发布</a>
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2016/07/18/from_end-react-native-android-release#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2016-07-18-from_end-react-native-android-release.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+  
+  
+  
+  
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/%E5%89%8D%E7%AB%AFbug%E8%B5%84%E6%96%99/2016/07/18/from_end-360-browser-bug" title="360手机浏览器重复请求bug" itemprop="url">360手机浏览器重复请求bug</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2016-07-18 00:00:00 +0800" itemprop="datePublished"> 发表于 2016-07-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="bug">360手机浏览器重复请求bug</h3>
+
+<ol>
+  <li>版本：  2.5.0</li>
+  <li>手机型号： iphone6</li>
+  <li>ios版本： 9.3.2</li>
+</ol>
+
+<p>在新窗口中打开链接发现会重复请求， 2-3次， 请求不到的，关闭窗口还会请求</p>
+
+<p>包含a标签，window.open和form表单提交都存在该问题。</p>
+
+<p>只有单页请求的时候只请求一遍</p>
+
+<blockquote>
+  <p>发现 jquery(“a”).click(); 不起作用。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/%E5%89%8D%E7%AB%AFbug%E8%B5%84%E6%96%99/2016/07/18/from_end-360-browser-bug#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#前端bug资料">前端bug资料</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#前端">前端</a>
+  
+  <a href="/tags/#手机端">手机端</a>
+  
+  <a href="/tags/#360浏览器，bug">360浏览器，bug</a>
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/%E5%89%8D%E7%AB%AFbug%E8%B5%84%E6%96%99/2016/07/18/from_end-360-browser-bug#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2016-07-18-from_end-360-browser-bug.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+  
+  
+  
+  
+    
+    <article class="post-expand " itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/07/04/front-end-w3c-Web-Storage" title="Front End W3c Web Storage" itemprop="url">Front End W3c Web Storage</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2016-07-04 00:00:00 +0800" itemprop="datePublished"> 发表于 2016-07-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="web-storage-">Web Storage (第二版)</h3>
+
+<h2 id="section">摘要</h2>
+
+<p>该规范定义了一个在客户端存储键值对数据的API。</p>
+
+<ol>
+  <li>介绍</li>
+</ol>
+
+<p><em>该部分为非规范内容</em></p>
+
+<p>该规范介绍了在客户端存储键值对的两种不同机制，类似HTTP会话中的COOKIES.</p>
+
+<p>我们会遇到一种场景，用户在某地存储了一项数据，同时能够在不同的窗口中进行使用.</p>
+
+<p><code class="highlighter-rouge">Cookies</code> 并没有完好的解决该问题. For example, a user could be buying plane tickets in two different windows, using the same site. If the site used cookies to keep track of which ticket the user was buying, then as the user clicked from page to page in both windows, the ticket currently being purchased would “leak” from one window to the other, potentially causing the user to buy two tickets for the same flight without really noticing.</p>
+
+<ol>
+  <li>asd</li>
+</ol>
+
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/07/04/front-end-w3c-Web-Storage#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/07/04/front-end-w3c-Web-Storage#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2016-07-04-front-end-w3c-Web-Storage.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+  
+  
+  
+  
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/react/2016/03/21/front_end_grunt_react_es6" title="Grunt + ES6 + React 整合开发" itemprop="url">Grunt + ES6 + React 整合开发</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-21 00:00:00 +0800" itemprop="datePublished"> 发表于 2016-03-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="grunt--es6--react-">Grunt + ES6 + React 整合开发</h3>
+
+<ul>
+  <li>安装grunt插件</li>
+</ul>
+
+<p><code class="highlighter-rouge">grunt-react</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm install grunt-react
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">grunt-babel</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm install grunt-babel
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">babel-preset-es2015</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm install babel-preset-es2015
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">babel-preset-react</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm install babel-preset-react
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">transform-es2015-modules-amd</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm install transform-es2015-modules-amd
+</code></pre>
+</div>
+
+<ul>
+  <li>
+    <p>配置grunt</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>  react: {
+      options: {
+          es6module: true
+      },
+      dynamic_mappings: {
+          files: [
+              {
+                  expand: true,
+                  cwd: 'src/jsx',
+                  src: ['**/*.jsx'],
+                  dest: 'src/es6',
+                  ext: '.js'
+              }
+          ]
+      }
+  },
+  babel: {
+      options: {
+          presets: ['es2015','react'],
+          "plugins": ["transform-es2015-modules-amd"]
+      },
+      dist: {
+          files: [{
+              "expand": true,
+              "cwd": "src/jsx",
+              "src": ["**/*.jsx"],
+              "dest": "assets/js",
+              "ext": ".js"
+          }]
+      }
+  }
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>加载插件</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>  grunt.loadNpmTasks('grunt-react');
+  grunt.loadNpmTasks('grunt-babel');
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<h2 id="gruntbabel">如需使用全局grunt和babel</h2>
+
+<p>修改全局babel-core/lib/transformation/file/options/option-manager.js</p>
+
+<p>修改函数<code class="highlighter-rouge">OptionManager.normalisePlugins</code>中的</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>if (typeof plugin === "string") {
+	dirname = "C:/Users/cqb32_000";
+	var pluginLoc = _helpersResolve2["default"]("babel-plugin-" + plugin, dirname) || _helpersResolve2["default"](plugin, dirname);
+	if (pluginLoc) {
+		plugin = require(pluginLoc);
+	} else {
+		throw new ReferenceError(messages.get("pluginUnknown", plugin, loc, i, dirname));
+	}
+}
+</code></pre>
+</div>
+
+<p>和函数<code class="highlighter-rouge">OptionManager.prototype.resolvePresets</code>中的</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>if (typeof val === "string") {
+	dirname = "C:/Users/cqb32_000";
+	var presetLoc = _helpersResolve2["default"]("babel-preset-" + val, dirname) || _helpersResolve2["default"](val, dirname);
+	if (presetLoc) {
+		var _val = require(presetLoc);
+		onResolve &amp;&amp; onResolve(_val, presetLoc);
+		return _val;
+	} else {
+		throw new Error("Couldn't find preset " + JSON.stringify(val) + " relative to directory " + JSON.stringify(dirname));
+	}
+}
+</code></pre>
+</div>
+
+<h2 id="ie8">兼容ie8</h2>
+
+<p>要兼容IE8的话需要注意</p>
+
+<ul>
+  <li>导出使用 <code class="highlighter-rouge">module.exports = xxx;</code></li>
+  <li>替换<code class="highlighter-rouge">import</code> 使用 <code class="highlighter-rouge">require</code></li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/react/2016/03/21/front_end_grunt_react_es6#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#React">React</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#前端">前端</a>
+  
+  <a href="/tags/#Grunt">Grunt</a>
+  
+  <a href="/tags/#ES6">ES6</a>
+  
+  <a href="/tags/#React">React</a>
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/react/2016/03/21/front_end_grunt_react_es6#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2016-03-21-front_end_grunt_react_es6.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+  
+  
+  
+  
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/grunt/2016/03/21/front_end_grunt_modify" title="如何全局使用grunt" itemprop="url">如何全局使用grunt</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-21 00:00:00 +0800" itemprop="datePublished"> 发表于 2016-03-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="grunt">如何全局使用grunt</h3>
+
+<h1 id="loadnpmtasks">loadNpmTasks</h1>
+
+<p>我们知道grunt使用插件的时候采用<code class="highlighter-rouge">loadNpmTasks</code>方式</p>
+
+<p>该函数为grunt的Task类的<code class="highlighter-rouge">loadNpmTasks</code>方法</p>
+
+<p>代码大致如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>task.loadNpmTasks = function(name) {
+	loadTasksMessage('"' + name + '" local Npm module');
+	var root = path.resolve('node_modules', __dirname+"../../../../");
+	var pkgfile = path.join(root, name, 'package.json');
+	var pkg = grunt.file.exists(pkgfile) ? grunt.file.readJSON(pkgfile) : {keywords: []};
+
+  	// Process collection plugins.
+	if (pkg.keywords &amp;&amp; pkg.keywords.indexOf('gruntcollection') !== -1) {
+		loadTaskDepth++;
+		Object.keys(pkg.dependencies).forEach(function(depName) {
+			// Npm sometimes pulls dependencies out if they're shared, so find
+			// upwards if not found locally.
+			var filepath = grunt.file.findup('node_modules/' + depName, {
+				cwd: path.resolve('node_modules', name),
+				nocase: true
+	  		});
+		  	if (filepath) {
+				// Load this task plugin recursively.
+				task.loadNpmTasks(path.relative(root, filepath));
+	  		}
+		});
+		loadTaskDepth--;
+		return;
+  		}
+
+	// Process task plugins.
+	var tasksdir = path.join(root, name, 'tasks');
+	if (grunt.file.exists(root)) {
+		loadTasks(tasksdir);
+	} else {
+		grunt.log.error('Local Npm module "' + name + '" not found. Is it installed?');
+	}
+};
+</code></pre>
+</div>
+
+<p>修改root的路径为本地安装node模块的地址即可，如：</p>
+
+<p>var root = path.resolve(‘node_modules’, __dirname+”../../../../”);</p>
+
+<h2 id="grunt-cli">Grunt-cli修改</h2>
+
+<p>grunt 命令使用grunt-cli，需要修改cli加载grunt模块的寻址参数
+文件为： grunt-cli 中的bin/grunt</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#!/usr/bin/env node
+</span>
+<span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="nx">process</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">'grunt'</span><span class="p">;</span>
+
+<span class="c1">// Especially badass external libs.</span>
+<span class="kd">var</span> <span class="nx">findup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'findup-sync'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">resolve</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'resolve'</span><span class="p">).</span><span class="nx">sync</span><span class="p">;</span>
+
+<span class="c1">// Internal libs.</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../lib/cli'</span><span class="p">).</span><span class="nx">options</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">completion</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../lib/completion'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">info</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../lib/info'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'path'</span><span class="p">);</span>
+
+
+<span class="kd">var</span> <span class="nx">basedir</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">cwd</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">gruntpath</span><span class="p">;</span>
+
+<span class="c1">// Do stuff based on CLI options.</span>
+<span class="k">if</span> <span class="p">(</span><span class="s1">'completion'</span> <span class="k">in</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">completion</span><span class="p">.</span><span class="nx">print</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">completion</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">version</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">info</span><span class="p">.</span><span class="nx">version</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">base</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">gruntfile</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">basedir</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">base</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">gruntfile</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">basedir</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">dirname</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">gruntfile</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="nx">basedir</span> <span class="o">=</span> <span class="s2">"C:/Users/xxxxx"</span><span class="p">;</span>
+
+<span class="k">try</span> <span class="p">{</span>
+  <span class="nx">gruntpath</span> <span class="o">=</span> <span class="nx">resolve</span><span class="p">(</span><span class="s1">'grunt'</span><span class="p">,</span> <span class="p">{</span><span class="na">basedir</span><span class="p">:</span> <span class="nx">basedir</span><span class="p">});</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">gruntpath</span> <span class="o">=</span> <span class="nx">findup</span><span class="p">(</span><span class="s1">'lib/grunt.js'</span><span class="p">);</span>
+  <span class="c1">// No grunt install found!</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">gruntpath</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">version</span><span class="p">)</span> <span class="p">{</span> <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span> <span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">help</span><span class="p">)</span> <span class="p">{</span> <span class="nx">info</span><span class="p">.</span><span class="nx">help</span><span class="p">();</span> <span class="p">}</span>
+<span class="nx">info</span><span class="p">.</span><span class="nx">fatal</span><span class="p">(</span><span class="s1">'Unable to find local grunt.'</span><span class="p">,</span> <span class="mi">99</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Everything looks good. Require local grunt and run it.</span>
+<span class="nx">require</span><span class="p">(</span><span class="nx">gruntpath</span><span class="p">).</span><span class="nx">cli</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>修改basedir参数为自己存放全局node_modules的地址。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/grunt/2016/03/21/front_end_grunt_modify#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#Grunt">Grunt</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#前端">前端</a>
+  
+  <a href="/tags/#Grunt">Grunt</a>
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/grunt/2016/03/21/front_end_grunt_modify#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2016-03-21-front_end_grunt_modify.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+  
+  
+  
+  
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9/2016/03/03/front_end_imgpreview_ie8" title="IE8获取图片尺寸，并预览" itemprop="url">IE8获取图片尺寸，并预览</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-03 00:00:00 +0800" itemprop="datePublished"> 发表于 2016-03-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="ie8">IE8获取图片尺寸，并预览</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;div class="form-group form-inline text-center" id="previewWrap"&gt;
+    &lt;img src="" id="imgPreview"&gt;
+&lt;/div&gt;
+</code></pre>
+</div>
+
+<ul>
+  <li>获取尺寸</li>
+  <li>
+    <p>var preload = document.createElement(“div”),
+        body = document.body,
+        data, oriWidth, oriHeight, ratio;</p>
+
+    <p>preload.style.cssText = “width:100px;height:100px;visibility: visible;position: absolute;left: 0px;top: 0px”;
+// 设置sizingMethod=’image’
+preload.style.filter = “progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=’image’)”;
+body.insertBefore(preload, body.childNodes[0]);
+ele.select();
+try {
+    data = document.selection.createRange().text;
+} finally {
+    document.selection.empty();
+}</p>
+
+    <p>if ( !! data) {
+    data = data.replace(/[)’”%]/g, function(s) {
+        return escape(escape(s));
+    });
+    //预载图片
+    try {
+        preload.filters.item(“DXImageTransform.Microsoft.AlphaImageLoader”).src = data;
+    } catch (e) {
+        //console.log(e.description);
+        return;
+    }
+}</p>
+
+    <p>oriWidth = preload.offsetWidth;
+oriHeight = preload.offsetHeight;</p>
+
+    <p>document.body.removeChild(preload);
+preload = null;</p>
+  </li>
+  <li>预览</li>
+  <li>
+
+    <p>var target = $(“#imgPreview”);
+var parent = target.parent();
+var div = $(“&lt;div&gt;”);
+parent.prepend(div);
+div.css({
+    “filter”:”progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)”,
+    position: “absolute”,
+    left: ‘20px’,
+    top: ‘20px’
+});
+div[0].filters.item(“DXImageTransform.Microsoft.AlphaImageLoader”).src = data;
+var w = parent.width();
+var h = w/oriWidth * oriHeight;
+div[0].style.width = w +”px”;
+div[0].style.height = h +”px”;
+target.css({height: h+”px”});</p>
+  </li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9/2016/03/03/front_end_imgpreview_ie8#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#浏览器兼容">浏览器兼容</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#前端">前端</a>
+  
+  <a href="/tags/#IE8">IE8</a>
+  
+  <a href="/tags/#图片尺寸">图片尺寸</a>
+  
+  <a href="/tags/#图片预览">图片预览</a>
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9/2016/03/03/front_end_imgpreview_ie8#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2016-03-03-front_end_imgpreview_ie8.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+  
+  
+  
+  
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/%E5%89%8D%E7%AB%AF%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/2015/12/25/font_end_file_uplaod" title="前端文件上传" itemprop="url">前端文件上传</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-25 00:00:00 +0800" itemprop="datePublished"> 发表于 2015-12-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="section">前端文件上传</h2>
+<blockquote>
+  <p>引用至 <a href="http://www.codeweblog.com/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%B8%90%E8%BF%9B%E5%BC%8F%E5%A2%9E%E5%BC%BA/">文件上传的渐进式增强</a></p>
+</blockquote>
+
+<p>HTML5提供了一系列新的浏览器API，使得文件上传有可能出现革命性变化。英国程序员Remy Sharp总结了这些新的接口，本文在他的文章基础上，讨论如何采用HTML5的API，对文件上传进行渐进式增强，实现以下功能：</p>
+
+<ul>
+  <li>iframe上传</li>
+  <li>ajax上传</li>
+  <li>进度条</li>
+  <li>文件预览</li>
+  <li>拖放上传</li>
+</ul>
+
+<p>为了对这些功能有一个感性认识，你可以先看看Remy Sharp提供的<a href="http://html5demos.com/dnd-upload">范例</a>。</p>
+
+<h3 id="section-1">传统形式</h3>
+
+<p>让我们从最基本的开始。
+文件上传的传统形式，是使用表单元素file：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;form id="upload-form" action="upload.php" method="post" enctype="multipart/form-data" &gt;
+	&lt;input type="file" id="upload" name="upload" /&gt; &lt;br /&gt;
+	&lt;input type="submit" value="Upload" /&gt;
+&lt;/form&gt;
+</code></pre>
+</div>
+
+<p>所有浏览器都支持上面的代码。它在IE浏览器中，显示如下：</p>
+
+<p><img src="http://image.codeweblog.com/upload/b/26/b26c7237b1f6af61.png" alt="" /></p>
+
+<p>用户先选择文件，然后点击”Upload”按钮，文件开始上传。</p>
+
+<h3 id="iframe">iframe上传</h3>
+
+<p>传统的表单上传，属于”同步上传”。也就是说，点击上传按钮后，网页”锁死”，
+用户只能等待上传结束，然后浏览器刷新，跳到表单的action属性指定的网址。
+有没有办法”异步上传”，在网页不重载的情况下，完成整个上传过程呢？
+在HTML5没有出现之前，只能使用iframe做到这一点。用户点击submit时，
+动态插入一个iframe元素（以下代码使用了jQuery函数库）。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var form = $("#upload-form");
+	form.on('submit',function() {
+	// 此处动态插入iframe元素
+});
+</code></pre>
+</div>
+
+<p>插入iframe的代码如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>var seed = Math.floor(Math.random() * 1000);
+var id = "uploader-frame-" + seed;
+var callback = "uploader-cb-" + seed;
+var iframe = $('&lt;iframe id="'+id+'" name="'+id+'" style="display:none;"&gt;');
+var url = form.attr('action');
+form.attr('target', id).append(iframe).attr('action', url + '?iframe=' + callback);
+</code></pre>
+</div>
+
+<p>最后一行，有两个地方值得注意。首先，它为表单添加target属性，指向动态插入的iframe窗口，这使得上传结束后，服务器将结果返回iframe窗口，所以当前页面就不会跳转了。其次，它在action属性指定的上传网址的后面，添加了一个参数，使得服务器知道回调函数的名称。这样就能将服务器返回的信息，从iframe窗口传到上层页面。</p>
+
+<p>服务器（upload.php）返回的信息，应该是如下形式：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script type="text/javascript"&gt;
+	window.top.window['callback'](data);
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<p>然后，在当前网页定义回调函数：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>window[callback] = function(data){
+	console.log('received callback:', data);
+	iframe.remove(); //removing iframe
+	form.removeAttr('target');
+	form.attr('action', url);
+	window[callback] = undefined; //removing callback
+};
+</code></pre>
+</div>
+
+<h3 id="ajax">ajax上传</h3>
+
+<p>HTML5提出了<code class="highlighter-rouge">XMLHttpRequest</code>对象的<code class="highlighter-rouge">第二版</code>，从此ajax能够上传文件了。这是真正的”异步上传”，是将来的主流。上一节的iframe上传，可以用作老式浏览器的替代方案。</p>
+
+<p>ajax上传代码，放在表单的submit事件回调函数中：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>form.on('submit',function() {
+	// 此处进行ajax上传
+});
+</code></pre>
+</div>
+
+<p>我们主要用的是<a href="https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest/FormData"><code class="highlighter-rouge">FormData</code>对象</a>，它能够构建类似表单的键值对。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>// 检查是否支持FormData
+if(window.FormData) {　
+	var formData = new FormData();
+	// 建立一个upload表单项，值为上传的文件
+	formData.append('upload', document.getElementById('upload').files[0]);
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', $(this).attr('action'));
+	// 定义上传完成后的回调函数
+	xhr.onload = function () {
+		if (xhr.status === 200) {
+			console.log('上传成功');
+		} else {
+			console.log('出错了');
+		}
+	};
+	xhr.send(formData);
+}
+</code></pre>
+</div>
+
+<h3 id="section-2">进度条</h3>
+
+<p>XMLHttpRequest第二版还定义了一个<a href="https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest/Using_XMLHttpRequest#Monitoring_progress"><code class="highlighter-rouge">progress</code></a>事件，可以用来制作进度条。
+首先，在页面中放置一个HTML元素progress。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;progress id="uploadprogress" min="0" max="100" value="0"&gt;0&lt;/progress&gt;
+</code></pre>
+</div>
+
+<p>然后，定义progress事件的回调函数。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>xhr.upload.onprogress = function (event) {
+	if (event.lengthComputable) {
+		var complete = (event.loaded / event.total * 100 | 0);
+		var progress = document.getElementById('uploadprogress');
+		progress.value = progress.innerHTML = complete;
+	}
+};
+</code></pre>
+</div>
+
+<p>注意，progress事件不是定义在xhr，而是定义在xhr.upload，因为这里需要区分下载和上传，下载也有一个progress事件。</p>
+
+<h3 id="section-3">图片预览</h3>
+
+<p>如果上传的是图片文件，利用<a href="http://dev.w3.org/2006/webapi/FileAPI/"><code class="highlighter-rouge">File API</code></a>，我们可以做一个图片文件的预览。这里主要用到<code class="highlighter-rouge">FileReader</code>对象。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>// 检查是否支持FileReader对象
+if (typeof FileReader != 'undefined') {
+	var acceptedTypes = {
+		'image/png': true,
+		'image/jpeg': true,
+		'image/gif': true
+	};
+	if (acceptedTypes[document.getElementById('upload').files[0].type] === true) {
+		var reader = new FileReader();
+		reader.onload = function (event) {
+			var image = new Image();
+			image.src = event.target.result;
+			image.width = 100;
+			document.body.appendChild(image);
+		};
+		reader.readAsDataURL(document.getElementById('upload').files[0]);
+	}
+}
+</code></pre>
+</div>
+
+<h3 id="section-4">拖放上传</h3>
+
+<p>最后，利用HTML5的拖放功能，实现拖放上传。</p>
+
+<p>先在页面中放置一个容器，用来接收拖放的文件。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;div id="holder"&gt;&lt;/div&gt;
+</code></pre>
+</div>
+
+<p>对它设置样式：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#holder {
+	border: 10px dashed #ccc;
+	width: 300px;
+	min-height: 300px;
+	margin: 20px auto;
+}
+#holder.hover {
+	border: 10px dashed #0c0;
+}
+</code></pre>
+</div>
+
+<p>拖放文件的代码，主要是定义dragover、dragend和drop这三个事件。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>// 检查浏览器是否支持拖放上传。
+if('draggable' in document.createElement('span')){
+	var holder = document.getElementById('holder');
+	holder.ondragover = function () { this.className = 'hover'; return false; };
+	holder.ondragend = function () { this.className = ''; return false; };
+	holder.ondrop = function (event) {
+		event.preventDefault();
+		this.className = '';
+		var files = event.dataTransfer.files;
+		// do something with files
+	};
+}
+</code></pre>
+</div>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/%E5%89%8D%E7%AB%AF%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/2015/12/25/font_end_file_uplaod#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#前端文件上传">前端文件上传</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#前端">前端</a>
+  
+  <a href="/tags/#文件上传">文件上传</a>
+  
+  <a href="/tags/#进度">进度</a>
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/%E5%89%8D%E7%AB%AF%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/2015/12/25/font_end_file_uplaod#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2015-12-25-font_end_file_uplaod.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+  
+  
+  
+  
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2012/12/09/front_end_res_01" title="前端资源收集第一弹" itemprop="url">前端资源收集第一弹</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/?rel=author" title="Chenqb" target="_blank" itemprop="author">Chenqb</a>
+		
+  <p class="article-time">
+    <time datetime="2012-12-09 00:00:00 +0800" itemprop="datePublished"> 发表于 2012-12-09</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="section">综合/资源</h3>
+
+<ul>
+  <li>
+    <p>frontend-dev-bookmarks 一个巨大的前端开发资源清单。</p>
+  </li>
+  <li>
+    <p>front-end-collect 分享自己长期关注的前端开发相关的优秀网站、博客、以及活跃开发者。</p>
+  </li>
+  <li>
+    <p>Front-end-Interview-questions 史上最全前端开发面试问题及答案</p>
+  </li>
+  <li>
+    <p>f2e-hub 包含<code class="highlighter-rouge">Animation</code>，<code class="highlighter-rouge">UI</code>，<code class="highlighter-rouge">dialog</code>，<code class="highlighter-rouge">Carousels</code>，<code class="highlighter-rouge">color</code>，<code class="highlighter-rouge">image</code>，<code class="highlighter-rouge">workflow</code>等。</p>
+  </li>
+  <li>
+    <p>awesome-javascript 一系列很棒的javascript 库，资源。</p>
+  </li>
+  <li>
+    <p>fks 前端技能汇总，包含前端知识架构，后端知识，<code class="highlighter-rouge">linux</code>，书籍推荐等。</p>
+  </li>
+  <li>
+    <p>node123 <code class="highlighter-rouge">node.js</code>中文资料导航。</p>
+  </li>
+  <li>
+    <p>mobile-web-favorites 移动端web开发收藏夹。</p>
+  </li>
+  <li>
+    <p>gulp-book Gulp 入门指南</p>
+  </li>
+</ul>
+
+<h3 id="uicss">样式/UI/css</h3>
+
+<ul>
+  <li>
+    <p>Semantic-UI 让你使用任何HTML标签 来表现UI控件。 
+这是一款语义化设计的前端框架，为攻城师而制作的可复用的开源前端框架。</p>
+  </li>
+  <li>
+    <p>primer CSS风格指南。</p>
+  </li>
+  <li>
+    <p>glue 一个生成CSS sprites的简单的命令行工具。</p>
+  </li>
+  <li>
+    <p>postcss 用js插件来对css进行转换，类似Sass的预编译器，但实现了模块化，并且更加强大。</p>
+  </li>
+  <li>
+    <p>css3 PIE 允许在IE上使用CSS3绝大部分的酷炫功能。官网：<a href="http://css3pie.com/">http://css3pie.com/</a></p>
+  </li>
+  <li>
+    <p>mui 轻量级css框架。</p>
+  </li>
+</ul>
+
+<h3 id="section-1">测试/工具</h3>
+
+<ul>
+  <li>
+    <p>mocha 一个简单、灵活有趣的 JavaScript 测试框架，用于 Node.js 和浏览器上的 JavaScript 应用测试。</p>
+  </li>
+  <li>
+    <p>csscss css代码冗余分析仪，用于分析冗余 。</p>
+  </li>
+  <li>
+    <p>es6-tools es6 工具集，包括Grunt Tasks，Gulp Plugins，Broccoli Plugins，Brunch Plugins，Webpack plugins等等。</p>
+  </li>
+  <li>
+    <p>async 一个工具模块，提供了直接而强大的 JavaScript 异步功能。虽然是为 Node.js 设计的，但是它也可以直接在浏览器中使用。</p>
+  </li>
+  <li>
+    <p>simditor 团队协作工具 Tower 使用的富文本编辑器。</p>
+  </li>
+  <li>
+    <p>HTMLHint HTML 静态代码分析工具，可以集成到IDE环境或编译系统中。</p>
+  </li>
+  <li>
+    <p>jshint js静态代码分析工具，可以帮你检测js语法错误和潜在的问题。</p>
+  </li>
+  <li>
+    <p>csslint 分析和优化你的CSS样式表的工具。由[Nicholas C.Zakas][28]所写。</p>
+  </li>
+  <li>
+    <p>protractor 一款端对端的angular apps 测试框架。</p>
+  </li>
+  <li>
+    <p>casperjs 一个基于PhantomJS的开源导航脚本和测试工具。</p>
+  </li>
+  <li>
+    <p>Karma 自动化完成单元测试，允许你在多个浏览器里执行js代码。让你的TDD变得简单，快速，有趣。</p>
+  </li>
+  <li>
+    <p>jasmine 是一个简易的JS单元测试框架， 用来测试Javascript代码。</p>
+  </li>
+  <li>
+    <p>chai 一个针对 Node.js 和浏览器的TDD(测试驱动开发)/BDD(行为驱动开发)的断言框架，可与任何 JavaScript 测试框架集成。</p>
+  </li>
+  <li>
+    <p>Qunit 一个很容易使用的js单元测试框架，该框架是由jQuery团队的成员所开发，并且是jQuery的官方测试套件。</p>
+  </li>
+</ul>
+
+<h3 id="workflow">Workflow/构建工具</h3>
+
+<ul>
+  <li>
+    <p>Grunt 基于Node.js的项目构建工具。拥有数量庞大的插件，是一款优秀的前端自动化工具。</p>
+  </li>
+  <li>
+    <p>yeoman 一个强健的工具，库，及工作流程的组合。</p>
+  </li>
+  <li>
+    <p>gulp 基于node.js流的新一代前端构建系统。</p>
+  </li>
+  <li>
+    <p>spm 是 CMD 的包管理工具，需要和 Sea.js 配合使用。</p>
+  </li>
+</ul>
+
+<h3 id="canvas">canvas/数据可视化</h3>
+
+<ul>
+  <li>
+    <p>echarts 基于Canvas，纯Javascript图表库，提供直观，生动，可交互，可个性化定制的数据可视化图表。</p>
+  </li>
+  <li>
+    <p>Chart.js 使用<canvas>标签的简易HTML5图表。</canvas></p>
+  </li>
+  <li>
+    <p>sketch.js 跨平台JavaScript创意编码框架，gzip压缩后仅有2kb。</p>
+  </li>
+  <li>
+    <p>d3 一个基于数据操作文档的js数据可视化框架，最流行的可视化库之一。</p>
+  </li>
+  <li>
+    <p>zrender 一个轻量级的Canvas类库，MVC封装，数据驱动，提供类DOM事件模型，让canvas绘图大不同！</p>
+  </li>
+  <li>
+    <p>c3 一个基于 D3.js 的可重用 JavaScript 图表库。几乎零学习曲线。</p>
+  </li>
+  <li>
+    <p>img2css 将图片转为纯css代码。</p>
+  </li>
+</ul>
+
+<h3 id="section-2">模块管理/加载器</h3>
+
+<ul>
+  <li>ESL 是一个浏览器端、符合AMD的标准加载器，适合用于现代Web浏览器端应用的入口与模块管理。</li>
+</ul>
+
+<p><code class="highlighter-rouge">ESL</code> vs <code class="highlighter-rouge">RequireJS</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>体积更小 (Smaller)
+性能更高 (Higher performance)
+更健壮 (More Robustness)
+不支持在非浏览器端使用 (Browser only)
+依赖模块用时定义 (Lazy define) - seajs 一个遵循`CommonJS`规范的`JavaScript`模块加载器。提供简单、极致的模块化开发体验。
+</code></pre>
+</div>
+
+<ul>
+  <li>
+    <p>Component 一个模块化的JavaScript框架，同时也是面向前端的包管理器。</p>
+  </li>
+  <li>
+    <p>webpack一个模块打包工具，你可以使用WebPack管理你的模块依赖，并编绎输出模块们所需的静态文件。</p>
+  </li>
+</ul>
+
+<h3 id="section-3">动画</h3>
+
+<ul>
+  <li>
+    <p>animate.css 一个跨浏览器的<code class="highlighter-rouge">CSS</code>动画库。简单易用易上手。</p>
+  </li>
+  <li>
+    <p>move.js 极小的 <code class="highlighter-rouge">JavaScript</code> 库,支持 <code class="highlighter-rouge">CSS3</code> 的动画效果,非常简单优雅。</p>
+  </li>
+  <li>
+    <p>TweenJS 是一个简单但强大的 <code class="highlighter-rouge">Javascript</code> 动画库。<code class="highlighter-rouge">CreateJS</code> 套件的一部分。</p>
+  </li>
+  <li>
+    <p>bounce.js 一个用于制作漂亮的 <code class="highlighter-rouge">CSS3</code> 关键帧动画的 <code class="highlighter-rouge">JavaScript</code>
+库,使用其特有的方式生成的动画效果。</p>
+  </li>
+  <li>
+    <p>Swipe 号称最精确的<code class="highlighter-rouge">Slider</code>触摸库，专为移动设备优化。</p>
+  </li>
+  <li>
+    <p>tween.js 一款可生成平滑动画效果的js动画库。<code class="highlighter-rouge">tween.js</code>允许你以平滑的方式修改元素的属性值。它可以通过设置生成各种类似CSS3的动画效果。</p>
+  </li>
+  <li>
+    <p>parallax.js轻量级的的视差引擎，能对智能设备的方向作出反应。</p>
+  </li>
+</ul>
+
+<h3 id="section-4">插件</h3>
+
+<ul>
+  <li>
+    <p>zepto.fullpage 专注于移动端的全屏滚动插件。</p>
+  </li>
+  <li>
+    <p>fullPage.js pc端的全屏滚动插件。 <a href="http://alvarotrigo.com/fullPage/#firstPage">view demo </a></p>
+  </li>
+  <li>
+    <p>onepage-scroll 可以轻松建立一个动感的响应式的滚动效果页面，比较适用于单页面的专题站。支持现代浏览器和IE8以上版本。<a href="http://kenwheeler.github.io/slick/">View demo</a> 。</p>
+  </li>
+  <li>
+    <p>slick 一款完全响应式的 jQuery 图片滚动插件，能够根据容器自动适应宽度。view demo</p>
+  </li>
+  <li>
+    <p>superslides 致力于解决网站大部分特效展示问题。网站上常用的“焦点图/幻灯片”“Tab标签切换”“图片滚动”“无缝滚动”等只需要一个SuperSlide即可解决！ view demo</p>
+  </li>
+  <li>
+    <p>jQuery-One-Page-Nav 当用户滚动网页时，实现平滑滚动和智能导航。</p>
+  </li>
+  <li>
+    <p>slider 一个jquery完全开源的JavaScript代码库，用户可以开发，调试和深度定制自己的滑块。<a href="http://www.jssor.com/demos/index.html">view demo</a></p>
+  </li>
+  <li>
+    <p>github-hovercard github 鼠标悬停显示用户，仓库等摘要信息。</p>
+  </li>
+  <li>
+    <p>onepage-scroll 一款带有背景视觉差效果的jQuery整页滚动特效插件。<a href="http://www.htmleaf.com/Demo/201412311045.html">view demo</a></p>
+  </li>
+  <li>
+    <p>justlazy.js 轻量级js图片延迟加载插件。</p>
+  </li>
+</ul>
+
+<h3 id="section-5">框架、库和组件</h3>
+
+<ul>
+  <li>
+    <p>polymer web组件构建框架。一套以“一切皆组件、最少化代码量、最少框架限制”为设计理念的Web UI框架。</p>
+  </li>
+  <li>
+    <p>impress.js 创建令人兴奋的演示。使用CSS3的转换和过渡，这个库允许你创建令人印象深刻的演示文稿。<a href="http://bartaz.github.io/impress.js/#/bored">view demo</a>。</p>
+  </li>
+  <li>
+    <p>ionic 先进的HTML5 移动端开发框架。帮助开发者使用HTML5, CSS3和js做出不可思议的hybrid app。</p>
+  </li>
+  <li>
+    <p>reveal.js 基于CSS3的3D幻灯片工具。能够制作绚丽的演示文稿并生成HTML格式，将它发布到web上。 <a href="http://lab.hakim.se/reveal-js/#/">view demo</a></p>
+  </li>
+  <li>
+    <p>pure.css 一组很小的，响应式的css组件，你可以在网页的项目上到处使用。</p>
+  </li>
+  <li>
+    <p>three.js 是JavaScript编写的WebGL第三方库。提供了非常多的3D显示功能。</p>
+  </li>
+  <li>
+    <p>TimelineJS 轻松制作时间轴。</p>
+  </li>
+  <li>
+    <p>jquery-pjax 对ajax 和 pushState的封装，让你可以很方便的使用pushState技术，用以实现页面无刷新加载。</p>
+  </li>
+  <li>
+    <p>highlight.js javascript语法高亮。既可以运行在浏览器端也可以运行在服务端。</p>
+  </li>
+  <li>
+    <p>commander.js Node.js命令行工具。</p>
+  </li>
+  <li>
+    <p>togetherjs 由Mozilla打造的一款可以给网站添加实时协作功能的JavaScript库。</p>
+  </li>
+  <li>
+    <p>HTML.js 轻量级的简化与DOM操作的js库。view demo</p>
+  </li>
+  <li>
+    <p>MEAN.JS 全栈式javascript，使用<code class="highlighter-rouge">MongoDB, Express,AngularJS和Node.js。star:2.2K</code></p>
+  </li>
+  <li>
+    <p>wechat.js 微信相关的 js 操作：分享、网络、菜单。</p>
+  </li>
+  <li>
+    <p>JavaScript-Load-Image 一个js加载和转换图像文件的库。</p>
+  </li>
+  <li>
+    <p>progress.js 一个 js 和 CSS3的库，帮助开发人员为网页上的每个对象创建和管理进度条效果。 <a href="http://usablica.github.io/progress.js/">view demo</a></p>
+  </li>
+  <li>
+    <p>foundation 号称世界上最先进的响应式前端框架，也是一款Mobile First的框架。</p>
+  </li>
+  <li>
+    <p>Sugar 一个JavaScript库。它扩展了现有的JS对象的方法，让你可以用更少的代码做更多的事情。</p>
+  </li>
+  <li>
+    <p>todomvc 帮你挑选一款MV<em>框架，它使用不同的最流行的js MV</em>框架实现了一个相同的Todo应用。</p>
+  </li>
+  <li>
+    <p>yepnope.js 这是一个异步的条件加载框架，速度超快，只为用户加载需要的脚本。使用非常简单，非常有用！</p>
+  </li>
+  <li>
+    <p>Material UI 是一个 CSS 框架和一组实现谷歌 Material Design 设计规范的 React组件。</p>
+  </li>
+  <li>
+    <p>Pikaday 是一个 JavaScript 日期选择器，特点是轻量级、无依赖和模块化的CSS。view demo</p>
+  </li>
+  <li>
+    <p>vuejs 用于构建交互式的 Web 界面的库。它提供了 MVVM 数据绑定和一个可组合的组件系统,具有简单、灵活的 API。</p>
+  </li>
+  <li>
+    <p>meteor 超简单的，数据库无处不在的，用于自动化和简化实时运行的 Web 应用程序的开发。纯JavaScript的Web框架。</p>
+  </li>
+  <li>
+    <p>webuploader
+一个简单的以HTML5为主，FLASH为辅的现代文件上传组件。支持大文件分片并发上传，极大的提高了文件上传效率。</p>
+  </li>
+  <li>
+    <p>fastclick触摸UI上的消除点击延迟js库。</p>
+  </li>
+  <li>
+    <p>wangEditor 轻量级web富文本框。</p>
+  </li>
+  <li>
+    <p>benchmark.js是强大的基准测试库，几乎适用于所有JavaScript平台。支持high-resolution定时器，并返回重要的统计结果。</p>
+  </li>
+  <li>
+    <p>headroom.js是一个轻量级、纯 JS 组件,用来隐藏或展现页面上的元素,为你的页面留下更多展示内容的空间。</p>
+  </li>
+</ul>
+
+<h3 id="section-6">移动端</h3>
+
+<ul>
+  <li>
+    <p>Swipe 加速移动触摸滑块与硬件之间的转换。</p>
+  </li>
+  <li>
+    <p>hammer.js 一个支持多点触摸的手势库。</p>
+  </li>
+  <li>
+    <p>amDoc 无线Web解决方案 - 文档规范指南</p>
+  </li>
+  <li>
+    <p>amazeui 移动优先的跨屏前端框架。面向HTML5开发，使用css3做动画和交互。</p>
+  </li>
+  <li>
+    <p>Zepto 一款面向移动端设备、API与jQuery兼容的基础库。</p>
+  </li>
+  <li>
+    <p>mui 最接近原生APP体验的高性能框架 。</p>
+  </li>
+  <li>
+    <p>Swiper纯javascript打造的滑动特效插件，面向手机、平板电脑等移动终端。能实现触屏焦点图、触屏Tab切换、触屏多图切换等常用效果。</p>
+  </li>
+</ul>
+
+<h3 id="react">React相关</h3>
+
+<ul>
+  <li>
+    <p>react-style 是 <code class="highlighter-rouge">React.js</code> 可维护的样式组件</p>
+  </li>
+  <li>
+    <p>react-component 基于<code class="highlighter-rouge">reactjs</code>的组件。</p>
+  </li>
+  <li>
+    <p>react-native 一个用<code class="highlighter-rouge">React</code>构建<code class="highlighter-rouge">native apps</code>的框架。</p>
+  </li>
+  <li>
+    <p>react-native-guide 汇集了<code class="highlighter-rouge">react-native</code>学习资源与各类开源app。</p>
+  </li>
+  <li>
+    <p>awesome-react 关于<code class="highlighter-rouge">react</code>的工具，资源，视频的集合。</p>
+  </li>
+  <li>
+    <p>Flux 是一个<code class="highlighter-rouge">Facebook</code>开发的、利用单向数据流实现的应用架构，用于<code class="highlighter-rouge">React</code>。<code class="highlighter-rouge">Flux</code>应用有三个主要的部分组成：调度程序、存储和视图（<code class="highlighter-rouge">React</code> 组件）。</p>
+  </li>
+  <li>
+    <p>iscroll 高性能，体积小，无外部依赖，跨平台的滚动组件</p>
+  </li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2012/12/09/front_end_res_01#more">Read More</a>
+          
+       </p>
+    </div>
+    
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#前端资源">前端资源</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#前端">前端</a>
+  
+  <a href="/tags/#资源">资源</a>
+  
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2012/12/09/front_end_res_01#comments" class="ds-thread-count comments-count-link" data-thread-key="_posts/2012-12-9-front_end_res_01.md" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+  <nav id="page-nav" class="clearfix">
+    
+    
+    <span class="page-number current">1</span>
+    
+    
+     
+  </nav>
+  </nav>
+
+</div>
+      
+      
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/#前端资源" title="前端资源">前端资源<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#前端文件上传" title="前端文件上传">前端文件上传<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#浏览器兼容" title="浏览器兼容">浏览器兼容<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#Grunt" title="Grunt">Grunt<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#React" title="React">React<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#前端bug资料" title="前端bug资料">前端bug资料<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#页面挟持处理" title="页面挟持处理">页面挟持处理<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/#前端" title="前端">前端<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#资源" title="资源">资源<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#文件上传" title="文件上传">文件上传<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#进度" title="进度">进度<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#IE8" title="IE8">IE8<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#图片尺寸" title="图片尺寸">图片尺寸<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#图片预览" title="图片预览">图片预览<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#Grunt" title="Grunt">Grunt<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#ES6" title="ES6">ES6<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#React" title="React">React<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#手机端" title="手机端">手机端<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#360浏览器，bug" title="360浏览器，bug">360浏览器，bug<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#react-native" title="react-native">react-native<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#android" title="android">android<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#打包发布" title="打包发布">打包发布<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#挟持" title="挟持">挟持<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#X-Frame-Options" title="X-Frame-Options">X-Frame-Options<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#clickjacking" title="clickjacking">clickjacking<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#iframe" title="iframe">iframe<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I'm CQB in HZ. <br/>
+			Too simple, sometimes naive.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/cqb325" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="https://plus.google.com/?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:cqb325@163.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+	<!--
+			<%  Array.prototype.S=String.fromCharCode(2);
+			  Array.prototype.in_array=function(e){
+    			var r=new RegExp(this.S+e+this.S);
+    			return (r.test(this.S+this.join(this.S)+this.S));
+				};
+				var cc = new Array('by','by-nc','by-nc-nd','by-nc-sa','by-nd','by-sa','zero'); %>
+		<% if (cc.in_array(theme.creative_commons) ) { %>
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/<%= theme.creative_commons %>/4.0" class="cc-opacity" target="_blank">
+            <img src="<%- config.root %>img/cc-<%= theme.creative_commons %>.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    <% } %>
+				-->
+
+		<p class="copyright">
+		Powered by <a href="http://jekyllrb.com" target="_blank" title="jekyll">jekyll</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="about" target="_blank" title="Chenqb">Chenqb</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/assets/js/jquery-2.0.3.min.js"></script>
+<script src="/assets/js/jquery.imagesloaded.min.js"></script>
+<script src="/assets/js/gallery.js"></script>
+<script src="/assets/js/jquery.qrcode-0.12.0.min.js"></script>
+<script src="/assets/js/toc.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"simpleyyt"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<!--
+
+-->
+
+
+
+
+<link rel="stylesheet" href="/assets/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/assets/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      if ($(this).hasClass('emoji')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-67994495-1', 'auto');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/assets/img/scrollup.png"/></a>
+	</div>
+	<script src="/assets/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+  </body>
+ </html>
+
