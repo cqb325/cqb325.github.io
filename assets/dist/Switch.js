@@ -1,4 +1,4 @@
-define(['module', "react", 'react-dom', 'utils/Dom', "classnames", "core/BaseComponent", "FontIcon"], function (module, React, ReactDOM, Dom, classnames, BaseComponent, FontIcon) {
+define(['module', "react", 'react-dom', 'utils/Dom', "classnames", "core/BaseComponent", "FontIcon", 'FormControl'], function (module, React, ReactDOM, Dom, classnames, BaseComponent, FontIcon, FormControl) {
     'use strict';
 
     function _classCallCheck(instance, Constructor) {
@@ -121,6 +121,8 @@ define(['module', "react", 'react-dom', 'utils/Dom', "classnames", "core/BaseCom
 
         return Switch;
     }(BaseComponent);
+
+    FormControl.register(Switch, "switch");
 
     module.exports = Switch;
 });

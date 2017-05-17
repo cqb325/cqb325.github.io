@@ -129,4 +129,6 @@ define(['module', 'utils/strings'], function (module, strings) {
     };
 
     module.exports = Validation;
+
+    window.Validation = Validation;
 });

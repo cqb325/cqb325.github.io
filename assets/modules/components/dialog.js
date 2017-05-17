@@ -189,6 +189,31 @@ define(["module", "react", "Label", "Row", "Col", "Table", "../components/dialog
                         React.createElement(
                             "i",
                             null,
+                            "setContent(content)"
+                        ),
+                        React.createElement(
+                            "span",
+                            null,
+                            "设置内容"
+                        ),
+                        React.createElement(
+                            "ul",
+                            null,
+                            React.createElement(
+                                "li",
+                                null,
+                                "content ",
+                                "String/ReactElement",
+                                " 内容"
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "i",
+                            null,
                             "getPanel()"
                         ),
                         React.createElement(

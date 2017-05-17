@@ -370,3 +370,10 @@ pre[class*="language-"] {
   padding: 3px 0;
   margin-bottom: 20px;
 }
+.rect-box {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border-radius: 3px;
+  background: rgba(200, 200, 200, 0.5);
+}

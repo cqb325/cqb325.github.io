@@ -72,7 +72,8 @@ define(["module", "react", "core/BaseComponent", 'classnames', 'Input', 'CheckBo
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SimpleForm).call(this, props));
 
             _this.state = {
-                data: props.data || {}
+                data: props.data || {},
+                initData: props.initData || {}
             };
 
             _this.itemIndex = 0;
@@ -116,10 +117,24 @@ define(["module", "react", "core/BaseComponent", 'classnames', 'Input', 'CheckBo
 
                 if (items) {
                     return items.map(function (item) {
+                        if (item.type === "label") {
+                            return React.createElement(
+                                "span",
+                                _extends({ key: _this2.itemIndex++, style: item.style }, item.props),
+                                item.label
+                            );
+                        }
                         if (item.type !== "row") {
                             var itemProps = _extends({}, item.props || {});
                             _this2.mergeProps(itemProps, item, ["name", "type", "rules", "messages"]);
                             itemProps.key = _this2.itemIndex++;
+                            var initData = _this2.state.initData;
+                            var val = initData[item.name];
+                            if (typeof itemProps.value === 'function') {
+                                val = itemProps.value(initData);
+                            }
+                            itemProps.value = val || itemProps.value;
+                            itemProps.value = itemProps.value == undefined || itemProps.value == null ? undefined : itemProps.value + "";
                             return React.createElement(FormControl, _extends({}, itemProps, { label: item.label, onChange: _this2.onChange.bind(_this2, item) }));
                         } else {
                             return _this2.renderFormRow(item);
@@ -157,6 +172,11 @@ define(["module", "react", "core/BaseComponent", 'classnames', 'Input', 'CheckBo
             key: "getFormData",
             value: function getFormData() {
                 return this.refs.form.getFormParams();
+            }
+        }, {
+            key: "setFormData",
+            value: function setFormData(data) {
+                this.setState({ initData: data });
             }
         }, {
             key: "getFormControl",

@@ -1,4 +1,4 @@
-define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "classnames", "core/BaseComponent"], function (module, React, ReactDOM, Dom, velocity, UUID, classnames, BaseComponent) {
+define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "classnames", 'utils/Events', "core/BaseComponent"], function (module, React, ReactDOM, Dom, velocity, UUID, classnames, Events, BaseComponent) {
     "use strict";
 
     function _defineProperty(obj, key, value) {
@@ -78,6 +78,8 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
         if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
     }
 
+    var isDescendant = Dom.isDescendant;
+
     var Menu = function (_BaseComponent) {
         _inherits(Menu, _BaseComponent);
 
@@ -101,6 +103,8 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                 layout: props.layout
             });
             _this.name = "Menu";
+            _this.prefix = props.prefix || "cm-menu";
+            _this.startIndex = props.startIndex == undefined ? 1 : 0;
             return _this;
         }
 
@@ -221,11 +225,39 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                         parent: _this2,
                         root: _this2,
                         index: index,
-                        level: 1,
+                        level: _this2.startIndex,
+                        prefix: _this2.prefix,
                         layout: _this2.props.layout
                     });
                     return React.cloneElement(child, props);
                 });
+            }
+        }, {
+            key: "componentWillUnmount",
+            value: function componentWillUnmount() {
+                this._isMounted = false;
+                Events.off(document, "click", this.onDocumentClick);
+            }
+        }, {
+            key: "componentDidMount",
+            value: function componentDidMount() {
+                this._isMounted = true;
+                if (this.props.layout != "inline") {
+                    Events.on(document, "click", this.onDocumentClick.bind(this));
+                }
+            }
+        }, {
+            key: "onDocumentClick",
+            value: function onDocumentClick(event) {
+                if (this._isMounted) {
+                    var target = event.target || event.srcElement;
+                    var ele = ReactDOM.findDOMNode(this);
+                    if (ele != target && !isDescendant(ele, target)) {
+                        for (var key in this.openKeys) {
+                            this.collapse(key, true);
+                        }
+                    }
+                }
             }
         }, {
             key: "render",
@@ -234,7 +266,7 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                 var className = _props.className;
                 var style = _props.style;
 
-                className = classnames(className, "cm-menu", this.state.theme, _defineProperty({}, "cm-menu-" + this.state.layout, this.props.layout != undefined));
+                className = classnames(className, this.prefix, this.state.theme, _defineProperty({}, this.prefix + "-" + this.state.layout, this.props.layout != undefined));
                 return React.createElement(
                     "ul",
                     { className: className, style: style },
@@ -249,26 +281,54 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
     Menu.defaultProps = {
         theme: 'light',
         modal: 'single',
-        layout: "vertical"
+        layout: "inline"
     };
 
-    var SubMenu = function (_BaseComponent2) {
-        _inherits(SubMenu, _BaseComponent2);
+    /**
+     * Divider
+     */
+
+    var Divider = function (_BaseComponent2) {
+        _inherits(Divider, _BaseComponent2);
+
+        function Divider() {
+            _classCallCheck(this, Divider);
+
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(Divider).apply(this, arguments));
+        }
+
+        _createClass(Divider, [{
+            key: "render",
+            value: function render() {
+                return React.createElement("li", { className: this.props.prefix + "-item-divider" });
+            }
+        }]);
+
+        return Divider;
+    }(BaseComponent);
+
+    Menu.Divider = Divider;
+
+    var SubMenu = function (_BaseComponent3) {
+        _inherits(SubMenu, _BaseComponent3);
 
         function SubMenu(props) {
             _classCallCheck(this, SubMenu);
 
-            var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(SubMenu).call(this, props));
+            var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(SubMenu).call(this, props));
 
-            _this3.addState({
+            _this4.prefix = props.prefix;
+            _this4.addState({
                 hover: false,
                 collapsed: !props.open || false
             });
 
-            _this3.identify = props.identify || "SubMenu_level_" + (props.parent.identify ? props.parent.identify : "") + "_" + props.index;
-            _this3.children = [];
-            _this3.name = "SubMenu";
-            return _this3;
+            _this4.identify = props.identify || "SubMenu_level_" + (props.parent.identify ? props.parent.identify : "") + "_" + props.index;
+            _this4.children = [];
+            _this4.name = "SubMenu";
+
+            _this4.isAnimating = false;
+            return _this4;
         }
 
         _createClass(SubMenu, [{
@@ -279,18 +339,20 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
         }, {
             key: "renderChildren",
             value: function renderChildren() {
-                var _this4 = this;
+                var _this5 = this;
 
                 var cildren = this.props.children;
                 return React.Children.map(cildren, function (child, index) {
                     var props = child.props;
                     props = _extends({}, props, {
-                        onSelect: _this4.props.onSelect,
-                        onClick: _this4.props.onClick,
-                        parent: _this4,
-                        root: _this4.props.root,
+                        onSelect: _this5.props.onSelect,
+                        onClick: _this5.props.onClick,
+                        parent: _this5,
+                        root: _this5.props.root,
                         index: index,
-                        level: _this4.props.level + 1
+                        prefix: _this5.prefix,
+                        level: _this5.props.level + 1,
+                        layout: _this5.props.layout
                     });
                     return React.cloneElement(child, props);
                 });
@@ -314,26 +376,42 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
         }, {
             key: "onMouseLeave",
             value: function onMouseLeave() {
+                var _this6 = this;
+
                 if (this.props.disabled) {
                     return false;
                 }
                 if (this.props.layout === "horizontal") {
-                    this.onClick(null, true);
+                    if (this.leaveTimer) {
+                        window.clearTimeout(this.leaveTimer);
+                        this.leaveTimer = null;
+                    }
+                    this.leaveTimer = window.setTimeout(function () {
+                        _this6.onClick(null, true, false);
+                    }, 300);
                 }
             }
         }, {
             key: "onMouseEnter",
             value: function onMouseEnter() {
+                var _this7 = this;
+
                 if (this.props.disabled) {
                     return false;
                 }
                 if (this.props.layout === "horizontal") {
-                    this.onClick(null, true);
+                    if (this.enterTimer) {
+                        window.clearTimeout(this.enterTimer);
+                        this.enterTimer = null;
+                    }
+                    this.enterTimer = window.setTimeout(function () {
+                        _this7.onClick(null, true, true);
+                    }, 100);
                 }
             }
         }, {
             key: "onClick",
-            value: function onClick(event, called) {
+            value: function onClick(event, called, collapse) {
                 if (this.props.disabled) {
                     return false;
                 }
@@ -355,10 +433,19 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                     this.props.onClick(this);
                 }
 
-                if (this.state.collapsed) {
-                    this.collapse(false);
+                if (this.props.layout === "horizontal") {
+                    if (collapse && this.state.collapsed) {
+                        this.collapse(false);
+                    }
+                    if (!collapse && !this.state.collapsed) {
+                        this.collapse(true);
+                    }
                 } else {
-                    this.collapse(true);
+                    if (this.state.collapsed) {
+                        this.collapse(false);
+                    } else {
+                        this.collapse(true);
+                    }
                 }
             }
         }, {
@@ -384,13 +471,19 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
         }, {
             key: "collapse",
             value: function collapse(collapsed) {
-                var _this5 = this;
+                var _this8 = this;
 
+                if (this.isAnimating) {
+                    return false;
+                }
                 var subMenu = Dom.dom(ReactDOM.findDOMNode(this.refs.subMenu));
                 var parent = this.props.root;
                 var openKeys = parent.getOpenKeys();
+                this.isAnimating = true;
                 if (collapsed) {
-                    velocity(subMenu[0], "slideUp", { duration: 300 });
+                    velocity(subMenu[0], "slideUp", { duration: 300, complete: function complete() {
+                            _this8.isAnimating = false;
+                        } });
 
                     if (this.props.onCollapse) {
                         this.props.onCollapse(this);
@@ -414,7 +507,9 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                         delete openKeys[this.identify];
                     }
                 } else {
-                    velocity(subMenu[0], "slideDown", { duration: 300 });
+                    velocity(subMenu[0], "slideDown", { duration: 300, complete: function complete() {
+                            _this8.isAnimating = false;
+                        } });
 
                     if (this.props.onOpen) {
                         this.props.onOpen(this);
@@ -428,8 +523,8 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                     }
                 }
                 window.setTimeout(function () {
-                    if (_this5._isMounted) {
-                        _this5.setState({
+                    if (_this8._isMounted) {
+                        _this8.setState({
                             collapsed: collapsed
                         });
                     }
@@ -452,17 +547,14 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
         }, {
             key: "render",
             value: function render() {
+                var _classnames2;
 
-                var className = classnames("cm-menu-submenu-title", {
-                    "cm-menu-submenu-title-hover": this.state.hover,
-                    "cm-menu-disabled": this.props.disabled
-                });
+                var className = classnames(this.prefix + "-submenu-title", (_classnames2 = {}, _defineProperty(_classnames2, this.prefix + "-submenu-title-hover", this.state.hover), _defineProperty(_classnames2, this.prefix + "-disabled", this.props.disabled), _classnames2));
 
-                var className2 = classnames("cm-menu-submenu", {
-                    "cm-menu-submenu-active": !this.state.collapsed
-                });
+                var className2 = classnames(this.prefix + "-submenu", _defineProperty({}, this.prefix + "-submenu-active", !this.state.collapsed));
 
-                var paddingLeft = 24 * this.props.level;
+                var paddingLeft = this.props.layout === "inline" ? 24 * this.props.level : 0;
+                var style = paddingLeft ? { paddingLeft: paddingLeft } : null;
                 return React.createElement(
                     "li",
                     { className: className2,
@@ -475,7 +567,7 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                             onMouseOver: this.onMouseOver.bind(this),
                             onMouseOut: this.onMouseOut.bind(this),
                             onClick: this.onClick.bind(this),
-                            style: { paddingLeft: paddingLeft }
+                            style: style
                         },
                         React.createElement(
                             "span",
@@ -485,7 +577,7 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                     ),
                     React.createElement(
                         "ul",
-                        { ref: "subMenu", className: "cm-menu-sub cm-menu", style: { display: this.props.open ? "block" : "none" } },
+                        { ref: "subMenu", className: this.prefix + "-sub " + this.prefix, style: { display: this.props.open ? "block" : "none" } },
                         this.renderChildren()
                     )
                 );
@@ -495,35 +587,39 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
         return SubMenu;
     }(BaseComponent);
 
-    var MenuItemGroup = function (_BaseComponent3) {
-        _inherits(MenuItemGroup, _BaseComponent3);
+    var MenuItemGroup = function (_BaseComponent4) {
+        _inherits(MenuItemGroup, _BaseComponent4);
 
         function MenuItemGroup(props) {
             _classCallCheck(this, MenuItemGroup);
 
-            var _this6 = _possibleConstructorReturn(this, Object.getPrototypeOf(MenuItemGroup).call(this, props));
+            var _this9 = _possibleConstructorReturn(this, Object.getPrototypeOf(MenuItemGroup).call(this, props));
 
-            _this6.children = [];
-            _this6.name = "MenuItemGroup";
-            _this6.identify = "ItemGroup_" + props.parent.identify + "_" + props.index;
-            return _this6;
+            _this9.prefix = props.prefix;
+
+            _this9.children = [];
+            _this9.name = "MenuItemGroup";
+            _this9.identify = "ItemGroup_" + props.parent.identify + "_" + props.index;
+            return _this9;
         }
 
         _createClass(MenuItemGroup, [{
             key: "renderChildren",
             value: function renderChildren() {
-                var _this7 = this;
+                var _this10 = this;
 
                 var cildren = this.props.children;
                 return React.Children.map(cildren, function (child, index) {
                     var props = child.props;
                     props = _extends({}, props, {
-                        onSelect: _this7.props.onSelect,
-                        onClick: _this7.props.onClick,
+                        onSelect: _this10.props.onSelect,
+                        onClick: _this10.props.onClick,
                         index: index,
-                        parent: _this7,
-                        root: _this7.props.root,
-                        level: _this7.props.level
+                        parent: _this10,
+                        prefix: _this10.prefix,
+                        root: _this10.props.root,
+                        level: _this10.props.level,
+                        layout: _this10.props.layout
                     });
                     return React.cloneElement(child, props);
                 });
@@ -544,15 +640,15 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
 
                 return React.createElement(
                     "li",
-                    { className: "cm-menu-item-group" },
+                    { className: this.prefix + "-item-group" },
                     React.createElement(
                         "div",
-                        { className: "cm-menu-item-group-title" },
+                        { className: this.prefix + "-item-group-title" },
                         this.props.title
                     ),
                     React.createElement(
                         "ul",
-                        { className: "cm-menu-item-group-list" },
+                        { className: this.prefix + "-item-group-list" },
                         this.renderChildren()
                     )
                 );
@@ -562,22 +658,29 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
         return MenuItemGroup;
     }(BaseComponent);
 
-    var Item = function (_BaseComponent4) {
-        _inherits(Item, _BaseComponent4);
+    var Item = function (_BaseComponent5) {
+        _inherits(Item, _BaseComponent5);
 
         function Item(props) {
             _classCallCheck(this, Item);
 
-            var _this8 = _possibleConstructorReturn(this, Object.getPrototypeOf(Item).call(this, props));
+            var _this11 = _possibleConstructorReturn(this, Object.getPrototypeOf(Item).call(this, props));
 
-            _this8.identify = props.identify || "Item_level_" + (props.parent.identify ? props.parent.identify : "") + "_" + props.index;
+            _this11.identify = props.identify || "Item_level_" + (props.parent.identify ? props.parent.identify : "") + "_" + props.index;
+            _this11.prefix = props.prefix;
 
-            _this8.addState({
+            _this11.addState({
                 active: props.select || false
             });
-            _this8.name = "Item";
-            return _this8;
+            _this11.name = "Item";
+            return _this11;
         }
+
+        /**
+         * 点击
+         * @returns {boolean}
+         */
+
 
         _createClass(Item, [{
             key: "onClick",
@@ -589,6 +692,7 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                 if (this.props.onClick) {
                     this.props.onClick(this);
                 }
+                this.emit("click", this);
 
                 var parent = this.props.root;
                 if (parent.lastSelect && parent.lastSelect != this) {
@@ -604,9 +708,23 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
                 }
                 var parent = this.props.root;
                 parent.lastSelect = this;
+
+                if (this.props.layout != "inline") {
+                    var _parent = this.props.parent;
+                    console.log(_parent.name);
+                    while (_parent.name != "Menu") {
+                        if (_parent.name === "SubMenu") {
+                            _parent.collapse(true);
+                        }
+                        _parent = _parent.props.parent;
+                    }
+                }
+
                 if (this.props.onSelect) {
                     this.props.onSelect(this);
                 }
+
+                this.emit("select", this);
             }
         }, {
             key: "unSelect",
@@ -641,19 +759,17 @@ define(["module", "react", "react-dom", "utils/Dom", "velocity", "utils/UUID", "
         }, {
             key: "render",
             value: function render() {
+                var _classnames4;
 
-                var className = classnames(this.props.className, "cm-menu-item", {
-                    "cm-menu-item-active": this.state.active,
-                    "cm-menu-disabled": this.props.disabled
-                });
+                var className = classnames(this.props.className, this.prefix + "-item", (_classnames4 = {}, _defineProperty(_classnames4, this.prefix + "-item-active", this.state.active), _defineProperty(_classnames4, this.prefix + "-disabled", this.props.disabled), _classnames4));
 
-                var paddingLeft = 24 * this.props.level;
-
+                var paddingLeft = this.props.layout === "inline" ? 24 * this.props.level : 0;
+                var style = paddingLeft ? { paddingLeft: paddingLeft } : null;
                 return React.createElement(
                     "li",
                     { className: className,
                         onClick: this.onClick.bind(this),
-                        style: { paddingLeft: paddingLeft }
+                        style: style
                     },
                     React.createElement(
                         "a",

@@ -97,6 +97,12 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
             return _this;
         }
 
+        /**
+         * 设置携带数据
+         * @param data
+         */
+
+
         _createClass(Dialog, [{
             key: "setData",
             value: function setData(data) {
@@ -112,6 +118,12 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
             value: function setTitle(title) {
                 this.title = title;
                 this.panel.setTitle(title);
+            }
+        }, {
+            key: "setContent",
+            value: function setContent(content) {
+                this.content = content;
+                this.panel.setContent(content);
             }
         }, {
             key: "btnHandler",

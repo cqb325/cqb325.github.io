@@ -1,0 +1,1193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+        <title>CQB&#39;s Blog</title>
+        <description>CQB&#39;s Blog - Chenqb</description>
+        <link></link>
+        <atom:link href="" rel="self" type="application/rss+xml" />
+        <lastBuildDate>Fri, 07 Apr 2017 10:57:45 +0800</lastBuildDate>
+        <pubDate>Fri, 07 Apr 2017 10:57:45 +0800</pubDate>
+        <ttl>60</ttl>
+
+
+        <item>
+                <title>避免点击劫持</title>
+                <description>&lt;h2 id=&quot;section&quot;&gt;避免点击劫持&lt;/h2&gt;
+
+&lt;h3 id=&quot;x-frame-options-&quot;&gt;添加 X-Frame-Options 响应头&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;X-Frame-Options&lt;/code&gt; HTTP 响应头是用来给浏览器指示允许一个页面可否在 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;frame&amp;gt;&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;iframe&amp;gt;&lt;/code&gt; 或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;object&amp;gt;&lt;/code&gt; 中展现的标记。网站可以使用此功能，来确保自己网站的内容没有被嵌到别人的网站中去，也从而避免了点击劫持 (clickjacking) 的攻击。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;使用 X-Frame-Options&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;X-Frame-Options 有三个值:
+&amp;gt;DENY&lt;/p&gt;
+
+&lt;p&gt;表示该页面不允许在 frame 中展示，即便是在相同域名的页面中嵌套也不允许。
+&amp;gt;SAMEORIGIN&lt;/p&gt;
+
+&lt;p&gt;表示该页面可以在相同域名页面的 frame 中展示。
+&amp;gt;ALLOW-FROM uri&lt;/p&gt;
+
+&lt;p&gt;表示该页面可以在指定来源的 frame 中展示。&lt;/p&gt;
+
+&lt;p&gt;换一句话说，如果设置为 DENY，不光在别人的网站 frame 嵌入时会无法加载，在同域名页面中同样会无法加载。另一方面，如果设置为 SAMEORIGIN，那么页面就可以在同域名页面的 frame 中嵌套。&lt;/p&gt;
+
+&lt;h3 id=&quot;apache&quot;&gt;配置 Apache&lt;/h3&gt;
+
+&lt;p&gt;配置 Apache 在所有页面上发送 X-Frame-Options 响应头，需要把下面这行添加到 ‘site’ 的配置中:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Header always append X-Frame-Options SAMEORIGIN
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;nginx&quot;&gt;配置 nginx&lt;/h3&gt;
+
+&lt;p&gt;配置 nginx 发送 X-Frame-Options 响应头，把下面这行添加到 ‘http’, ‘server’ 或者 ‘location’ 的配置中:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;add_header X-Frame-Options SAMEORIGIN;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;iis&quot;&gt;配置 IIS&lt;/h3&gt;
+
+&lt;p&gt;配置 IIS 发送 X-Frame-Options 响应头，添加下面的配置到 Web.config 文件中:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;system.webServer&amp;gt;
+  ...
+
+  &amp;lt;httpProtocol&amp;gt;
+    &amp;lt;customHeaders&amp;gt;
+      &amp;lt;add name=&quot;X-Frame-Options&quot; value=&quot;SAMEORIGIN&quot; /&amp;gt;
+    &amp;lt;/customHeaders&amp;gt;
+  &amp;lt;/httpProtocol&amp;gt;
+
+  ...
+&amp;lt;/system.webServer&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;结果&lt;/h3&gt;
+
+&lt;p&gt;在 Firefox 尝试加载 frame 的内容时，如果 X-Frame-Options 响应头设置为禁止访问了，那么 Firefox 会用 about:blank 展现到 frame 中。也许从某种方面来讲的话，展示为错误消息会更好一点。&lt;/p&gt;
+
+&lt;p&gt;参考  &lt;a href=&quot;https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options&quot; title=&quot;https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options&quot;&gt;https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options&lt;/a&gt;&lt;/p&gt;
+</description>
+                <link>/%E9%A1%B5%E9%9D%A2%E6%8C%9F%E6%8C%81%E5%A4%84%E7%90%86/2016/08/25/from_end-clickjacking</link>
+                <guid>/%E9%A1%B5%E9%9D%A2%E6%8C%9F%E6%8C%81%E5%A4%84%E7%90%86/2016/08/25/from_end-clickjacking</guid>
+                <pubDate>Thu, 25 Aug 2016 00:00:00 +0800</pubDate>
+        </item>
+
+        <item>
+                <title>From_end Ie Safari Iframe cookie Problem</title>
+                <description>
+&lt;h3 id=&quot;internet-explorer--safari-iframe-session-cookie-problem&quot;&gt;Internet Explorer &amp;amp; Safari: IFrame Session Cookie Problem&lt;/h3&gt;
+
+&lt;p&gt;在IE和Safari浏览器中，一个域名网页嵌入另外一个域名网页的iframe的时候会发现不能保持cookies，导致session丢失。&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;如果在localhost域名下嵌入另外域名的iframe没有问题&lt;/em&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;例：在&lt;code class=&quot;highlighter-rouge&quot;&gt;domain A&lt;/code&gt;中嵌入&lt;code class=&quot;highlighter-rouge&quot;&gt;domain B &lt;/code&gt;的iframe&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;iframe src=&quot;http://www.domain-B.com/login.html&quot;&amp;gt;&amp;lt;/iframe&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;domain B &lt;/code&gt;中登录或注册等创建需要的session&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;form action=&quot;dologin.html&quot; method=&quot;post&quot;&amp;gt;
+	&amp;lt;input name=&quot;username&quot;&amp;gt;
+	&amp;lt;input type=&quot;password&quot; name=&quot;passwrod&quot;&amp;gt;
+	&amp;lt;input type=&quot;submit&quot; value=&quot;提交&quot;&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;domain B &lt;/code&gt;中编写action&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;String redirect = request.getParameter(&quot;redirect&quot;);
+
+if(loginSuccess){
+	getSession().setAttribute(&quot;user&quot;, user);
+}
+
+//重新定位到domain A的地址
+return &quot;redirect:&quot;+redirect;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+                <link>/2016/08/03/from_end-IE-Safari-iframe-Cookie-Problem</link>
+                <guid>/2016/08/03/from_end-IE-Safari-iframe Cookie-Problem</guid>
+                <pubDate>Wed, 03 Aug 2016 00:00:00 +0800</pubDate>
+        </item>
+
+        <item>
+                <title>React-Native Android打包发布</title>
+                <description>&lt;h3 id=&quot;react-native-android&quot;&gt;React-Native Android打包发布&lt;/h3&gt;
+
+&lt;hr /&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;启动服务&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    //在项目目录下执行启动服务
+	npm start
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;生成密匙&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;`keytool -genkey -v -keystore my-test-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000`
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;代码中的 my-test-key.keystore 和 my-key-alias 替换成需要的名字。记住后续步骤中输入的密码等信息，需要用于第四步骤中的gradle脚本的编写。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;下载bundle文件并保存&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;通过访问&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8081/index.android.bundle&lt;/code&gt;地址下载bundle文件保存到&lt;code class=&quot;highlighter-rouge&quot;&gt;/android/app/src/main/assets&lt;/code&gt;目录下
+或者执行
+&lt;code class=&quot;highlighter-rouge&quot;&gt;curl -k &quot;http://localhost:8081/index.android.bundle&quot; &amp;gt; android/app/src/main/assets/index.android.bundle &lt;/code&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;添加 gradle 的 keystore 配置&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 在 defaultConfig 后面添加
+signingConfigs {
+    release {
+        storeFile file(&quot;/my-test-key.keystore&quot;) // 替换成你实际密匙文件所在位置
+        storePassword &quot;步骤1中的密码&quot;　　// 替换成你实际的密码
+        keyAlias &quot;my-key-alias&quot;　　　　// 替换
+        keyPassword &quot;步骤1中的密码&quot;　　// 替换
+    }
+}
+
+// 修改原来的配置，主要是加入 signingConfig 这一行
+buildTypes {
+    release {
+        minifyEnabled enableProguardInReleaseBuilds // 记得修改相应的功能启动
+        proguardFiles fetDefaultProguardFile(&#39;proguard-android.txt), &#39;proguard-rules.pro&#39; 
+        signingConfig signingConfigs.release
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;注意：路径中的 反斜线() 要改成 正斜线(/)。&lt;/em&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;启用 Proguard 代码混淆（可选）&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Proguard 是一个 Java 字节码混淆压缩工具，可剔除项目文件夹中为使用的部分，有效减少APK的大小。在 build.gradle 文件中，启动 Proguard模块：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def enableProguardInReleaseBuilds = true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;执行打包脚本&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;首先：进入项目根目录下的 /android/ 目录中；&lt;/p&gt;
+
+&lt;p&gt;然后：执行 gradle assembleRelease 命令。&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;注意：如果出现错误或者没有安装 gradle 工具，需要自行安装 gradle 工具和配置好 GRADLE_HOME 和 PATH，注意和 /android/gradle/wrapper/gradele-wrapper.properties 文件中的版本配置保持一致。也可以使用 gradle clean 清理一下缓存。&lt;/em&gt;&lt;/p&gt;
+</description>
+                <link>/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2016/07/18/from_end-react-native-android-release</link>
+                <guid>/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2016/07/18/from_end-react-native-android-release</guid>
+                <pubDate>Mon, 18 Jul 2016 00:00:00 +0800</pubDate>
+        </item>
+
+        <item>
+                <title>360手机浏览器重复请求bug</title>
+                <description>&lt;h3 id=&quot;bug&quot;&gt;360手机浏览器重复请求bug&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;版本：  2.5.0&lt;/li&gt;
+  &lt;li&gt;手机型号： iphone6&lt;/li&gt;
+  &lt;li&gt;ios版本： 9.3.2&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;在新窗口中打开链接发现会重复请求， 2-3次， 请求不到的，关闭窗口还会请求&lt;/p&gt;
+
+&lt;p&gt;包含a标签，window.open和form表单提交都存在该问题。&lt;/p&gt;
+
+&lt;p&gt;只有单页请求的时候只请求一遍&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;发现 jquery(“a”).click(); 不起作用。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+                <link>/%E5%89%8D%E7%AB%AFbug%E8%B5%84%E6%96%99/2016/07/18/from_end-360-browser-bug</link>
+                <guid>/%E5%89%8D%E7%AB%AFbug%E8%B5%84%E6%96%99/2016/07/18/from_end-360-browser-bug</guid>
+                <pubDate>Mon, 18 Jul 2016 00:00:00 +0800</pubDate>
+        </item>
+
+        <item>
+                <title>Front End W3c Web Storage</title>
+                <description>&lt;h3 id=&quot;web-storage-&quot;&gt;Web Storage (第二版)&lt;/h3&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;摘要&lt;/h2&gt;
+
+&lt;p&gt;该规范定义了一个在客户端存储键值对数据的API。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;介绍&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;em&gt;该部分为非规范内容&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;该规范介绍了在客户端存储键值对的两种不同机制，类似HTTP会话中的COOKIES.&lt;/p&gt;
+
+&lt;p&gt;我们会遇到一种场景，用户在某地存储了一项数据，同时能够在不同的窗口中进行使用.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Cookies&lt;/code&gt; 并没有完好的解决该问题. For example, a user could be buying plane tickets in two different windows, using the same site. If the site used cookies to keep track of which ticket the user was buying, then as the user clicked from page to page in both windows, the ticket currently being purchased would “leak” from one window to the other, potentially causing the user to buy two tickets for the same flight without really noticing.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;asd&lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+                <link>/2016/07/04/front-end-w3c-Web-Storage</link>
+                <guid>/2016/07/04/front-end-w3c-Web-Storage</guid>
+                <pubDate>Mon, 04 Jul 2016 00:00:00 +0800</pubDate>
+        </item>
+
+        <item>
+                <title>Grunt + ES6 + React 整合开发</title>
+                <description>&lt;h3 id=&quot;grunt--es6--react-&quot;&gt;Grunt + ES6 + React 整合开发&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;安装grunt插件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;grunt-react&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install grunt-react
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;grunt-babel&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install grunt-babel
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;babel-preset-es2015&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install babel-preset-es2015
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;babel-preset-react&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install babel-preset-react
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;transform-es2015-modules-amd&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install transform-es2015-modules-amd
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;配置grunt&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  react: {
+      options: {
+          es6module: true
+      },
+      dynamic_mappings: {
+          files: [
+              {
+                  expand: true,
+                  cwd: &#39;src/jsx&#39;,
+                  src: [&#39;**/*.jsx&#39;],
+                  dest: &#39;src/es6&#39;,
+                  ext: &#39;.js&#39;
+              }
+          ]
+      }
+  },
+  babel: {
+      options: {
+          presets: [&#39;es2015&#39;,&#39;react&#39;],
+          &quot;plugins&quot;: [&quot;transform-es2015-modules-amd&quot;]
+      },
+      dist: {
+          files: [{
+              &quot;expand&quot;: true,
+              &quot;cwd&quot;: &quot;src/jsx&quot;,
+              &quot;src&quot;: [&quot;**/*.jsx&quot;],
+              &quot;dest&quot;: &quot;assets/js&quot;,
+              &quot;ext&quot;: &quot;.js&quot;
+          }]
+      }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;加载插件&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  grunt.loadNpmTasks(&#39;grunt-react&#39;);
+  grunt.loadNpmTasks(&#39;grunt-babel&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;gruntbabel&quot;&gt;如需使用全局grunt和babel&lt;/h2&gt;
+
+&lt;p&gt;修改全局babel-core/lib/transformation/file/options/option-manager.js&lt;/p&gt;
+
+&lt;p&gt;修改函数&lt;code class=&quot;highlighter-rouge&quot;&gt;OptionManager.normalisePlugins&lt;/code&gt;中的&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if (typeof plugin === &quot;string&quot;) {
+	dirname = &quot;C:/Users/cqb32_000&quot;;
+	var pluginLoc = _helpersResolve2[&quot;default&quot;](&quot;babel-plugin-&quot; + plugin, dirname) || _helpersResolve2[&quot;default&quot;](plugin, dirname);
+	if (pluginLoc) {
+		plugin = require(pluginLoc);
+	} else {
+		throw new ReferenceError(messages.get(&quot;pluginUnknown&quot;, plugin, loc, i, dirname));
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;和函数&lt;code class=&quot;highlighter-rouge&quot;&gt;OptionManager.prototype.resolvePresets&lt;/code&gt;中的&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if (typeof val === &quot;string&quot;) {
+	dirname = &quot;C:/Users/cqb32_000&quot;;
+	var presetLoc = _helpersResolve2[&quot;default&quot;](&quot;babel-preset-&quot; + val, dirname) || _helpersResolve2[&quot;default&quot;](val, dirname);
+	if (presetLoc) {
+		var _val = require(presetLoc);
+		onResolve &amp;amp;&amp;amp; onResolve(_val, presetLoc);
+		return _val;
+	} else {
+		throw new Error(&quot;Couldn&#39;t find preset &quot; + JSON.stringify(val) + &quot; relative to directory &quot; + JSON.stringify(dirname));
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;ie8&quot;&gt;兼容ie8&lt;/h2&gt;
+
+&lt;p&gt;要兼容IE8的话需要注意&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;导出使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;module.exports = xxx;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;替换&lt;code class=&quot;highlighter-rouge&quot;&gt;import&lt;/code&gt; 使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;require&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+                <link>/react/2016/03/21/front_end_grunt_react_es6</link>
+                <guid>/react/2016/03/21/front_end_grunt_react_es6</guid>
+                <pubDate>Mon, 21 Mar 2016 00:00:00 +0800</pubDate>
+        </item>
+
+        <item>
+                <title>如何全局使用grunt</title>
+                <description>&lt;h3 id=&quot;grunt&quot;&gt;如何全局使用grunt&lt;/h3&gt;
+
+&lt;h1 id=&quot;loadnpmtasks&quot;&gt;loadNpmTasks&lt;/h1&gt;
+
+&lt;p&gt;我们知道grunt使用插件的时候采用&lt;code class=&quot;highlighter-rouge&quot;&gt;loadNpmTasks&lt;/code&gt;方式&lt;/p&gt;
+
+&lt;p&gt;该函数为grunt的Task类的&lt;code class=&quot;highlighter-rouge&quot;&gt;loadNpmTasks&lt;/code&gt;方法&lt;/p&gt;
+
+&lt;p&gt;代码大致如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;task.loadNpmTasks = function(name) {
+	loadTasksMessage(&#39;&quot;&#39; + name + &#39;&quot; local Npm module&#39;);
+	var root = path.resolve(&#39;node_modules&#39;, __dirname+&quot;../../../../&quot;);
+	var pkgfile = path.join(root, name, &#39;package.json&#39;);
+	var pkg = grunt.file.exists(pkgfile) ? grunt.file.readJSON(pkgfile) : {keywords: []};
+
+  	// Process collection plugins.
+	if (pkg.keywords &amp;amp;&amp;amp; pkg.keywords.indexOf(&#39;gruntcollection&#39;) !== -1) {
+		loadTaskDepth++;
+		Object.keys(pkg.dependencies).forEach(function(depName) {
+			// Npm sometimes pulls dependencies out if they&#39;re shared, so find
+			// upwards if not found locally.
+			var filepath = grunt.file.findup(&#39;node_modules/&#39; + depName, {
+				cwd: path.resolve(&#39;node_modules&#39;, name),
+				nocase: true
+	  		});
+		  	if (filepath) {
+				// Load this task plugin recursively.
+				task.loadNpmTasks(path.relative(root, filepath));
+	  		}
+		});
+		loadTaskDepth--;
+		return;
+  		}
+
+	// Process task plugins.
+	var tasksdir = path.join(root, name, &#39;tasks&#39;);
+	if (grunt.file.exists(root)) {
+		loadTasks(tasksdir);
+	} else {
+		grunt.log.error(&#39;Local Npm module &quot;&#39; + name + &#39;&quot; not found. Is it installed?&#39;);
+	}
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;修改root的路径为本地安装node模块的地址即可，如：&lt;/p&gt;
+
+&lt;p&gt;var root = path.resolve(‘node_modules’, __dirname+”../../../../”);&lt;/p&gt;
+
+&lt;h2 id=&quot;grunt-cli&quot;&gt;Grunt-cli修改&lt;/h2&gt;
+
+&lt;p&gt;grunt 命令使用grunt-cli，需要修改cli加载grunt模块的寻址参数
+文件为： grunt-cli 中的bin/grunt&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#!/usr/bin/env node
+&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;&#39;use strict&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;grunt&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Especially badass external libs.&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;findup&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;findup-sync&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resolve&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;resolve&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Internal libs.&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;../lib/cli&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;completion&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;../lib/completion&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;../lib/info&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;path&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;basedir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cwd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;gruntpath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Do stuff based on CLI options.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;completion&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;completion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;completion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;base&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;gruntfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;basedir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;gruntfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;basedir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;gruntfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;basedir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;C:/Users/xxxxx&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;gruntpath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;grunt&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;basedir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;basedir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;gruntpath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;findup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;lib/grunt.js&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// No grunt install found!&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;gruntpath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;help&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fatal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Unable to find local grunt.&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;99&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Everything looks good. Require local grunt and run it.&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;gruntpath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cli&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;修改basedir参数为自己存放全局node_modules的地址。&lt;/p&gt;
+</description>
+                <link>/grunt/2016/03/21/front_end_grunt_modify</link>
+                <guid>/grunt/2016/03/21/front_end_grunt_modify</guid>
+                <pubDate>Mon, 21 Mar 2016 00:00:00 +0800</pubDate>
+        </item>
+
+        <item>
+                <title>IE8获取图片尺寸，并预览</title>
+                <description>&lt;h3 id=&quot;ie8&quot;&gt;IE8获取图片尺寸，并预览&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;div class=&quot;form-group form-inline text-center&quot; id=&quot;previewWrap&quot;&amp;gt;
+    &amp;lt;img src=&quot;&quot; id=&quot;imgPreview&quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;获取尺寸&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;var preload = document.createElement(“div”),
+        body = document.body,
+        data, oriWidth, oriHeight, ratio;&lt;/p&gt;
+
+    &lt;p&gt;preload.style.cssText = “width:100px;height:100px;visibility: visible;position: absolute;left: 0px;top: 0px”;
+// 设置sizingMethod=’image’
+preload.style.filter = “progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=’image’)”;
+body.insertBefore(preload, body.childNodes[0]);
+ele.select();
+try {
+    data = document.selection.createRange().text;
+} finally {
+    document.selection.empty();
+}&lt;/p&gt;
+
+    &lt;p&gt;if ( !! data) {
+    data = data.replace(/[)’”%]/g, function(s) {
+        return escape(escape(s));
+    });
+    //预载图片
+    try {
+        preload.filters.item(“DXImageTransform.Microsoft.AlphaImageLoader”).src = data;
+    } catch (e) {
+        //console.log(e.description);
+        return;
+    }
+}&lt;/p&gt;
+
+    &lt;p&gt;oriWidth = preload.offsetWidth;
+oriHeight = preload.offsetHeight;&lt;/p&gt;
+
+    &lt;p&gt;document.body.removeChild(preload);
+preload = null;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;预览&lt;/li&gt;
+  &lt;li&gt;
+
+    &lt;p&gt;var target = $(“#imgPreview”);
+var parent = target.parent();
+var div = $(“&amp;lt;div&amp;gt;”);
+parent.prepend(div);
+div.css({
+    “filter”:”progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)”,
+    position: “absolute”,
+    left: ‘20px’,
+    top: ‘20px’
+});
+div[0].filters.item(“DXImageTransform.Microsoft.AlphaImageLoader”).src = data;
+var w = parent.width();
+var h = w/oriWidth * oriHeight;
+div[0].style.width = w +”px”;
+div[0].style.height = h +”px”;
+target.css({height: h+”px”});&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+                <link>/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9/2016/03/03/front_end_imgpreview_ie8</link>
+                <guid>/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9/2016/03/03/front_end_imgpreview_ie8</guid>
+                <pubDate>Thu, 03 Mar 2016 00:00:00 +0800</pubDate>
+        </item>
+
+        <item>
+                <title>前端文件上传</title>
+                <description>&lt;h2 id=&quot;section&quot;&gt;前端文件上传&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;引用至 &lt;a href=&quot;http://www.codeweblog.com/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%B8%90%E8%BF%9B%E5%BC%8F%E5%A2%9E%E5%BC%BA/&quot;&gt;文件上传的渐进式增强&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;HTML5提供了一系列新的浏览器API，使得文件上传有可能出现革命性变化。英国程序员Remy Sharp总结了这些新的接口，本文在他的文章基础上，讨论如何采用HTML5的API，对文件上传进行渐进式增强，实现以下功能：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;iframe上传&lt;/li&gt;
+  &lt;li&gt;ajax上传&lt;/li&gt;
+  &lt;li&gt;进度条&lt;/li&gt;
+  &lt;li&gt;文件预览&lt;/li&gt;
+  &lt;li&gt;拖放上传&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;为了对这些功能有一个感性认识，你可以先看看Remy Sharp提供的&lt;a href=&quot;http://html5demos.com/dnd-upload&quot;&gt;范例&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;传统形式&lt;/h3&gt;
+
+&lt;p&gt;让我们从最基本的开始。
+文件上传的传统形式，是使用表单元素file：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;form id=&quot;upload-form&quot; action=&quot;upload.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot; &amp;gt;
+	&amp;lt;input type=&quot;file&quot; id=&quot;upload&quot; name=&quot;upload&quot; /&amp;gt; &amp;lt;br /&amp;gt;
+	&amp;lt;input type=&quot;submit&quot; value=&quot;Upload&quot; /&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;所有浏览器都支持上面的代码。它在IE浏览器中，显示如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://image.codeweblog.com/upload/b/26/b26c7237b1f6af61.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;用户先选择文件，然后点击”Upload”按钮，文件开始上传。&lt;/p&gt;
+
+&lt;h3 id=&quot;iframe&quot;&gt;iframe上传&lt;/h3&gt;
+
+&lt;p&gt;传统的表单上传，属于”同步上传”。也就是说，点击上传按钮后，网页”锁死”，
+用户只能等待上传结束，然后浏览器刷新，跳到表单的action属性指定的网址。
+有没有办法”异步上传”，在网页不重载的情况下，完成整个上传过程呢？
+在HTML5没有出现之前，只能使用iframe做到这一点。用户点击submit时，
+动态插入一个iframe元素（以下代码使用了jQuery函数库）。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var form = $(&quot;#upload-form&quot;);
+	form.on(&#39;submit&#39;,function() {
+	// 此处动态插入iframe元素
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;插入iframe的代码如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var seed = Math.floor(Math.random() * 1000);
+var id = &quot;uploader-frame-&quot; + seed;
+var callback = &quot;uploader-cb-&quot; + seed;
+var iframe = $(&#39;&amp;lt;iframe id=&quot;&#39;+id+&#39;&quot; name=&quot;&#39;+id+&#39;&quot; style=&quot;display:none;&quot;&amp;gt;&#39;);
+var url = form.attr(&#39;action&#39;);
+form.attr(&#39;target&#39;, id).append(iframe).attr(&#39;action&#39;, url + &#39;?iframe=&#39; + callback);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;最后一行，有两个地方值得注意。首先，它为表单添加target属性，指向动态插入的iframe窗口，这使得上传结束后，服务器将结果返回iframe窗口，所以当前页面就不会跳转了。其次，它在action属性指定的上传网址的后面，添加了一个参数，使得服务器知道回调函数的名称。这样就能将服务器返回的信息，从iframe窗口传到上层页面。&lt;/p&gt;
+
+&lt;p&gt;服务器（upload.php）返回的信息，应该是如下形式：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;script type=&quot;text/javascript&quot;&amp;gt;
+	window.top.window[&#39;callback&#39;](data);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;然后，在当前网页定义回调函数：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;window[callback] = function(data){
+	console.log(&#39;received callback:&#39;, data);
+	iframe.remove(); //removing iframe
+	form.removeAttr(&#39;target&#39;);
+	form.attr(&#39;action&#39;, url);
+	window[callback] = undefined; //removing callback
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;ajax&quot;&gt;ajax上传&lt;/h3&gt;
+
+&lt;p&gt;HTML5提出了&lt;code class=&quot;highlighter-rouge&quot;&gt;XMLHttpRequest&lt;/code&gt;对象的&lt;code class=&quot;highlighter-rouge&quot;&gt;第二版&lt;/code&gt;，从此ajax能够上传文件了。这是真正的”异步上传”，是将来的主流。上一节的iframe上传，可以用作老式浏览器的替代方案。&lt;/p&gt;
+
+&lt;p&gt;ajax上传代码，放在表单的submit事件回调函数中：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;form.on(&#39;submit&#39;,function() {
+	// 此处进行ajax上传
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我们主要用的是&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest/FormData&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;FormData&lt;/code&gt;对象&lt;/a&gt;，它能够构建类似表单的键值对。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 检查是否支持FormData
+if(window.FormData) {　
+	var formData = new FormData();
+	// 建立一个upload表单项，值为上传的文件
+	formData.append(&#39;upload&#39;, document.getElementById(&#39;upload&#39;).files[0]);
+	var xhr = new XMLHttpRequest();
+	xhr.open(&#39;POST&#39;, $(this).attr(&#39;action&#39;));
+	// 定义上传完成后的回调函数
+	xhr.onload = function () {
+		if (xhr.status === 200) {
+			console.log(&#39;上传成功&#39;);
+		} else {
+			console.log(&#39;出错了&#39;);
+		}
+	};
+	xhr.send(formData);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;进度条&lt;/h3&gt;
+
+&lt;p&gt;XMLHttpRequest第二版还定义了一个&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest/Using_XMLHttpRequest#Monitoring_progress&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;progress&lt;/code&gt;&lt;/a&gt;事件，可以用来制作进度条。
+首先，在页面中放置一个HTML元素progress。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;progress id=&quot;uploadprogress&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;0&quot;&amp;gt;0&amp;lt;/progress&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;然后，定义progress事件的回调函数。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;xhr.upload.onprogress = function (event) {
+	if (event.lengthComputable) {
+		var complete = (event.loaded / event.total * 100 | 0);
+		var progress = document.getElementById(&#39;uploadprogress&#39;);
+		progress.value = progress.innerHTML = complete;
+	}
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;注意，progress事件不是定义在xhr，而是定义在xhr.upload，因为这里需要区分下载和上传，下载也有一个progress事件。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;图片预览&lt;/h3&gt;
+
+&lt;p&gt;如果上传的是图片文件，利用&lt;a href=&quot;http://dev.w3.org/2006/webapi/FileAPI/&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;File API&lt;/code&gt;&lt;/a&gt;，我们可以做一个图片文件的预览。这里主要用到&lt;code class=&quot;highlighter-rouge&quot;&gt;FileReader&lt;/code&gt;对象。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 检查是否支持FileReader对象
+if (typeof FileReader != &#39;undefined&#39;) {
+	var acceptedTypes = {
+		&#39;image/png&#39;: true,
+		&#39;image/jpeg&#39;: true,
+		&#39;image/gif&#39;: true
+	};
+	if (acceptedTypes[document.getElementById(&#39;upload&#39;).files[0].type] === true) {
+		var reader = new FileReader();
+		reader.onload = function (event) {
+			var image = new Image();
+			image.src = event.target.result;
+			image.width = 100;
+			document.body.appendChild(image);
+		};
+		reader.readAsDataURL(document.getElementById(&#39;upload&#39;).files[0]);
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;拖放上传&lt;/h3&gt;
+
+&lt;p&gt;最后，利用HTML5的拖放功能，实现拖放上传。&lt;/p&gt;
+
+&lt;p&gt;先在页面中放置一个容器，用来接收拖放的文件。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;div id=&quot;holder&quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;对它设置样式：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#holder {
+	border: 10px dashed #ccc;
+	width: 300px;
+	min-height: 300px;
+	margin: 20px auto;
+}
+#holder.hover {
+	border: 10px dashed #0c0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;拖放文件的代码，主要是定义dragover、dragend和drop这三个事件。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 检查浏览器是否支持拖放上传。
+if(&#39;draggable&#39; in document.createElement(&#39;span&#39;)){
+	var holder = document.getElementById(&#39;holder&#39;);
+	holder.ondragover = function () { this.className = &#39;hover&#39;; return false; };
+	holder.ondragend = function () { this.className = &#39;&#39;; return false; };
+	holder.ondrop = function (event) {
+		event.preventDefault();
+		this.className = &#39;&#39;;
+		var files = event.dataTransfer.files;
+		// do something with files
+	};
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+                <link>/%E5%89%8D%E7%AB%AF%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/2015/12/25/font_end_file_uplaod</link>
+                <guid>/%E5%89%8D%E7%AB%AF%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/2015/12/25/font_end_file_uplaod</guid>
+                <pubDate>Fri, 25 Dec 2015 00:00:00 +0800</pubDate>
+        </item>
+
+        <item>
+                <title>前端资源收集第一弹</title>
+                <description>&lt;h3 id=&quot;section&quot;&gt;综合/资源&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;frontend-dev-bookmarks 一个巨大的前端开发资源清单。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;front-end-collect 分享自己长期关注的前端开发相关的优秀网站、博客、以及活跃开发者。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Front-end-Interview-questions 史上最全前端开发面试问题及答案&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;f2e-hub 包含&lt;code class=&quot;highlighter-rouge&quot;&gt;Animation&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;UI&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;dialog&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;Carousels&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;color&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;workflow&lt;/code&gt;等。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;awesome-javascript 一系列很棒的javascript 库，资源。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;fks 前端技能汇总，包含前端知识架构，后端知识，&lt;code class=&quot;highlighter-rouge&quot;&gt;linux&lt;/code&gt;，书籍推荐等。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;node123 &lt;code class=&quot;highlighter-rouge&quot;&gt;node.js&lt;/code&gt;中文资料导航。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;mobile-web-favorites 移动端web开发收藏夹。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;gulp-book Gulp 入门指南&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;uicss&quot;&gt;样式/UI/css&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Semantic-UI 让你使用任何HTML标签 来表现UI控件。 
+这是一款语义化设计的前端框架，为攻城师而制作的可复用的开源前端框架。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;primer CSS风格指南。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;glue 一个生成CSS sprites的简单的命令行工具。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;postcss 用js插件来对css进行转换，类似Sass的预编译器，但实现了模块化，并且更加强大。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;css3 PIE 允许在IE上使用CSS3绝大部分的酷炫功能。官网：&lt;a href=&quot;http://css3pie.com/&quot;&gt;http://css3pie.com/&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;mui 轻量级css框架。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;测试/工具&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;mocha 一个简单、灵活有趣的 JavaScript 测试框架，用于 Node.js 和浏览器上的 JavaScript 应用测试。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;csscss css代码冗余分析仪，用于分析冗余 。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;es6-tools es6 工具集，包括Grunt Tasks，Gulp Plugins，Broccoli Plugins，Brunch Plugins，Webpack plugins等等。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;async 一个工具模块，提供了直接而强大的 JavaScript 异步功能。虽然是为 Node.js 设计的，但是它也可以直接在浏览器中使用。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;simditor 团队协作工具 Tower 使用的富文本编辑器。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;HTMLHint HTML 静态代码分析工具，可以集成到IDE环境或编译系统中。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;jshint js静态代码分析工具，可以帮你检测js语法错误和潜在的问题。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;csslint 分析和优化你的CSS样式表的工具。由[Nicholas C.Zakas][28]所写。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;protractor 一款端对端的angular apps 测试框架。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;casperjs 一个基于PhantomJS的开源导航脚本和测试工具。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Karma 自动化完成单元测试，允许你在多个浏览器里执行js代码。让你的TDD变得简单，快速，有趣。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;jasmine 是一个简易的JS单元测试框架， 用来测试Javascript代码。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;chai 一个针对 Node.js 和浏览器的TDD(测试驱动开发)/BDD(行为驱动开发)的断言框架，可与任何 JavaScript 测试框架集成。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Qunit 一个很容易使用的js单元测试框架，该框架是由jQuery团队的成员所开发，并且是jQuery的官方测试套件。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;workflow&quot;&gt;Workflow/构建工具&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Grunt 基于Node.js的项目构建工具。拥有数量庞大的插件，是一款优秀的前端自动化工具。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;yeoman 一个强健的工具，库，及工作流程的组合。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;gulp 基于node.js流的新一代前端构建系统。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;spm 是 CMD 的包管理工具，需要和 Sea.js 配合使用。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;canvas&quot;&gt;canvas/数据可视化&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;echarts 基于Canvas，纯Javascript图表库，提供直观，生动，可交互，可个性化定制的数据可视化图表。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Chart.js 使用&lt;canvas&gt;标签的简易HTML5图表。&lt;/canvas&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;sketch.js 跨平台JavaScript创意编码框架，gzip压缩后仅有2kb。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;d3 一个基于数据操作文档的js数据可视化框架，最流行的可视化库之一。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;zrender 一个轻量级的Canvas类库，MVC封装，数据驱动，提供类DOM事件模型，让canvas绘图大不同！&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;c3 一个基于 D3.js 的可重用 JavaScript 图表库。几乎零学习曲线。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;img2css 将图片转为纯css代码。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;模块管理/加载器&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ESL 是一个浏览器端、符合AMD的标准加载器，适合用于现代Web浏览器端应用的入口与模块管理。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ESL&lt;/code&gt; vs &lt;code class=&quot;highlighter-rouge&quot;&gt;RequireJS&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;体积更小 (Smaller)
+性能更高 (Higher performance)
+更健壮 (More Robustness)
+不支持在非浏览器端使用 (Browser only)
+依赖模块用时定义 (Lazy define) - seajs 一个遵循`CommonJS`规范的`JavaScript`模块加载器。提供简单、极致的模块化开发体验。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Component 一个模块化的JavaScript框架，同时也是面向前端的包管理器。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;webpack一个模块打包工具，你可以使用WebPack管理你的模块依赖，并编绎输出模块们所需的静态文件。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;动画&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;animate.css 一个跨浏览器的&lt;code class=&quot;highlighter-rouge&quot;&gt;CSS&lt;/code&gt;动画库。简单易用易上手。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;move.js 极小的 &lt;code class=&quot;highlighter-rouge&quot;&gt;JavaScript&lt;/code&gt; 库,支持 &lt;code class=&quot;highlighter-rouge&quot;&gt;CSS3&lt;/code&gt; 的动画效果,非常简单优雅。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;TweenJS 是一个简单但强大的 &lt;code class=&quot;highlighter-rouge&quot;&gt;Javascript&lt;/code&gt; 动画库。&lt;code class=&quot;highlighter-rouge&quot;&gt;CreateJS&lt;/code&gt; 套件的一部分。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;bounce.js 一个用于制作漂亮的 &lt;code class=&quot;highlighter-rouge&quot;&gt;CSS3&lt;/code&gt; 关键帧动画的 &lt;code class=&quot;highlighter-rouge&quot;&gt;JavaScript&lt;/code&gt;
+库,使用其特有的方式生成的动画效果。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Swipe 号称最精确的&lt;code class=&quot;highlighter-rouge&quot;&gt;Slider&lt;/code&gt;触摸库，专为移动设备优化。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;tween.js 一款可生成平滑动画效果的js动画库。&lt;code class=&quot;highlighter-rouge&quot;&gt;tween.js&lt;/code&gt;允许你以平滑的方式修改元素的属性值。它可以通过设置生成各种类似CSS3的动画效果。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;parallax.js轻量级的的视差引擎，能对智能设备的方向作出反应。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;插件&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;zepto.fullpage 专注于移动端的全屏滚动插件。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;fullPage.js pc端的全屏滚动插件。 &lt;a href=&quot;http://alvarotrigo.com/fullPage/#firstPage&quot;&gt;view demo &lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;onepage-scroll 可以轻松建立一个动感的响应式的滚动效果页面，比较适用于单页面的专题站。支持现代浏览器和IE8以上版本。&lt;a href=&quot;http://kenwheeler.github.io/slick/&quot;&gt;View demo&lt;/a&gt; 。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;slick 一款完全响应式的 jQuery 图片滚动插件，能够根据容器自动适应宽度。view demo&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;superslides 致力于解决网站大部分特效展示问题。网站上常用的“焦点图/幻灯片”“Tab标签切换”“图片滚动”“无缝滚动”等只需要一个SuperSlide即可解决！ view demo&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;jQuery-One-Page-Nav 当用户滚动网页时，实现平滑滚动和智能导航。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;slider 一个jquery完全开源的JavaScript代码库，用户可以开发，调试和深度定制自己的滑块。&lt;a href=&quot;http://www.jssor.com/demos/index.html&quot;&gt;view demo&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;github-hovercard github 鼠标悬停显示用户，仓库等摘要信息。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;onepage-scroll 一款带有背景视觉差效果的jQuery整页滚动特效插件。&lt;a href=&quot;http://www.htmleaf.com/Demo/201412311045.html&quot;&gt;view demo&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;justlazy.js 轻量级js图片延迟加载插件。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;框架、库和组件&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;polymer web组件构建框架。一套以“一切皆组件、最少化代码量、最少框架限制”为设计理念的Web UI框架。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;impress.js 创建令人兴奋的演示。使用CSS3的转换和过渡，这个库允许你创建令人印象深刻的演示文稿。&lt;a href=&quot;http://bartaz.github.io/impress.js/#/bored&quot;&gt;view demo&lt;/a&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ionic 先进的HTML5 移动端开发框架。帮助开发者使用HTML5, CSS3和js做出不可思议的hybrid app。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;reveal.js 基于CSS3的3D幻灯片工具。能够制作绚丽的演示文稿并生成HTML格式，将它发布到web上。 &lt;a href=&quot;http://lab.hakim.se/reveal-js/#/&quot;&gt;view demo&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;pure.css 一组很小的，响应式的css组件，你可以在网页的项目上到处使用。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;three.js 是JavaScript编写的WebGL第三方库。提供了非常多的3D显示功能。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;TimelineJS 轻松制作时间轴。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;jquery-pjax 对ajax 和 pushState的封装，让你可以很方便的使用pushState技术，用以实现页面无刷新加载。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;highlight.js javascript语法高亮。既可以运行在浏览器端也可以运行在服务端。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;commander.js Node.js命令行工具。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;togetherjs 由Mozilla打造的一款可以给网站添加实时协作功能的JavaScript库。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;HTML.js 轻量级的简化与DOM操作的js库。view demo&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;MEAN.JS 全栈式javascript，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;MongoDB, Express,AngularJS和Node.js。star:2.2K&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;wechat.js 微信相关的 js 操作：分享、网络、菜单。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;JavaScript-Load-Image 一个js加载和转换图像文件的库。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;progress.js 一个 js 和 CSS3的库，帮助开发人员为网页上的每个对象创建和管理进度条效果。 &lt;a href=&quot;http://usablica.github.io/progress.js/&quot;&gt;view demo&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;foundation 号称世界上最先进的响应式前端框架，也是一款Mobile First的框架。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Sugar 一个JavaScript库。它扩展了现有的JS对象的方法，让你可以用更少的代码做更多的事情。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;todomvc 帮你挑选一款MV&lt;em&gt;框架，它使用不同的最流行的js MV&lt;/em&gt;框架实现了一个相同的Todo应用。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;yepnope.js 这是一个异步的条件加载框架，速度超快，只为用户加载需要的脚本。使用非常简单，非常有用！&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Material UI 是一个 CSS 框架和一组实现谷歌 Material Design 设计规范的 React组件。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Pikaday 是一个 JavaScript 日期选择器，特点是轻量级、无依赖和模块化的CSS。view demo&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;vuejs 用于构建交互式的 Web 界面的库。它提供了 MVVM 数据绑定和一个可组合的组件系统,具有简单、灵活的 API。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;meteor 超简单的，数据库无处不在的，用于自动化和简化实时运行的 Web 应用程序的开发。纯JavaScript的Web框架。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;webuploader
+一个简单的以HTML5为主，FLASH为辅的现代文件上传组件。支持大文件分片并发上传，极大的提高了文件上传效率。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;fastclick触摸UI上的消除点击延迟js库。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;wangEditor 轻量级web富文本框。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;benchmark.js是强大的基准测试库，几乎适用于所有JavaScript平台。支持high-resolution定时器，并返回重要的统计结果。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;headroom.js是一个轻量级、纯 JS 组件,用来隐藏或展现页面上的元素,为你的页面留下更多展示内容的空间。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;移动端&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Swipe 加速移动触摸滑块与硬件之间的转换。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;hammer.js 一个支持多点触摸的手势库。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;amDoc 无线Web解决方案 - 文档规范指南&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;amazeui 移动优先的跨屏前端框架。面向HTML5开发，使用css3做动画和交互。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Zepto 一款面向移动端设备、API与jQuery兼容的基础库。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;mui 最接近原生APP体验的高性能框架 。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Swiper纯javascript打造的滑动特效插件，面向手机、平板电脑等移动终端。能实现触屏焦点图、触屏Tab切换、触屏多图切换等常用效果。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;react&quot;&gt;React相关&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;react-style 是 &lt;code class=&quot;highlighter-rouge&quot;&gt;React.js&lt;/code&gt; 可维护的样式组件&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;react-component 基于&lt;code class=&quot;highlighter-rouge&quot;&gt;reactjs&lt;/code&gt;的组件。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;react-native 一个用&lt;code class=&quot;highlighter-rouge&quot;&gt;React&lt;/code&gt;构建&lt;code class=&quot;highlighter-rouge&quot;&gt;native apps&lt;/code&gt;的框架。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;react-native-guide 汇集了&lt;code class=&quot;highlighter-rouge&quot;&gt;react-native&lt;/code&gt;学习资源与各类开源app。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;awesome-react 关于&lt;code class=&quot;highlighter-rouge&quot;&gt;react&lt;/code&gt;的工具，资源，视频的集合。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Flux 是一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Facebook&lt;/code&gt;开发的、利用单向数据流实现的应用架构，用于&lt;code class=&quot;highlighter-rouge&quot;&gt;React&lt;/code&gt;。&lt;code class=&quot;highlighter-rouge&quot;&gt;Flux&lt;/code&gt;应用有三个主要的部分组成：调度程序、存储和视图（&lt;code class=&quot;highlighter-rouge&quot;&gt;React&lt;/code&gt; 组件）。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;iscroll 高性能，体积小，无外部依赖，跨平台的滚动组件&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+                <link>/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2012/12/09/front_end_res_01</link>
+                <guid>/%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90/2012/12/09/front_end_res_01</guid>
+                <pubDate>Sun, 09 Dec 2012 00:00:00 +0800</pubDate>
+        </item>
+
+
+</channel>
+</rss>

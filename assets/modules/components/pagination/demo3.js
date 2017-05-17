@@ -80,12 +80,12 @@ define(["module", "react", "../BaseDemo", "FontIcon", "Pagination", "../Code"], 
                         React.createElement(
                             "div",
                             { className: "code-box-title" },
-                            "圆形"
+                            "displayInfo"
                         ),
                         React.createElement(
                             "div",
                             null,
-                            "设置shape为circle页号变为圆形, theme 支持 cyan, none",
+                            "设置displayInfo 为false 可以不显示页数信息等",
                             React.createElement(FontIcon, { icon: "chevron-circle-down", ref: "collapse", className: "collapse", onClick: this.openCloseCode.bind(this) })
                         )
                     ),

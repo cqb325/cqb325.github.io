@@ -247,6 +247,8 @@ define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Butto
                     } else {
                         this.goToPage();
                     }
+                } else {
+                    this.goToPage();
                 }
             }
         }, {

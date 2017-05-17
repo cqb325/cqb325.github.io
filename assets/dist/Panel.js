@@ -70,6 +70,12 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
             return _this;
         }
 
+        /**
+         * 设置标题
+         * @param title
+         */
+
+
         _createClass(Panel, [{
             key: "setTitle",
             value: function setTitle(title) {
@@ -177,7 +183,7 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
         }, {
             key: "renderContent",
             value: function renderContent() {
-                if (this.state.content.substring(0, 1) === "<") {
+                if (this.state.content && this.state.content.substring && this.state.content.substring(0, 1) === "<") {
                     return React.createElement("div", { dangerouslySetInnerHTML: { __html: this.state.content } });
                 } else {
                     return this.state.content;
@@ -206,8 +212,7 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'Cor
                     React.createElement(
                         "div",
                         { className: "cm-panel-content" },
-                        this.props.children,
-                        this.renderContent()
+                        this.renderContent() || this.props.children
                     ),
                     this.renderFooter()
                 );

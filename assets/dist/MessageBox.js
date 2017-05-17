@@ -179,7 +179,7 @@ define(["module", "react", 'react-dom', "classnames", "core/BaseComponent", 'uti
                 //     visibility: true
                 // });
 
-                this.panel.setTitleAndContent(this.state.title || title, msg);
+                this.panel.setTitleAndContent(this.state.title || title, this.state.msg || msg);
 
                 if (!this.backdrop) {
                     var ele = Dom.query(".shadow-backdrop");
