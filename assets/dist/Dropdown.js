@@ -111,5 +111,10 @@ define(["module", "react", "react-dom", "classnames", "internal/InnerDropdown", 
         return Dropdown;
     }(BaseComponent);
 
+    Dropdown.defaultProps = {
+        action: "hover",
+        align: "bottomLeft"
+    };
+
     module.exports = Dropdown;
 });

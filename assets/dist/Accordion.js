@@ -1,5 +1,19 @@
-define(["module", "react", "classnames", "core/BaseComponent", "utils/shallowEqual", "FontIcon", "utils/UUID", 'internal/EnhancedButton'], function (module, React, classnames, BaseComponent, shallowEqual, FontIcon, UUID, EnhancedButton) {
+define(["module", "react", "react-dom", "classnames", "core/BaseComponent", "utils/shallowEqual", "FontIcon", "velocity", "utils/UUID", 'internal/EnhancedButton'], function (module, React, ReactDOM, classnames, BaseComponent, shallowEqual, FontIcon, velocity, UUID, EnhancedButton) {
     "use strict";
+
+    var _extends = Object.assign || function (target) {
+        for (var i = 1; i < arguments.length; i++) {
+            var source = arguments[i];
+
+            for (var key in source) {
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+
+        return target;
+    };
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -49,190 +63,239 @@ define(["module", "react", "classnames", "core/BaseComponent", "utils/shallowEqu
         if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
     }
 
-    var Component = React.Component;
     var PropTypes = React.PropTypes;
 
-    var MenuItem = function (_Component) {
-        _inherits(MenuItem, _Component);
+    var Item = function (_BaseComponent) {
+        _inherits(Item, _BaseComponent);
 
-        function MenuItem() {
-            _classCallCheck(this, MenuItem);
+        function Item(props) {
+            _classCallCheck(this, Item);
 
-            return _possibleConstructorReturn(this, Object.getPrototypeOf(MenuItem).apply(this, arguments));
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Item).call(this, props));
+
+            _this.active = props.open || false;
+            _this.key = props.identify || UUID.v4();
+            _this._animating = false;
+            _this.addState({
+                active: props.open || false
+            });
+            return _this;
         }
 
-        _createClass(MenuItem, [{
-            key: "_onSelect",
-            value: function _onSelect(event) {
-                var item = this.props.data;
-                if (this.props.onSelect) {
-                    this.props.onSelect(item);
+        _createClass(Item, [{
+            key: "onClick",
+            value: function onClick(event) {
+                if (this._animating) {
+                    return false;
+                }
+                if (!this.active) {
+                    this.open();
+                } else {
+                    this.collapse();
+                }
+            }
+        }, {
+            key: "open",
+            value: function open() {
+                var _this2 = this;
+
+                this._animating = true;
+                var body = ReactDOM.findDOMNode(this.refs.body);
+                if (this.props.onOpen) {
+                    this.props.onOpen(this);
+                }
+                velocity(body, "slideDown", { duration: 300, complete: function complete() {
+                        _this2.active = true;
+                        if (_this2._isMounted) {
+                            _this2.setState({
+                                active: true
+                            });
+                        }
+                        _this2._animating = false;
+                        if (_this2.props.onOpened) {
+                            _this2.props.onOpened(_this2);
+                        }
+                    } });
+            }
+        }, {
+            key: "collapse",
+            value: function collapse() {
+                var _this3 = this;
+
+                this._animating = true;
+                var body = ReactDOM.findDOMNode(this.refs.body);
+                if (this.props.onCollapse) {
+                    this.props.onCollapse(this);
+                }
+                velocity(body, "slideUp", { duration: 300, complete: function complete() {
+                        _this3.active = false;
+                        if (_this3._isMounted) {
+                            _this3.setState({
+                                active: false
+                            });
+                        }
+                        _this3._animating = false;
+                        if (_this3.props.onCollapsed) {
+                            _this3.props.onCollapsed(_this3);
+                        }
+                    } });
+            }
+        }, {
+            key: "componentWillUnmount",
+            value: function componentWillUnmount() {
+                this._isMounted = false;
+            }
+        }, {
+            key: "componentDidMount",
+            value: function componentDidMount() {
+                this._isMounted = true;
+                this.props.parent.items.push(this);
+                if (this.props.open) {
+                    this.open();
                 }
             }
         }, {
             key: "render",
             value: function render() {
-                var item = this.props.data,
-                    icon = item.icon ? React.createElement(FontIcon, { icon: item.icon, className: "menu-icon" }) : "",
-                    link = item.link ? item.link : "javascript:void(0)",
-                    text = item.text,
-                    content = item.content;
+                var _props = this.props;
+                var className = _props.className;
+                var style = _props.style;
+                var icon = _props.icon;
+                var title = _props.title;
+                var children = _props.children;
 
-                var visible = item._visible;
-                var subMenu = content ? React.createElement(SubMenus, { visible: visible, onSelect: this.props.onSelect, content: content, isSub: true }) : "";
 
-                var className = classnames({
-                    active: item._active
+                className = classnames("cm-accordion-item", className, {
+                    "cm-accordion-item-active": this.state.active
                 });
+                icon = icon ? React.createElement(FontIcon, { className: "cm-accordion-item-icon", icon: icon }) : null;
                 return React.createElement(
                     "li",
-                    { className: className },
+                    { className: className, style: style },
                     React.createElement(
-                        "a",
-                        { href: link, "data-identity": this.props.identity, onClick: this._onSelect.bind(this) },
-                        React.createElement(
-                            EnhancedButton,
-                            { initFull: true },
-                            icon,
-                            text
-                        )
+                        "div",
+                        { className: "cm-accordion-item-head", onClick: this.onClick.bind(this) },
+                        icon,
+                        title
                     ),
-                    subMenu
+                    React.createElement(
+                        "div",
+                        { className: "cm-accordion-item-body", ref: "body" },
+                        children
+                    )
                 );
             }
         }]);
 
-        return MenuItem;
-    }(Component);
+        return Item;
+    }(BaseComponent);
 
-    var SubMenus = function (_Component2) {
-        _inherits(SubMenus, _Component2);
-
-        function SubMenus() {
-            _classCallCheck(this, SubMenus);
-
-            return _possibleConstructorReturn(this, Object.getPrototypeOf(SubMenus).apply(this, arguments));
-        }
-
-        _createClass(SubMenus, [{
-            key: "render",
-            value: function render() {
-                var menus = [];
-                var subs = this.props.items;
-
-                if (subs) {
-                    for (var i = 0; i < subs.length; i++) {
-                        var item = subs[i];
-                        var identity = item["identity"] || item["text"];
-                        menus.push(React.createElement(MenuItem, { onSelect: this.props.onSelect, key: i, identity: identity, data: item }));
-                    }
-                }
-
-                var className = classnames({
-                    submenu: this.props.isSub
-                });
-
-                var visible = this.props.visible ? 'block' : "none";
-                if (this.props.isSub) {
-                    return React.createElement("ul", { className: className, style: { display: visible }, dangerouslySetInnerHTML: { __html: this.props.content } });
-                } else {
-                    return React.createElement(
-                        "ul",
-                        { className: className },
-                        menus
-                    );
-                }
-            }
-        }]);
-
-        return SubMenus;
-    }(Component);
-
-    var Accordion = function (_BaseComponent) {
-        _inherits(Accordion, _BaseComponent);
+    var Accordion = function (_BaseComponent2) {
+        _inherits(Accordion, _BaseComponent2);
 
         function Accordion(props) {
             _classCallCheck(this, Accordion);
 
-            var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Accordion).call(this, props));
+            var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Accordion).call(this, props));
 
-            _this3.data = {};
-            _this3._buildData(_this3.data, -1, props.data);
-            _this3.addState({
-                data: props.data,
-                _active: null
-            });
-            return _this3;
+            _this4.items = [];
+            _this4.lastOpenItem = null;
+            return _this4;
         }
 
-        _createClass(Accordion, [{
-            key: "_buildData",
-            value: function _buildData(root, parentId, data) {
-                data.forEach(function (item) {
-                    item._id = UUID.v4();
-                    item._parentId = parentId;
-                    root[item._id] = item;
+        /**
+         * 根据index索引展开
+         * @param index
+         */
 
-                    if (item.children && item.children.length) {
-                        this._buildData(root, item._id, item.children);
-                    }
-                }, this);
+
+        _createClass(Accordion, [{
+            key: "activeByIndex",
+            value: function activeByIndex(index) {
+                if (this.items[index]) {
+                    this.items[index].open();
+                }
+            }
+        }, {
+            key: "activeItem",
+            value: function activeItem(item) {
+                if (typeof item == "string") {
+                    item = this.getItem(item);
+                }
+
+                if (item) {
+                    item.open();
+                }
             }
         }, {
             key: "getItem",
-            value: function getItem(id) {
-                return this.data[id];
+            value: function getItem(key) {
+                for (var i in this.items) {
+                    if (this.items[i].key === key) {
+                        return this.items[i];
+                    }
+                }
+                return null;
             }
         }, {
-            key: "_onSelect",
-            value: function _onSelect(item) {
-                if (this.state._active && shallowEqual(this.state._active, item)) {
-                    if (item._parentId == -1) {
-                        item._visible = !item._visible;
-                        this.setState({ _active: item });
-                    }
-                } else {
-                    var last = this.state._active;
-                    if (last) {
-                        last._active = false;
-                        last._visible = false;
+            key: "onOpen",
+            value: function onOpen(item) {
+                if (this.lastOpenItem) {
+                    this.lastOpenItem.collapse();
+                }
+                this.lastOpenItem = item;
 
-                        if (last._parentId != -1) {
-                            var parent = this.getItem(last._parentId);
-                            if (shallowEqual(parent, item)) {
-                                item._active = true;
-                                item._visible = false;
-                                this.setState({ _active: item });
-                                return;
-                            } else {
-                                parent._active = false;
-                                parent._visible = false;
-                            }
-                        }
-                    }
-                    if (item._parentId != -1) {
-                        var _parent = this.getItem(item._parentId);
-                        _parent._active = true;
-                        _parent._visible = true;
-                    }
-                    item._active = true;
-                    item._visible = true;
-                    this.setState({ _active: item });
+                if (this.props.onOpen) {
+                    this.props.onOpen(item);
                 }
 
-                if (this.props.onSelect) {
-                    this.props.onSelect(item);
+                this.emit("open", item);
+            }
+        }, {
+            key: "onCollapse",
+            value: function onCollapse(item) {
+                this.lastOpenItem = null;
+                if (this.props.onCollapse) {
+                    this.props.onCollapse(item);
                 }
+                this.emit("collapse", item);
+            }
+        }, {
+            key: "renderItems",
+            value: function renderItems() {
+                var _this5 = this;
+
+                var children = this.props.children;
+                return React.Children.map(children, function (child) {
+                    var props = child.props;
+                    props = _extends({}, props, {
+                        onCollapse: _this5.onCollapse.bind(_this5),
+                        onOpen: _this5.onOpen.bind(_this5),
+                        onCollapsed: _this5.props.onCollapsed,
+                        onOpened: _this5.props.onOpened,
+                        parent: _this5
+                    });
+
+                    return React.cloneElement(child, props);
+                });
             }
         }, {
             key: "render",
             value: function render() {
-                var className = classnames("cm-accordion", this.state.theme, this.props.className);
+                var className = classnames("cm-accordion", this.state.theme, this.props.className, {
+                    "cm-accordion-bordered": this.props.bordered
+                });
+
+                var items = this.renderItems();
 
                 return React.createElement(
                     "div",
                     { className: className, style: this.props.style },
-                    React.createElement(SubMenus, { onSelect: this._onSelect.bind(this), items: this.state.data, isSub: false })
+                    React.createElement(
+                        "ul",
+                        { className: "cm-accordion-wrap" },
+                        items
+                    )
                 );
             }
         }]);
@@ -240,14 +303,9 @@ define(["module", "react", "classnames", "core/BaseComponent", "utils/shallowEqu
         return Accordion;
     }(BaseComponent);
 
-    Accordion.propTypes = {
-        /**
-         * 数据
-         * @attribute data
-         * @type {Array}
-         */
-        data: PropTypes.array
-    };
+    Accordion.propTypes = {};
+
+    Accordion.Item = Item;
 
     module.exports = Accordion;
 });
