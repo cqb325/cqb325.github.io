@@ -244,7 +244,7 @@ define(["module", "react", "classnames", "core/BaseComponent", 'FontIcon', 'inte
          * @attribute size
          * @type {string}
          */
-        size: PropTypes.oneOf(["default","large", "small"]),
+        size: PropTypes.oneOf(["default", "large", "small"]),
         /**
          * 跳转的目标通a标签的target
          * @attribute target

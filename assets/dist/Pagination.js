@@ -1,4 +1,4 @@
-define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Button", "core/BaseComponent"], function (module, React, ReactDOM, Core, classnames, FontIcon, Button, BaseComponent) {
+define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Button", "Select", "Input", "core/BaseComponent"], function (module, React, ReactDOM, Core, classnames, FontIcon, Button, Select, Input, BaseComponent) {
     "use strict";
 
     function _classCallCheck(instance, Constructor) {
@@ -186,19 +186,21 @@ define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Butto
 
                 if (data.current != undefined) {
                     params.current = data.current;
-                    params._current = data.current;
 
                     var size = data.pageSize || this.state.pageSize;
                     var total = data.total || this.state.total;
 
                     if (params.current > this._calcPage(size, total)) {
                         this.setState(params);
-                        this._changePageSize(size, true);
+                        this._changePageSize(parseInt(size), true);
                         return;
                     }
                 }
 
                 this.setState(params);
+                if (this.refs.pageNum) {
+                    this.refs.pageNum.setValue(params.current);
+                }
             }
         }, {
             key: "_calcPage",
@@ -213,32 +215,29 @@ define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Butto
         }, {
             key: "_isValid",
             value: function _isValid(page) {
-                return typeof page === 'number' && page >= 1 && page !== this.state.current;
+                return typeof page === 'number' && page >= 1;
             }
         }, {
             key: "_selectPageSize",
-            value: function _selectPageSize() {
-                this._changePageSize(parseInt(ReactDOM.findDOMNode(this.refs.pageSize).value));
+            value: function _selectPageSize(value, item) {
+                this._changePageSize(parseInt(value));
             }
         }, {
             key: "_changePageSize",
             value: function _changePageSize(size, preventCallback) {
                 var current = this.state.current;
 
-                if (typeof size === 'number') {
+                this.setState({
+                    pageSize: size
+                });
+                if (this.state.current > this._calcPage(size)) {
+                    current = this._calcPage(size) || 1;
                     this.setState({
-                        pageSize: size
+                        current: current
                     });
-                    if (this.state.current > this._calcPage(size)) {
-                        current = this._calcPage(size) || 1;
-                        this.setState({
-                            current: current,
-                            _current: current
-                        });
-                        if (this.refs.pageNum) {
-                            ReactDOM.findDOMNode(this.refs.pageNum).value = current;
-                        }
-                    }
+                }
+                if (this.refs.pageNum) {
+                    this.refs.pageNum.setValue(current);
                 }
                 if (!preventCallback) {
                     if (this.props.onShowSizeChange) {
@@ -255,15 +254,14 @@ define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Butto
             key: "_handleChange",
             value: function _handleChange(p) {
                 var page = p;
-                if (this._isValid(page)) {
+                if (this._isValid(page) && page !== this.state.current) {
                     if (page > this._calcPage()) {
                         page = this._calcPage();
                     }
 
                     if (!('current' in this.props)) {
                         this.setState({
-                            current: page,
-                            _current: page
+                            current: page
                         });
                     }
 
@@ -274,7 +272,7 @@ define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Butto
                     this.emit("change", page, this.state.pageSize);
 
                     if (this.refs.pageNum) {
-                        ReactDOM.findDOMNode(this.refs.pageNum).value = page;
+                        this.refs.pageNum.setValue(page);
                     }
 
                     return page;
@@ -285,18 +283,37 @@ define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Butto
         }, {
             key: "goToPage",
             value: function goToPage() {
-                var page = parseInt(ReactDOM.findDOMNode(this.refs.pageNum).value);
+                var _this5 = this;
+
+                var page = parseInt(this.refs.pageNum.getValue());
                 if (this._isValid(page) && page <= this._calcPage()) {
                     this._handleChange(page);
+                } else {
+                    window.setTimeout(function () {
+                        page = _this5._calcPage();
+                        _this5.refs.pageNum.setValue(page);
+                        if (page !== _this5.state.current) {
+                            _this5._handleChange(page);
+                        }
+                    }, 0);
                 }
             }
         }, {
             key: "handlerInput",
-            value: function handlerInput(e) {
-                this.setState({
-                    _current: e.target.value
-                });
-            }
+            value: function handlerInput(value) {}
+            // if(value > this._calcPage()){
+            //     value = this._calcPage();
+            // }
+            // this.setState({
+            //     _current: value
+            // });
+
+
+            /**
+             * 页数框按下enter键跳转
+             * @param e
+             */
+
         }, {
             key: "keyUp",
             value: function keyUp(e) {
@@ -420,7 +437,7 @@ define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Butto
                     { className: className },
                     React.createElement(
                         "ul",
-                        { style: { float: "left" } },
+                        { style: { float: "left" }, className: "cm-pagination-num-list" },
                         React.createElement(PagePrev, { current: current, onClick: this._prev.bind(this, null) }),
                         pagerList,
                         React.createElement(PageNext, { current: current, onClick: this._next.bind(this, null), disabled: current == pages })
@@ -430,38 +447,9 @@ define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Butto
                         { className: "pagination-info" },
                         React.createElement(
                             "span",
-                            { className: "ml-10" },
-                            "共",
-                            pages,
-                            "页"
+                            { className: "page-code ml-5" },
+                            React.createElement(Select, { ref: "pageSize", value: this.state.pageSize + "", onChange: this._selectPageSize.bind(this), style: { width: 65 }, data: [{ id: "10", text: "10/页" }, { id: "50", text: "50/页" }, { id: "100", text: "100/页" }] })
                         ),
-                        " ",
-                        React.createElement(
-                            "span",
-                            { className: "page-code" },
-                            "每页",
-                            React.createElement(
-                                "select",
-                                { name: "pageSize", className: "pageSize", value: this.state.pageSize, ref: "pageSize", onChange: this._selectPageSize.bind(this, null) },
-                                React.createElement(
-                                    "option",
-                                    { value: "10" },
-                                    "10"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "50" },
-                                    "50"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "100" },
-                                    "100"
-                                )
-                            ),
-                            "条"
-                        ),
-                        " ",
                         React.createElement(
                             "span",
                             { className: "page-code mr-10" },
@@ -470,17 +458,14 @@ define(["module", "react", "react-dom", "Core", "classnames", "FontIcon", "Butto
                                 null,
                                 "到第"
                             ),
-                            React.createElement("input", { name: "pageNum", className: "pageNum", ref: "pageNum",
-                                autoComplete: "off",
-                                value: this.state._current,
-                                type: "text",
-                                style: { width: "40px" },
-                                onChange: this.handlerInput.bind(this),
-                                onKeyUp: this.keyUp.bind(this)
-                            }),
+                            React.createElement(Input, { ref: "pageNum", type: "number", autoComplete: "off", value: this.state.current,
+                                onKeyUp: this.keyUp.bind(this),
+                                onChange: this.handlerInput.bind(this) }),
                             React.createElement(
                                 "span",
                                 null,
+                                "/",
+                                pages,
                                 "页"
                             )
                         ),
