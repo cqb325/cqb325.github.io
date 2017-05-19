@@ -1,4 +1,4 @@
-define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Code"], function (module, React, BaseDemo, Button, Affix, FontIcon, Code) {
+define(["module", "react", "../BaseDemo", "Button", "InputNumber", "FontIcon", "../Code"], function (module, React, BaseDemo, Button, InputNumber, FontIcon, Code) {
     "use strict";
 
     function _classCallCheck(instance, Constructor) {
@@ -67,15 +67,7 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                     React.createElement(
                         "div",
                         { className: "code-box-demo" },
-                        React.createElement(
-                            Affix,
-                            null,
-                            React.createElement(
-                                Button,
-                                { theme: "primary" },
-                                "Affix"
-                            )
-                        )
+                        React.createElement(InputNumber, { min: 10, max: 20, value: 15.5, step: 0.1 })
                     ),
                     React.createElement(
                         "div",
@@ -83,12 +75,12 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                         React.createElement(
                             "div",
                             { className: "code-box-title" },
-                            "基本用法"
+                            "step"
                         ),
                         React.createElement(
                             "div",
                             null,
-                            "简单的Affix",
+                            "step为数字框的步长",
                             React.createElement(FontIcon, { icon: "chevron-circle-down", ref: "collapse", className: "collapse", onClick: this.openCloseCode.bind(this) })
                         )
                     ),
@@ -98,7 +90,7 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                         React.createElement(
                             Code,
                             { className: "language-jsx" },
-                            "\nconst Button = require(\"Button\");\nconst Affix = require(\"Affix\");\n\nReactDOM.render(\n<div>\n    <Affix>\n        <Button theme={\"primary\"}>Affix</Button>\n    </Affix>\n</div>, mountNode);\n"
+                            "\nconst InputNumber = require(\"InputNumber\");\n\nReactDOM.render(\n<div>\n    <InputNumber min={10} max={20} value={15.5} step={0.1}></InputNumber>\n</div>, mountNode);\n"
                         )
                     )
                 );

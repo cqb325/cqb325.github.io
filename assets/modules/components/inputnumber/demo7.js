@@ -1,4 +1,4 @@
-define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Code"], function (module, React, BaseDemo, Button, Affix, FontIcon, Code) {
+define(["module", "react", "../BaseDemo", "Button", "InputNumber", "FontIcon", "../Code"], function (module, React, BaseDemo, Button, InputNumber, FontIcon, Code) {
     "use strict";
 
     function _classCallCheck(instance, Constructor) {
@@ -52,13 +52,34 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
     var Demo = function (_BaseDemo) {
         _inherits(Demo, _BaseDemo);
 
-        function Demo() {
+        function Demo(props) {
             _classCallCheck(this, Demo);
 
-            return _possibleConstructorReturn(this, Object.getPrototypeOf(Demo).apply(this, arguments));
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Demo).call(this, props));
+
+            _this.state = {
+                disabled: true
+            };
+            return _this;
         }
 
         _createClass(Demo, [{
+            key: "toggleDisable",
+            value: function toggleDisable() {
+                if (this.state.disabled) {
+                    this.refs.inputNumber.enable();
+                    this.setState({ disabled: false });
+                } else {
+                    this.refs.inputNumber.disable();
+                    this.setState({ disabled: true });
+                }
+            }
+        }, {
+            key: "setMax",
+            value: function setMax() {
+                this.refs.inputNumber.setMax(50);
+            }
+        }, {
             key: "render",
             value: function render() {
                 return React.createElement(
@@ -67,14 +88,25 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                     React.createElement(
                         "div",
                         { className: "code-box-demo" },
+                        React.createElement(InputNumber, { className: "mb-5", min: "0", value: "100", max: "100", ref: "inputNumber",
+                            formatter: function formatter(value) {
+                                return value + "%";
+                            },
+                            parser: function parser(value) {
+                                return value.replace('%', '');
+                            },
+                            disabled: true
+                        }),
+                        React.createElement("br", null),
                         React.createElement(
-                            Affix,
-                            null,
-                            React.createElement(
-                                Button,
-                                { theme: "primary" },
-                                "Affix"
-                            )
+                            Button,
+                            { onClick: this.toggleDisable.bind(this) },
+                            this.state.disabled ? "激活" : "禁用"
+                        ),
+                        React.createElement(
+                            Button,
+                            { className: "ml-5", onClick: this.setMax.bind(this) },
+                            "设置最大值"
                         )
                     ),
                     React.createElement(
@@ -83,12 +115,12 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                         React.createElement(
                             "div",
                             { className: "code-box-title" },
-                            "基本用法"
+                            "formatter和parser"
                         ),
                         React.createElement(
                             "div",
                             null,
-                            "简单的Affix",
+                            "theme支持 primary 、success、 warning、 danger",
                             React.createElement(FontIcon, { icon: "chevron-circle-down", ref: "collapse", className: "collapse", onClick: this.openCloseCode.bind(this) })
                         )
                     ),
@@ -98,7 +130,7 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                         React.createElement(
                             Code,
                             { className: "language-jsx" },
-                            "\nconst Button = require(\"Button\");\nconst Affix = require(\"Affix\");\n\nReactDOM.render(\n<div>\n    <Affix>\n        <Button theme={\"primary\"}>Affix</Button>\n    </Affix>\n</div>, mountNode);\n"
+                            "\nconst InputNumber = require(\"InputNumber\");\n\ntoggleDisable(){\n    if(this.state.disabled){\n        this.refs.inputNumber.enable();\n        this.setState({disabled: false});\n    }else{\n        this.refs.inputNumber.disable();\n        this.setState({disabled: true});\n    }\n}\n\nsetMax(){\n    this.refs.inputNumber.setMax(50);\n}\n\nReactDOM.render(\n<div>\n    <InputNumber className=\"mb-5\" min=\"0\" value=\"100\" max=\"100\" ref=\"inputNumber\"\n        formatter={(value)=>`${value}%`}\n        parser={(value)=>value.replace('%', '')}\n        disabled\n    /><br/>\n\n    <Button onClick={this.toggleDisable.bind(this)}>{this.state.disabled ? \"激活\" : \"禁用\"}</Button>\n    <Button className=\"ml-5\" onClick={this.setMax.bind(this)}>设置最大值</Button>\n</div>, mountNode);\n"
                         )
                     )
                 );

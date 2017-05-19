@@ -1,6 +1,20 @@
 define(["module", "react", "react-dom", "classnames", "utils/Events", "utils/Dom", "core/BaseComponent"], function (module, React, ReactDOM, classnames, Events, Dom, BaseComponent) {
     "use strict";
 
+    var _extends = Object.assign || function (target) {
+        for (var i = 1; i < arguments.length; i++) {
+            var source = arguments[i];
+
+            for (var key in source) {
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+
+        return target;
+    };
+
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
             throw new TypeError("Cannot call a class as a function");
@@ -65,6 +79,9 @@ define(["module", "react", "react-dom", "classnames", "utils/Events", "utils/Dom
                 target: props.target,
                 offset: null
             });
+
+            _this.orignOffset = {};
+            _this.target = null;
             return _this;
         }
 
@@ -73,66 +90,95 @@ define(["module", "react", "react-dom", "classnames", "utils/Events", "utils/Dom
             value: function componentWillUnmount() {
                 this._isMounted = false;
 
-                var target = null;
-                if (this.state.target) {
-                    target = Dom.query(this.state.target);
-                } else {
-                    target = document.body;
+                Events.off(this.target, "scroll", this.onScroll);
+            }
+        }, {
+            key: "onScroll",
+            value: function onScroll(event) {
+                if(!this._isMounted){
+                    return false;
                 }
-                target = Dom.dom(target);
-                Events.off(target[0], "scroll", this._listener);
+                var container = Dom.dom(this.target);
+                var scrollTop = container[0].scrollTop;
+                var parentOffset = container.offset();
+                var ele = Dom.dom(ReactDOM.findDOMNode(this));
+
+                var offsetParent = this.getOffsetParent(ele[0]);
+                var offsetParentPostion = {
+                    top: 0,
+                    left: 0
+                };
+                if (offsetParent && offsetParent != this.target) {
+                    offsetParentPostion = Dom.dom(offsetParent).offset();
+                }
+
+                var distance = this.orignOffset.top - parentOffset.top - scrollTop;
+                var left = this.orignOffset.left - parentOffset.left;
+                if (distance > this.state.offsetTop) {
+                    if (this._isMounted) {
+                        this.setState({
+                            offset: null
+                        });
+                    }
+                } else {
+                    if (this._isMounted) {
+                        this.setState({
+                            offset: {
+                                top: scrollTop + parseFloat(this.state.offsetTop) - offsetParentPostion.top,
+                                left: container[0].scrollLeft + Math.max(left, 0) - offsetParentPostion.left
+                            }
+                        });
+                    }
+                }
+            }
+        }, {
+            key: "getOffsetParent",
+            value: function getOffsetParent(ele) {
+                var parent = ele.parentNode;
+
+                while (parent !== null && parent.tagName !== "HTML") {
+                    if (Dom.dom(parent).css("position") !== "static") {
+                        return parent;
+                    }
+                    parent = parent.parentNode;
+                }
+
+                return null;
             }
         }, {
             key: "componentDidMount",
             value: function componentDidMount() {
-                var _this2 = this;
-
                 this._isMounted = true;
                 var ele = Dom.dom(ReactDOM.findDOMNode(this));
+
                 var target = null;
                 if (this.state.target) {
                     target = Dom.query(this.state.target);
                 } else {
                     target = document.body;
                 }
-                target = Dom.dom(target);
+                this.target = target;
+                var container = Dom.dom(target);
+                if (container.css("position") == "static" && container[0].tagName !== "BODY") {
+                    container.css("position", "relative");
+                }
+                this.orignOffset = ele.offset();
 
-                var parentOffset = target.offset();
-                var eleOffset = ele.offset();
-                var needH = eleOffset.top - parentOffset.top - this.state.offsetTop;
-                var bw = target[0].style.borderLeftWidth;
-                var pl = parseFloat(target[0].style.paddingLeft);
-
-                var listener = this._listener = function (e) {
-                    if (_this2._isMounted) {
-                        if (target[0].scrollTop > needH) {
-                            _this2.setState({
-                                offset: {
-                                    top: target[0].scrollTop + parseFloat(_this2.state.offsetTop) - needH,
-                                    left: eleOffset.left - parentOffset.left - bw - pl
-                                }
-                            });
-                        } else {
-                            _this2.setState({
-                                offset: null
-                            });
-                        }
-                    }
-                };
-
-                Events.on(target[0], "scroll", listener);
+                var scrollEle = target;
+                if (container[0].tagName == "BODY") {
+                    scrollEle = window;
+                }
+                Events.on(scrollEle, "scroll", this.onScroll.bind(this));
             }
         }, {
             key: "render",
             value: function render() {
-                var style = {};
+                var style = this.props.style || {};
                 if (this.state.offset) {
-                    style = { "top": this.state.offset.top + "px", left: this.state.offset.left + "px", position: "relative" };
+                    style = _extends({ "top": this.state.offset.top + "px", left: this.state.offset.left + "px", position: "absolute" , zIndex: 1000}, style);
                 }
 
-                var className = classnames("cm-affix", {
-                    fixed: !!this.state.offset
-                });
+                var className = classnames("cm-affix", this.props.className);
 
                 return React.createElement(
                     "div",
