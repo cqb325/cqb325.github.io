@@ -1,4 +1,4 @@
-define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Code"], function (module, React, BaseDemo, Button, Affix, FontIcon, Code) {
+define(["module", "react", "../BaseDemo", "Button", "InputNumber", "FontIcon", "../Code"], function (module, React, BaseDemo, Button, InputNumber, FontIcon, Code) {
     "use strict";
 
     function _classCallCheck(instance, Constructor) {
@@ -59,6 +59,11 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
         }
 
         _createClass(Demo, [{
+            key: "onChange",
+            value: function onChange(value) {
+                console.log(value);
+            }
+        }, {
             key: "render",
             value: function render() {
                 return React.createElement(
@@ -67,15 +72,25 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                     React.createElement(
                         "div",
                         { className: "code-box-demo" },
-                        React.createElement(
-                            Affix,
-                            null,
-                            React.createElement(
-                                Button,
-                                { theme: "primary" },
-                                "Affix"
-                            )
-                        )
+                        React.createElement(InputNumber, { className: "mb-5", min: "0", value: "100", max: "100",
+                            formatter: function formatter(value) {
+                                return value + "%";
+                            },
+                            parser: function parser(value) {
+                                return value.replace('%', '');
+                            },
+                            onChange: this.onChange.bind(this)
+                        }),
+                        React.createElement("br", null),
+                        React.createElement(InputNumber, {
+                            value: 1000,
+                            formatter: function formatter(value) {
+                                return "$ " + value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                            },
+                            parser: function parser(value) {
+                                return value.replace(/\$\s?|(,*)/g, '');
+                            }
+                        })
                     ),
                     React.createElement(
                         "div",
@@ -83,12 +98,12 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                         React.createElement(
                             "div",
                             { className: "code-box-title" },
-                            "基本用法"
+                            "formatter和parser"
                         ),
                         React.createElement(
                             "div",
                             null,
-                            "简单的Affix",
+                            "theme支持 primary 、success、 warning、 danger",
                             React.createElement(FontIcon, { icon: "chevron-circle-down", ref: "collapse", className: "collapse", onClick: this.openCloseCode.bind(this) })
                         )
                     ),
@@ -98,7 +113,7 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                         React.createElement(
                             Code,
                             { className: "language-jsx" },
-                            "\nconst Button = require(\"Button\");\nconst Affix = require(\"Affix\");\n\nReactDOM.render(\n<div>\n    <Affix>\n        <Button theme={\"primary\"}>Affix</Button>\n    </Affix>\n</div>, mountNode);\n"
+                            "\nconst InputNumber = require(\"InputNumber\");\n\nonChange(value){\n    console.log(value);\n}\n\nReactDOM.render(\n<div>\n    <InputNumber className=\"mb-5\" min=\"0\" value=\"100\" max=\"100\"\n        formatter={(value)=>`${value}%`}\n        parser={(value)=>value.replace('%', '')}\n        onChange={this.onChange.bind(this)}\n    /><br/>\n\n    <InputNumber\n      value={1000}\n      formatter={value => `$ ${value.replace(/B(?=(d{3})+(?!d))/g, ',')}`}\n      parser={value => value.replace(/$s?|(,*)/g, '')}\n    />\n</div>, mountNode);\n"
                         )
                     )
                 );

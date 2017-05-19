@@ -68,13 +68,23 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                         "div",
                         { className: "code-box-demo" },
                         React.createElement(
-                            Affix,
-                            null,
+                            "div",
+                            { style: { height: 250, overflow: 'auto', position: 'relative' }, id: "scroll-wrap" },
                             React.createElement(
-                                Button,
-                                { theme: "primary" },
-                                "Affix"
-                            )
+                                "span",
+                                null,
+                                "some text"
+                            ),
+                            React.createElement(
+                                Affix,
+                                { target: "#scroll-wrap", style: { position: "absolute", right: 5 } },
+                                React.createElement(
+                                    Button,
+                                    { theme: "primary" },
+                                    "Affix"
+                                )
+                            ),
+                            React.createElement("div", { style: { height: 600 } })
                         )
                     ),
                     React.createElement(
@@ -83,12 +93,12 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                         React.createElement(
                             "div",
                             { className: "code-box-title" },
-                            "基本用法"
+                            "target"
                         ),
                         React.createElement(
                             "div",
                             null,
-                            "简单的Affix",
+                            "Affix可以限制target作为容器",
                             React.createElement(FontIcon, { icon: "chevron-circle-down", ref: "collapse", className: "collapse", onClick: this.openCloseCode.bind(this) })
                         )
                     ),
@@ -98,7 +108,7 @@ define(["module", "react", "../BaseDemo", "Button", "Affix", "FontIcon", "../Cod
                         React.createElement(
                             Code,
                             { className: "language-jsx" },
-                            "\nconst Button = require(\"Button\");\nconst Affix = require(\"Affix\");\n\nReactDOM.render(\n<div>\n    <Affix>\n        <Button theme={\"primary\"}>Affix</Button>\n    </Affix>\n</div>, mountNode);\n"
+                            "\nconst Button = require(\"Button\");\nconst Affix = require(\"Affix\");\n\nReactDOM.render(\n<div>\n    <div style={{height: 250, overflow: 'auto', position: 'relative'}} id=\"scroll-wrap\">\n        <span>some text</span>\n        <Affix target=\"#scroll-wrap\" style={{position: \"absolute\", right: 5}}>\n            <Button theme={\"primary\"}>Affix</Button>\n        </Affix>\n        <div style={{height: 600}}></div>\n    </div>\n</div>, mountNode);\n"
                         )
                     )
                 );
