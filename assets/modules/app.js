@@ -1,4 +1,4 @@
-define(['react', 'jquery', 'react-dom', 'ReactRouter', "FontIcon", "Logo", "Routers", "SideBar", "Menu"], function (React, jQuery, ReactDOM, ReactRouter, FontIcon, Logo, Routers, SideBar, Menu) {
+define(['react', 'jquery', 'react-dom', 'ReactRouter', "FontIcon", "Logo", "store", "Routers", "SideBar", "Menu"], function (React, jQuery, ReactDOM, ReactRouter, FontIcon, Logo, store, Routers, SideBar, Menu) {
     'use strict';
 
     var Router = ReactRouter.Router;
@@ -18,6 +18,13 @@ define(['react', 'jquery', 'react-dom', 'ReactRouter', "FontIcon", "Logo", "Rout
         displayName: 'App',
         getInitialState: function getInitialState() {
             return {};
+        },
+        forwardModule: function forwardModule(item) {
+            store.set("cm-cmui-doc-lastSelectKey", item.getKey());
+            if (window.location.hash.indexOf(item.props.link) == -1) {
+                window.location.hash = item.props.link;
+            }
+            return;
         },
         renderMenu: function renderMenu() {
             var _this = this;
@@ -88,6 +95,14 @@ define(['react', 'jquery', 'react-dom', 'ReactRouter', "FontIcon", "Logo", "Rout
                 }
             });
         },
+        componentDidMount: function componentDidMount() {
+            var key = store.get("cm-cmui-doc-lastSelectKey");
+            if (key) {
+                this.refs.menu.selectItem(key);
+            } else {
+                this.refs.menu.selectItem("31");
+            }
+        },
         render: function render() {
             return React.createElement(
                 'div',
@@ -109,7 +124,8 @@ define(['react', 'jquery', 'react-dom', 'ReactRouter', "FontIcon", "Logo", "Rout
                     React.createElement(
                         Menu,
                         { style: { width: 200 },
-                            ref: 'menu'
+                            ref: 'menu',
+                            onSelect: this.forwardModule
                         },
                         this.renderMenu()
                     )
