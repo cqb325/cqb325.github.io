@@ -5147,3 +5147,210 @@ textarea.cm-form-control {
 .cm-input-number-small .cm-input-number-field {
   height: 20px;
 }
+.cm-notification-box {
+  position: fixed;
+  z-index: 1500;
+  width: 335px;
+}
+.cm-notification-topRight {
+  right: 24px;
+  top: 24px;
+}
+.cm-notification-bottomRight {
+  right: 24px;
+  bottom: 24px;
+}
+.cm-notification-bottomLeft {
+  left: 24px;
+  bottom: 24px;
+}
+.cm-notification-topLeft {
+  left: 24px;
+  top: 24px;
+}
+.cm-notification-item {
+  padding: 16px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  line-height: 1.5;
+  position: relative;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.cm-notification-head {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 4px;
+  line-height: 20px;
+  display: inline-block;
+}
+.cm-notification-body {
+  font-size: 12px;
+}
+.cm-notification-close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+}
+.cm-notification-close:hover {
+  text-decoration: underline;
+}
+.cm-notification-bottomRight .cm-notification-item,
+.cm-notification-topRight .cm-notification-item {
+  right: -335px;
+}
+.cm-notification-bottomLeft .cm-notification-item,
+.cm-notification-topLeft .cm-notification-item {
+  left: -335px;
+}
+.cm-notification-icon {
+  width: 40px;
+  position: absolute;
+  font-size: 24px;
+  color: #20a0ff;
+}
+.cm-notification-icon .cmui-success {
+  color: #13ce66;
+}
+.cm-notification-icon .cmui-warning {
+  color: #f7ba2a;
+}
+.cm-notification-icon .cmui-error {
+  color: #ff4949;
+}
+.cm-notification-icon .cmui {
+  font-size: 30px;
+}
+.cm-notification-item-width-icon .cm-notification-content {
+  padding-left: 40px;
+}
+.cm-notification-btn-wrap {
+  margin-top: 5px;
+  display: block;
+  text-align: right;
+}
+@font-face {
+  font-family: "cmui";
+  src: url('../../fonts/iconfont.eot?t=1495185834097');
+  src: url('../../fonts/iconfont.eot?t=1495185834097#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../../fonts/iconfont.woff?t=1495185834097') format('woff'), /* chrome, firefox */ url('../../fonts/iconfont.ttf?t=1495185834097') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/ url('../../fonts/iconfont.svg?t=1495185834097#cmui') format('svg');
+  
+  /* IE9*/
+  /* iOS 4.1- */
+}
+.cmui {
+  font-family: "cmui" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.cmui-change:before {
+  content: "\e600";
+}
+.cmui-close:before {
+  content: "\e60d";
+}
+.cmui-close1:before {
+  content: "\e659";
+}
+.cmui-refresh:before {
+  content: "\e60f";
+}
+.cmui-close2:before {
+  content: "\e60b";
+}
+.cmui-check:before {
+  content: "\e62f";
+}
+.cmui-download:before {
+  content: "\e614";
+}
+.cmui-question:before {
+  content: "\e63e";
+}
+.cmui-exchange:before {
+  content: "\e660";
+}
+.cmui-top:before {
+  content: "\e605";
+}
+.cmui-download1:before {
+  content: "\e67f";
+}
+.cmui-angle:before {
+  content: "\e654";
+}
+.cmui-dingwei:before {
+  content: "\e606";
+}
+.cmui-icon:before {
+  content: "\e633";
+}
+.cmui-lg-up:before {
+  content: "\e664";
+}
+.cmui-top2:before {
+  content: "\e61b";
+}
+.cmui-top3:before {
+  content: "\e626";
+}
+.cmui-top4:before {
+  content: "\e610";
+}
+.cmui-back:before {
+  content: "\e6a1";
+}
+.cmui-dingwei1:before {
+  content: "\e88b";
+}
+.cmui-lg-down:before {
+  content: "\e68b";
+}
+.cmui-close3:before {
+  content: "\e61e";
+}
+.cmui-lg-right:before {
+  content: "\e658";
+}
+.cmui-back3:before {
+  content: "\e61c";
+}
+.cmui-error:before {
+  content: "\e627";
+}
+.cmui-warning:before {
+  content: "\e6b2";
+}
+.cmui-chaxun:before {
+  content: "\e643";
+}
+.cmui-tubiao05:before {
+  content: "\e608";
+}
+.cmui-info:before {
+  content: "\e60e";
+}
+.cmui-lg-left:before {
+  content: "\e611";
+}
+.cmui-back2:before {
+  content: "\e65b";
+}
+.cmui-angle-down:before {
+  content: "\e679";
+}
+.cmui-angle-left:before {
+  content: "\e67a";
+}
+.cmui-angle-right:before {
+  content: "\e67b";
+}
+.cmui-angle-up:before {
+  content: "\e67c";
+}
+.cmui-success:before {
+  content: "\e616";
+}

@@ -44,7 +44,8 @@ define(function(module, exports){
             {id:"327", text: "Badge",link: "#/components/badge"},
             {id:"328", text: "Dropdown",link: "#/components/dropdown"},
             {id:"329", text: "Accordion",link: "#/components/accordion"},
-            {id:"330", text: "InputNumber",link: "#/components/inputnumber"}
+            {id:"330", text: "InputNumber",link: "#/components/inputnumber"},
+            {id:"330", text: "Notification",link: "#/components/notification"}
         ]},
         {id: "4", "text": "业务组件", children: [
             {id:"41", text: "列表页",link: "#/business-component/simple-list-page"},
